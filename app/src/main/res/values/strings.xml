@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">PickUp</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string name="base_url">http://pickup.prateekchandan.me</string>
+    <string name="key">pickup</string>
+</resources>
