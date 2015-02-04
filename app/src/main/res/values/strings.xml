@@ -4,4 +4,10 @@
 
     <string name="base_url">http://pickup.prateekchandan.me</string>
     <string name="key">pickup</string>
+
+    <string name="preferences">pickup_prefs</string>
+    <string name="title_activity_chat">Chat</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>
