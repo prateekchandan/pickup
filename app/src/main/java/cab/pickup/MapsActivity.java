@@ -3,8 +3,8 @@ package cab.pickup;
 import android.graphics.Color;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,8 +34,8 @@ public class MapsActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        start = getIntent().getParcelableExtra("start");
-        end = getIntent().getParcelableExtra("end");
+        start = getIntent().getParcelableExtra(getString(R.string.extra_start_coord));
+        end = getIntent().getParcelableExtra(getString(R.string.extra_end_coord));
 
         setUpMapIfNeeded();
 

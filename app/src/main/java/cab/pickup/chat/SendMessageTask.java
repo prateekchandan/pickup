@@ -20,16 +20,16 @@ import cab.pickup.util.IOUtil;
 
 public class SendMessageTask extends AsyncTask<String,Integer,Integer> {
     private static final String TAG = "SendMessageTask";
-    String url, device_id, access_key;
 
-    public SendMessageTask(String url, String dev_id, String key){
-        this.url=url;
-        device_id=dev_id;
-        access_key=key;
+    public SendMessageTask(){
     }
 
     @Override
     protected Integer doInBackground(String... params) {
+        String url=params[1],
+            device_id=params[2],
+            access_key=params[3];
+
         AndroidHttpClient httpclient = AndroidHttpClient.newInstance(TAG);
         HttpPost httppost = new HttpPost(url);
         int statusCode=0;

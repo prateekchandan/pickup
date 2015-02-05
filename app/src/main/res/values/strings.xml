@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">PickUp</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_settings">Preferences</string>
 
     <string name="base_url">http://pickup.prateekchandan.me</string>
     <string name="key">pickup</string>
@@ -10,4 +11,18 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="extra_start_coord">start</string>
+    <string name="extra_end_coord">end</string>
+
+    <!-- profile tags -->
+
+    <string name="profile_tag_name">name</string>
+    <string name="profile_tag_company">company</string>
+    <string name="profile_tag_number">number</string>
+    <string name="profile_tag_age">age</string>
+    <string name="profile_tag_gender">gender</string>
+    <string name="profile_tag_home">home</string>
+    <string name="profile_tag_office">office</string>
 </resources>

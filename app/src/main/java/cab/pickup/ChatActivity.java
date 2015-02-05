@@ -47,9 +47,9 @@ public class ChatActivity extends MyActivity {
 
         if (registration_id.isEmpty()) {
             new RegisterTask(getApplicationContext()).execute(
-                    getString(R.string.base_url)+"/add.php",
+                    getUrl("/add.php"),
                     device_id,
-                    getString(R.string.preferences));
+                    getKey());
         }
 
         msgReciever = new BroadcastReceiver() {
@@ -106,10 +106,10 @@ public class ChatActivity extends MyActivity {
 
     public void sendMsg(View v){
         TextView newmsg = new TextView(this);
-        SendMessageTask task = new SendMessageTask(getString(R.string.base_url), device_id, getString(R.string.key));
+        SendMessageTask task = new SendMessageTask();
 
         String msg = ((EditText)findViewById(R.id.msg_input)).getText().toString();
-        task.execute(msg);
+        task.execute(msg, getUrl("/send.php"),device_id, getKey());
 
         newmsg.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         newmsg.setTextColor(0xffffffff);
