@@ -65,6 +65,12 @@ public class ChatActivity extends MyActivity {
         registerReceiver(msgReciever, new IntentFilter(GcmIntentService.MSG_REC_INTENT_TAG));
     }
 
+    @Override
+    public void onDestroy(){
+        unregisterReceiver(msgReciever);
+
+        super.onDestroy();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
