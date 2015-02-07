@@ -13,13 +13,13 @@ public class SettingsActivity extends MyActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        setEditText(prefs.getString(getString(R.string.profile_tag_name),""),R.id.profile_name);
-        setEditText(prefs.getString(getString(R.string.profile_tag_company),""),R.id.profile_company);
-        setEditText(prefs.getString(getString(R.string.profile_tag_number),""),R.id.profile_number);
-        setEditText(prefs.getString(getString(R.string.profile_tag_age),""),R.id.profile_age);
-        setEditText(prefs.getString(getString(R.string.profile_tag_gender),""),R.id.profile_gender);
-        setEditText(prefs.getString(getString(R.string.profile_tag_home),""),R.id.profile_home);
-        setEditText(prefs.getString(getString(R.string.profile_tag_office),""),R.id.profile_office);
+        setEditText(getData(getString(R.string.profile_tag_name)),R.id.profile_name);
+        setEditText(getData(getString(R.string.profile_tag_company)),R.id.profile_company);
+        setEditText(getData(getString(R.string.profile_tag_number)),R.id.profile_number);
+        setEditText(getData(getString(R.string.profile_tag_age)),R.id.profile_age);
+        setEditText(getData(getString(R.string.profile_tag_gender)),R.id.profile_gender);
+        setEditText(getData(getString(R.string.profile_tag_home)),R.id.profile_home);
+        setEditText(getData(getString(R.string.profile_tag_office)),R.id.profile_office);
     }
 
     public void save(View v){
@@ -46,5 +46,12 @@ public class SettingsActivity extends MyActivity {
 
     public void setEditText(String text, int id){
         ((EditText)findViewById(id)).setText(text);
+    }
+
+    public String getData(String key){
+        if(getIntent().getStringExtra(key)==null)
+            return prefs.getString(key,"");
+        else
+            return getIntent().getStringExtra(key);
     }
 }
