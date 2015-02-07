@@ -7,18 +7,18 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.udiboy.commonpath.MainActivity">
 
-    <EditText
-        android:layout_width="wrap_content"
+    <cab.pickup.widget.LocationSearchBar
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="Enter Start"
         android:id="@+id/field_start"
         android:layout_alignParentLeft="true"/>
     <EditText
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter destination"
         android:id="@+id/field_end"
-        android:layout_toRightOf="@id/field_start"
+        android:layout_below="@id/field_start"
         android:layout_alignParentRight="true"/>
     <LinearLayout
         android:layout_width="150dp"
