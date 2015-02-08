@@ -37,6 +37,11 @@ public class PlacesAdapter  extends ArrayAdapter<Address>{
     }
 
     @Override
+    public void clear(){
+        addrs.clear();
+    }
+
+    @Override
     public int getCount(){
         return addrs.size();
     }

@@ -1,5 +1,6 @@
 package cab.pickup.widget;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.location.Address;
@@ -14,13 +15,13 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.List;
 
 import cab.pickup.MyActivity;
 import cab.pickup.R;
+import cab.pickup.util.MapUtil;
 
 public class LocationSearchDialog extends Dialog implements View.OnClickListener{
     private static final String TAG = "LocationSearchDialog";
@@ -34,11 +35,15 @@ public class LocationSearchDialog extends Dialog implements View.OnClickListener
     PlacesAdapter adapter;
     Address addrSelected;
 
-    public LocationSearchDialog(Context context, int id) {
+    public LocationSearchDialog(Context context, int id, Address a) {
         super(context);
 
         searchBarId=id;
 
+        if(context instanceof Activity)
+            setOwnerActivity((Activity)context);
+
+        addrSelected=a;
     }
 
     @Override
@@ -54,17 +59,13 @@ public class LocationSearchDialog extends Dialog implements View.OnClickListener
 
         list.setAdapter(adapter);
 
-        list.setOnItemSelectedListener(new ListView.OnItemSelectedListener(){
+        list.setOnItemClickListener(new ListView.OnItemClickListener() {
 
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                searchField.setText(((TextView) view).getText());
-                addrSelected=(Address)view.getTag();
-            }
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                addrSelected = (Address) view.getTag();
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+                updateSearch();
             }
         });
 
@@ -87,12 +88,18 @@ public class LocationSearchDialog extends Dialog implements View.OnClickListener
             }
         });
 
+        updateSearch();
+
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    }
+
+    private void updateSearch() {
+        searchField.setText(MapUtil.stringFromAddress(addrSelected));
     }
 
     @Override
     public void onClick(View v) {
-        ((MyActivity)getOwnerActivity()).returnLocationSearchValue((Address) v.getTag(), searchBarId);
+        ((MyActivity)getOwnerActivity()).returnLocationSearchValue(addrSelected, searchBarId);
         dismiss();
     }
 
@@ -121,7 +128,6 @@ public class LocationSearchDialog extends Dialog implements View.OnClickListener
         protected void onPostExecute(List<Address> arr){
             running = false;
 
-            list.removeAllViews();
             adapter.clear();
 
             for(Address a : arr){
