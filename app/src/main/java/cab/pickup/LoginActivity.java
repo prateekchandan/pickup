@@ -18,6 +18,9 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        if(Session.getActiveSession().isOpened())
+            finish();
     }
 
     @Override
@@ -26,16 +29,7 @@ public class LoginActivity extends Activity {
         Session.getActiveSession().onActivityResult(this, requestCode,
                 resultCode, data);
 
-        Request.executeMeRequestAsync(Session.getActiveSession(), new Request.GraphUserCallback() {
-            @Override
-            public void onCompleted(GraphUser graphUser, Response response) {
-                Intent i = new Intent();
-                i.setClass(getApplicationContext(), SettingsActivity.class);
-                i.putExtra(getString(R.string.profile_tag_name), graphUser.getName());
-                startActivity(i);
-                finish();
-            }
-        });
+        getBiodata();
     }
 
     @Override
@@ -55,5 +49,18 @@ public class LoginActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void getBiodata(){
+        Request.executeMeRequestAsync(Session.getActiveSession(), new Request.GraphUserCallback() {
+            @Override
+            public void onCompleted(GraphUser graphUser, Response response) {
+                Intent i = new Intent();
+                i.setClass(getApplicationContext(), SettingsActivity.class);
+                i.putExtra(getString(R.string.profile_tag_name), graphUser.getName());
+                startActivity(i);
+                finish();
+            }
+        });
     }
 }
