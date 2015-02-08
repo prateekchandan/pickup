@@ -1,12 +1,10 @@
 package cab.pickup.util;
 
 
-import android.graphics.Color;
+import android.location.Address;
 import android.util.Log;
 
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -77,5 +75,9 @@ public class MapUtil {
         }
 
         return poly;
+    }
+
+    public static String stringFromAddress(Address address) {
+        return address.getFeatureName()+", "+address.getLocality();
     }
 }

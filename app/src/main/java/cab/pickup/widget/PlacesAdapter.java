@@ -7,28 +7,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cab.pickup.R;
+import cab.pickup.util.MapUtil;
 
-public class PlacesAdapter  extends ArrayAdapter<Address> implements Filterable {
+public class PlacesAdapter  extends ArrayAdapter<Address>{
     List<Address> addrs = new ArrayList<>();
     Context context;
 
-    public PlacesAdapter(Context context, int resource, List<Address> objects) {
-        super(context, resource, objects);
+    public PlacesAdapter(Context context, List<Address> objects) {
+        super(context, android.R.layout.simple_list_item_1, objects);
 
         this.context=context;
         addrs = objects;
     }
 
-    public PlacesAdapter(Context context, int resource) {
-        super(context, resource);
+    public PlacesAdapter(Context context) {
+        super(context, android.R.layout.simple_list_item_1);
 
         this.context=context;
     }
@@ -39,40 +37,18 @@ public class PlacesAdapter  extends ArrayAdapter<Address> implements Filterable 
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        TextView rowView = (TextView) inflater.inflate(R.layout.location_list_item, parent, false);
-
-        if(rowView!=null) rowView.setText(
-                stringFromAddress(addrs.get(position)));
-        return rowView;
+    public int getCount(){
+        return addrs.size();
     }
 
     @Override
-    public Filter getFilter(){
-        return new PlacesFilter();
-    }
+    public View getView(int position, View convertView, ViewGroup parent){
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        TextView rowView = (TextView) inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
 
-    private String stringFromAddress(Address a){
-        return a.getFeatureName()+", "+a.getLocality();
-    }
-
-    class PlacesFilter extends Filter{
-
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            FilterResults results = new FilterResults();
-
-            results.values = addrs;
-            results.count = addrs.size();
-
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-
-        }
+        rowView.setText(MapUtil.stringFromAddress(addrs.get(position)));
+        rowView.setTag(addrs.get(position));
+        return rowView;
     }
 }

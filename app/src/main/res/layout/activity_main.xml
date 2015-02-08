@@ -13,7 +13,7 @@
         android:hint="Enter Start"
         android:id="@+id/field_start"
         android:layout_alignParentLeft="true"/>
-    <EditText
+    <cab.pickup.widget.LocationSearchBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter destination"
