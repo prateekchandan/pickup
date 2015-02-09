@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.facebook.Session;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
@@ -27,13 +26,6 @@ public class MainActivity extends MyActivity {
 
         list_start=((LinearLayout)findViewById(R.id.list_start));
         list_end=((LinearLayout)findViewById(R.id.list_end));
-
-        Session session = Session.getActiveSession();
-        if(session == null || !session.isOpened()){
-            Intent i = new Intent();
-            i.setClass(this, LoginActivity.class);
-            startActivity(i);
-        }
     }
 
 

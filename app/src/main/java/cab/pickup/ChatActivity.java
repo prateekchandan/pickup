@@ -16,8 +16,8 @@ import android.widget.TextView;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import cab.pickup.chat.GcmIntentService;
-import cab.pickup.chat.RegisterTask;
-import cab.pickup.chat.SendMessageTask;
+import cab.pickup.server.RegisterTask;
+import cab.pickup.server.SendMessageTask;
 import cab.pickup.util.IOUtil;
 
 

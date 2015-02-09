@@ -1,4 +1,4 @@
-package cab.pickup.chat;
+package cab.pickup.server;
 
 import android.content.Context;
 import android.content.SharedPreferences;

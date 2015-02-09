@@ -1,18 +1,17 @@
 package cab.pickup;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
 
+import cab.pickup.server.AddUserTask;
 
-public class LoginActivity extends Activity {
+
+public class LoginActivity extends MyActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,26 +30,11 @@ public class LoginActivity extends Activity {
         Session.getActiveSession().onActivityResult(this, requestCode,
                 resultCode, data);
 
-        getBiodata();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if(!prefs.contains("name")) {
+            getBiodata();
+        } else {
+            new AddUserTask().execute();
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     public void getBiodata(){
