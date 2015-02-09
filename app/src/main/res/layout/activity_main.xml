@@ -12,14 +12,16 @@
         android:layout_height="wrap_content"
         android:hint="Enter Start"
         android:id="@+id/field_start"
-        android:layout_alignParentLeft="true"/>
+        android:layout_alignParentLeft="true"
+        style="@style/LocationSearchBar"/>
     <cab.pickup.widget.LocationSearchBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter destination"
         android:id="@+id/field_end"
         android:layout_below="@id/field_start"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        style="@style/LocationSearchBar"/>
     <LinearLayout
         android:layout_width="150dp"
         android:layout_height="wrap_content"
@@ -37,19 +39,10 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_weight="1"
-        android:text="Search"
-        android:id="@+id/button_search"
-        android:onClick="search"
-        android:layout_alignParentBottom="true" />
-    <Button
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_weight="1"
         android:text="get directions"
         android:id="@+id/button_getdir"
         android:onClick="showDirections"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@id/button_search"/>
+        android:layout_alignParentBottom="true"/>
     <Button
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"

@@ -19,7 +19,9 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        if(Session.getActiveSession().isOpened())
+        Session session = Session.getActiveSession();
+
+        if(session!=null && session.isOpened())
             finish();
     }
 

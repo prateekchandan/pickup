@@ -78,6 +78,7 @@ public class MapUtil {
     }
 
     public static String stringFromAddress(Address address) {
+        if(address == null) return "";
         return address.getFeatureName()+", "+address.getLocality();
     }
 }

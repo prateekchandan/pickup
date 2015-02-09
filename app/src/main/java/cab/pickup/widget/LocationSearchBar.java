@@ -7,8 +7,11 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
+import cab.pickup.util.MapUtil;
+
 public class LocationSearchBar extends TextView implements View.OnClickListener{
-    private static final String TAG = "LocationSearchBar";
+
+    private Address address;
 
     public LocationSearchBar(Context context) {
         super(context);
@@ -31,5 +34,15 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
         LocationSearchDialog dialog = new LocationSearchDialog(getContext(), getId(), (Address)getTag());
 
         dialog.show();
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+
+        setText(MapUtil.stringFromAddress(address));
+    }
+
+    public Address getAddress() {
+        return address;
     }
 }

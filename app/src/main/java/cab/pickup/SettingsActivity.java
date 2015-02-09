@@ -3,7 +3,9 @@ package cab.pickup;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.TextView;
+
+import cab.pickup.widget.LocationSearchBar;
 
 
 public class SettingsActivity extends MyActivity {
@@ -32,7 +34,8 @@ public class SettingsActivity extends MyActivity {
         spe.putString(getString(R.string.profile_tag_number),getEditText(R.id.profile_number));
         spe.putString(getString(R.string.profile_tag_age),getEditText(R.id.profile_age));
         spe.putString(getString(R.string.profile_tag_gender),getEditText(R.id.profile_gender));
-        spe.putString(getString(R.string.profile_tag_home),getEditText(R.id.profile_home));
+
+        spe.putString(getString(R.string.profile_tag_home), getEditText(R.id.profile_home));
         spe.putString(getString(R.string.profile_tag_office),getEditText(R.id.profile_office));
 
         spe.commit();
@@ -41,11 +44,15 @@ public class SettingsActivity extends MyActivity {
     }
 
     public String getEditText(int id){
-        return ((EditText)findViewById(id)).getText().toString();
+        return ((TextView)findViewById(id)).getText().toString();
     }
 
     public void setEditText(String text, int id){
-        ((EditText)findViewById(id)).setText(text);
+        ((TextView)findViewById(id)).setText(text);
+    }
+
+    public void getAddress(int id){
+        ((LocationSearchBar)findViewById(id)).getAddress();
     }
 
     public String getData(String key){

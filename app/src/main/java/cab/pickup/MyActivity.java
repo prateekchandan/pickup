@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 
 import cab.pickup.util.IOUtil;
-import cab.pickup.util.MapUtil;
 import cab.pickup.widget.LocationSearchBar;
 
 public class MyActivity extends Activity {
@@ -41,6 +40,6 @@ public class MyActivity extends Activity {
     }
 
     public void returnLocationSearchValue(Address address, int id){
-        ((LocationSearchBar)findViewById(id)).setText(MapUtil.stringFromAddress(address));
+        ((LocationSearchBar)findViewById(id)).setAddress(address);
     }
 }
