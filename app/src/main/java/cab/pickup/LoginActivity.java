@@ -34,7 +34,8 @@ public class LoginActivity extends MyActivity {
             getBiodata();
         } else {
             AddUserTask a = new AddUserTask(this);
-            a.execute(getUrl("add_user"), user_id, device_id, getKey()
+            a.execute(getUrl("add_user"), user_id, getKey()
+                    ,device_id
                     ,getData(getString(R.string.profile_tag_fbid))
                     ,getData(getString(R.string.profile_tag_name))
                     ,getData(getString(R.string.profile_tag_email))

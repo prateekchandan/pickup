@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import cab.pickup.chat.GcmIntentService;
-import cab.pickup.server.RegisterTask;
 import cab.pickup.server.SendMessageTask;
 import cab.pickup.util.IOUtil;
 
@@ -27,7 +26,7 @@ public class ChatActivity extends MyActivity {
 
     static final String TAG = "GCMDemo";
 
-    BroadcastReceiver msgReciever;
+    BroadcastReceiver msgReceiver;
 
     LinearLayout msgList;
     GoogleCloudMessaging gcm;
@@ -45,14 +44,7 @@ public class ChatActivity extends MyActivity {
 
         registration_id = getRegistrationId(getApplicationContext());
 
-        if (registration_id.isEmpty()) {
-            new RegisterTask(getApplicationContext()).execute(
-                    getUrl("/add.php"),
-                    device_id,
-                    getKey());
-        }
-
-        msgReciever = new BroadcastReceiver() {
+        msgReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 TextView tv = new TextView(getApplicationContext());
@@ -62,12 +54,12 @@ public class ChatActivity extends MyActivity {
             }
         };
 
-        registerReceiver(msgReciever, new IntentFilter(GcmIntentService.MSG_REC_INTENT_TAG));
+        registerReceiver(msgReceiver, new IntentFilter(GcmIntentService.MSG_REC_INTENT_TAG));
     }
 
     @Override
     public void onDestroy(){
-        unregisterReceiver(msgReciever);
+        unregisterReceiver(msgReceiver);
 
         super.onDestroy();
     }

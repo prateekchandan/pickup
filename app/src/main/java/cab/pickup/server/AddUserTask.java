@@ -4,6 +4,8 @@ import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -24,6 +26,11 @@ public class AddUserTask extends AsyncTask<String, Integer, String>{
     private static final String TAG = "SendMessageTask";
     MyActivity context;
 
+    GoogleCloudMessaging gcm;
+
+    String SENDER_ID = "1032273645702",
+            gcm_id;
+
     public AddUserTask(MyActivity context){
         this.context=context;
     }
@@ -32,20 +39,26 @@ public class AddUserTask extends AsyncTask<String, Integer, String>{
     protected String doInBackground(String... params) {
         String url=params[0],
                 user_id=params[1],
-                device_id=params[2],
-                access_key=params[3];
+                access_key=params[2];
 
         AndroidHttpClient httpclient = AndroidHttpClient.newInstance(TAG);
         HttpPost httppost = new HttpPost(url);
         int statusCode=0;
 
         try {
+            if (gcm == null) {
+                gcm = GoogleCloudMessaging.getInstance(context);
+            }
+            gcm_id = gcm.register(SENDER_ID);
+
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 
             nameValuePairs.add(new BasicNameValuePair("user_id", user_id));
-            nameValuePairs.add(new BasicNameValuePair("device_id", device_id));
             nameValuePairs.add(new BasicNameValuePair("key", access_key));
 
+            nameValuePairs.add(new BasicNameValuePair("gcm_id", gcm_id));
+
+            nameValuePairs.add(new BasicNameValuePair("device_id", params[3]));
             nameValuePairs.add(new BasicNameValuePair("fbid", params[4]));
             nameValuePairs.add(new BasicNameValuePair("name", params[5]));
             nameValuePairs.add(new BasicNameValuePair("email", params[6]));
@@ -81,6 +94,8 @@ public class AddUserTask extends AsyncTask<String, Integer, String>{
     @Override
     protected void onPostExecute(String user_id){
         context.getSharedPreferences().edit().putString("user_id",user_id);
+        context.getSharedPreferences().edit().putString("gcm_id", gcm_id);
+        context.getSharedPreferences().edit().putInt("app_version", IOUtil.getAppVersion(context));
 
         context.getSharedPreferences().edit().commit();
     }
