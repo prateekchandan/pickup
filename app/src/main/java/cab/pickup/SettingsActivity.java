@@ -54,11 +54,4 @@ public class SettingsActivity extends MyActivity {
     public void getAddress(int id){
         ((LocationSearchBar)findViewById(id)).getAddress();
     }
-
-    public String getData(String key){
-        if(getIntent().getStringExtra(key)==null)
-            return prefs.getString(key,"");
-        else
-            return getIntent().getStringExtra(key);
-    }
 }

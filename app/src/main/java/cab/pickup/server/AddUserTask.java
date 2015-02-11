@@ -17,10 +17,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cab.pickup.MyActivity;
 import cab.pickup.util.IOUtil;
 
 public class AddUserTask extends AsyncTask<String, Integer, String>{
     private static final String TAG = "SendMessageTask";
+    MyActivity context;
+
+    public AddUserTask(MyActivity context){
+        this.context=context;
+    }
 
     @Override
     protected String doInBackground(String... params) {
@@ -70,5 +76,12 @@ public class AddUserTask extends AsyncTask<String, Integer, String>{
         }
 
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(String user_id){
+        context.getSharedPreferences().edit().putString("user_id",user_id);
+
+        context.getSharedPreferences().edit().commit();
     }
 }

@@ -10,7 +10,7 @@ import cab.pickup.util.IOUtil;
 import cab.pickup.widget.LocationSearchBar;
 
 public class MyActivity extends Activity {
-    String device_id;
+    String device_id, user_id;
 
     SharedPreferences prefs;
 
@@ -36,10 +36,20 @@ public class MyActivity extends Activity {
     }
 
     public SharedPreferences getSharedPreferences(){
-        return getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
+        if(prefs==null)
+            return getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
+        else
+            return prefs;
     }
 
     public void returnLocationSearchValue(Address address, int id){
         ((LocationSearchBar)findViewById(id)).setAddress(address);
+    }
+
+    public String getData(String key){
+        if(getIntent().getStringExtra(key)==null)
+            return prefs.getString(key,"");
+        else
+            return getIntent().getStringExtra(key);
     }
 }

@@ -33,7 +33,12 @@ public class LoginActivity extends MyActivity {
         if(!prefs.contains("name")) {
             getBiodata();
         } else {
-            new AddUserTask().execute();
+            AddUserTask a = new AddUserTask(this);
+            a.execute(getUrl("add_user"), user_id, device_id, getKey()
+                    ,getData(getString(R.string.profile_tag_fbid))
+                    ,getData(getString(R.string.profile_tag_name))
+                    ,getData(getString(R.string.profile_tag_email))
+                    ,getData(getString(R.string.profile_tag_gender)));
         }
     }
 
@@ -44,8 +49,10 @@ public class LoginActivity extends MyActivity {
                 Intent i = new Intent();
                 i.setClass(getApplicationContext(), SettingsActivity.class);
                 i.putExtra(getString(R.string.profile_tag_name), graphUser.getName());
-                startActivity(i);
-                finish();
+                i.putExtra(getString(R.string.profile_tag_fbid), graphUser.getId());
+                i.putExtra(getString(R.string.profile_tag_email), (String)graphUser.getProperty(getString(R.string.profile_tag_email)));
+                i.putExtra(getString(R.string.profile_tag_gender), (String)graphUser.getProperty(getString(R.string.profile_tag_gender)));
+                startActivityForResult(i, RESULT_OK);
             }
         });
     }

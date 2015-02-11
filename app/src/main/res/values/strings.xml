@@ -5,6 +5,7 @@
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_settings">Preferences</string>
     <string name="title_fb_login">Facebook Login</string>
+    <string name="title_activity_login">LoginActivity</string>
 
     <string name="base_url">http://pickup.prateekchandan.me</string>
     <string name="key">9f83c32cf3c9d529e</string>
@@ -28,5 +29,6 @@
     <string name="profile_tag_gender">gender</string>
     <string name="profile_tag_home">home</string>
     <string name="profile_tag_office">office</string>
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="profile_tag_fbid">fbid</string>
+    <string name="profile_tag_email">email</string>
 </resources>
