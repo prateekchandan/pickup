@@ -16,6 +16,7 @@ public class SettingsActivity extends MyActivity {
         setContentView(R.layout.activity_settings);
 
         setEditText(getData(getString(R.string.profile_tag_name)),R.id.profile_name);
+        setEditText(getData(getString(R.string.profile_tag_email)),R.id.profile_email);
         setEditText(getData(getString(R.string.profile_tag_company)),R.id.profile_company);
         setEditText(getData(getString(R.string.profile_tag_number)),R.id.profile_number);
         setEditText(getData(getString(R.string.profile_tag_age)),R.id.profile_age);
@@ -30,6 +31,7 @@ public class SettingsActivity extends MyActivity {
         spe.clear();
 
         spe.putString(getString(R.string.profile_tag_name),getEditText(R.id.profile_name));
+        spe.putString(getString(R.string.profile_tag_email),getEditText(R.id.profile_email));
         spe.putString(getString(R.string.profile_tag_company),getEditText(R.id.profile_company));
         spe.putString(getString(R.string.profile_tag_number),getEditText(R.id.profile_number));
         spe.putString(getString(R.string.profile_tag_age),getEditText(R.id.profile_age));
@@ -37,6 +39,8 @@ public class SettingsActivity extends MyActivity {
 
         spe.putString(getString(R.string.profile_tag_home), getEditText(R.id.profile_home));
         spe.putString(getString(R.string.profile_tag_office),getEditText(R.id.profile_office));
+
+        spe.putString(getString(R.string.profile_tag_fbid),getData(getString(R.string.profile_tag_fbid)));
 
         spe.commit();
         spe.apply();

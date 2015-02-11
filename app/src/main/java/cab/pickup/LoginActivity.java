@@ -56,6 +56,9 @@ public class LoginActivity extends MyActivity {
                 i.setClass(getApplicationContext(), SettingsActivity.class);
                 i.putExtra(getString(R.string.profile_tag_name), graphUser.getName());
                 i.putExtra(getString(R.string.profile_tag_fbid), graphUser.getId());
+
+                Log.i(TAG, "fbid : "+graphUser.getId());
+
                 i.putExtra(getString(R.string.profile_tag_email), (String)graphUser.getProperty(getString(R.string.profile_tag_email)));
                 i.putExtra(getString(R.string.profile_tag_gender), (String)graphUser.getProperty(getString(R.string.profile_tag_gender)));
                 startActivityForResult(i, RESULT_OK);
