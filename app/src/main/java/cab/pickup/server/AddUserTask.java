@@ -72,13 +72,17 @@ public class AddUserTask extends AsyncTask<String, Integer, String>{
 
             Log.d(TAG, statusCode + " : " + response.getStatusLine().getReasonPhrase());
 
-            if(statusCode==200){
-                JSONObject result = new JSONObject(IOUtil.buildStringFromIS(response.getEntity().getContent()));
+            JSONObject result = new JSONObject(IOUtil.buildStringFromIS(response.getEntity().getContent()));
 
-                String msg = result.get("message").toString();
+            String msg = result.get("message").toString();
+
+            if(statusCode==200){
+
                 if(msg.equals("user added")){
                     return result.get("user_id").toString();
                 }
+            } else {
+                Log.e(TAG, "Error: "+msg);
             }
         } catch (ClientProtocolException e) {
             Log.e(TAG, e.getMessage());
@@ -98,5 +102,7 @@ public class AddUserTask extends AsyncTask<String, Integer, String>{
         context.getSharedPreferences().edit().putInt("app_version", IOUtil.getAppVersion(context));
 
         context.getSharedPreferences().edit().commit();
+
+        context.finish();
     }
 }

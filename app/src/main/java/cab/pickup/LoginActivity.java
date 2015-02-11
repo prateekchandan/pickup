@@ -2,6 +2,7 @@ package cab.pickup;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.facebook.Request;
 import com.facebook.Response;
@@ -13,6 +14,8 @@ import cab.pickup.server.AddUserTask;
 
 public class LoginActivity extends MyActivity {
 
+    private static final String TAG = "LoginActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +24,7 @@ public class LoginActivity extends MyActivity {
         Session session = Session.getActiveSession();
 
         if(session!=null && session.isOpened())
-            finish();
+            ;//finish();
     }
 
     @Override
@@ -33,13 +36,15 @@ public class LoginActivity extends MyActivity {
         if(!prefs.contains("name")) {
             getBiodata();
         } else {
+            Log.d(TAG, "add user");
             AddUserTask a = new AddUserTask(this);
-            a.execute(getUrl("add_user"), user_id, getKey()
-                    ,device_id
-                    ,getData(getString(R.string.profile_tag_fbid))
-                    ,getData(getString(R.string.profile_tag_name))
-                    ,getData(getString(R.string.profile_tag_email))
-                    ,getData(getString(R.string.profile_tag_gender)));
+            a.execute(getUrl("/add_user"), user_id, getKey()
+                    , device_id
+                    , getData(getString(R.string.profile_tag_fbid))
+                    , getData(getString(R.string.profile_tag_name))
+                    , getData(getString(R.string.profile_tag_email))
+                    , getData(getString(R.string.profile_tag_gender)));
+
         }
     }
 

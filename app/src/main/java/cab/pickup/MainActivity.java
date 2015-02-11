@@ -2,30 +2,28 @@ package cab.pickup;
 
 import android.content.Intent;
 import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.io.IOException;
-import java.util.List;
+import cab.pickup.server.AddJourneyTask;
+import cab.pickup.widget.LocationSearchBar;
 
 public class MainActivity extends MyActivity {
-    LinearLayout list_start, list_end;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        list_start=((LinearLayout)findViewById(R.id.list_start));
-        list_end=((LinearLayout)findViewById(R.id.list_end));
+        Intent i = new Intent();
+        i.setClass(this,LoginActivity.class);
+        startActivity(i);
     }
 
 
@@ -55,30 +53,6 @@ public class MainActivity extends MyActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void search(View v){
-        Geocoder gc = new Geocoder(this);
-        String startStr = ((EditText)findViewById(R.id.field_start)).getText().toString();
-        String endStr = ((EditText)findViewById(R.id.field_end)).getText().toString();
-
-        try {
-            List<Address> startResults = gc.getFromLocationName(startStr,5);
-            List<Address> endResults = gc.getFromLocationName(endStr,5);
-
-            ((LinearLayout)findViewById(R.id.list_start)).removeAllViews();
-            for(Address a : startResults){
-                list_start.addView(getListItem(a));
-            }
-
-            ((LinearLayout)findViewById(R.id.list_end)).removeAllViews();
-            for(Address a : endResults){
-                list_end.addView(getListItem(a));
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private TextView getListItem(Address a){
         TextView tv = new TextView(this);
         tv.setText(a.getFeatureName()+" ,"+a.getLocality()+" ,"+a.getLatitude()+","+a.getLongitude());
@@ -86,17 +60,21 @@ public class MainActivity extends MyActivity {
         return tv;
     }
 
-    public void showDirections(View v) {
-        Address startAddr = (Address)list_start.getChildAt(0).getTag();
-        Address endAddr = (Address)list_end.getChildAt(0).getTag();
+    public void addJourney(View v) {
+        Address start = ((LocationSearchBar)findViewById(R.id.field_start)).getAddress();
+        Address end = ((LocationSearchBar)findViewById(R.id.field_start)).getAddress();
 
-        Intent i = new Intent();
-        i.setClass(this, MapsActivity.class);
+        TimePicker journey_time = (TimePicker)findViewById(R.id.journey_time);
+        String time = journey_time.getCurrentHour()+":"+journey_time.getCurrentMinute()+":00";
 
-        i.putExtra(getString(R.string.extra_start_coord),getLatLng(startAddr));
-        i.putExtra(getString(R.string.extra_end_coord),getLatLng(endAddr));
-
-        startActivity(i);
+        new AddJourneyTask().execute(getUrl("/add_journey"), user_id, getKey()
+                ,start.getLatitude()+""
+                ,start.getLongitude()+""
+                ,end.getLatitude()+""
+                ,end.getLongitude()+""
+                ,time
+                ,"30"
+                ,"30");
     }
 
     public void openChat(View v){
