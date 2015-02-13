@@ -43,7 +43,8 @@ public class SettingsActivity extends MyActivity {
         spe.putString(getString(R.string.profile_tag_fbid),getData(getString(R.string.profile_tag_fbid)));
 
         spe.commit();
-        spe.apply();
+
+        setResult(RESULT_OK);
         finish();
     }
 

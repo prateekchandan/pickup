@@ -24,28 +24,26 @@ public class LoginActivity extends MyActivity {
         Session session = Session.getActiveSession();
 
         if(session!=null && session.isOpened())
-            ;//finish();
+            if (user_id == null){
+                addUser();
+            } else {
+                finish();
+            }
+
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         Session.getActiveSession().onActivityResult(this, requestCode,
                 resultCode, data);
 
         if(!prefs.contains("name")) {
             getBiodata();
         } else {
-            Log.d(TAG, "add user");
-            AddUserTask a = new AddUserTask(this);
-            a.execute(getUrl("/add_user"), user_id, getKey()
-                    , device_id
-                    , getData(getString(R.string.profile_tag_fbid))
-                    , getData(getString(R.string.profile_tag_name))
-                    , getData(getString(R.string.profile_tag_email))
-                    , getData(getString(R.string.profile_tag_gender)));
-
+            addUser();
         }
+
+        super.onActivityResult(requestCode,resultCode,data);
     }
 
     public void getBiodata(){
@@ -57,12 +55,24 @@ public class LoginActivity extends MyActivity {
                 i.putExtra(getString(R.string.profile_tag_name), graphUser.getName());
                 i.putExtra(getString(R.string.profile_tag_fbid), graphUser.getId());
 
-                Log.i(TAG, "fbid : "+graphUser.getId());
+                Log.i(TAG, "fbid : " + graphUser.getId());
 
-                i.putExtra(getString(R.string.profile_tag_email), (String)graphUser.getProperty(getString(R.string.profile_tag_email)));
+                i.putExtra(getString(R.string.profile_tag_email), (String) graphUser.getProperty(getString(R.string.profile_tag_email)));
                 i.putExtra(getString(R.string.profile_tag_gender), (String)graphUser.getProperty(getString(R.string.profile_tag_gender)));
                 startActivityForResult(i, RESULT_OK);
             }
         });
+    }
+
+    private void addUser() {
+        Log.d(TAG, "add user");
+        AddUserTask a = new AddUserTask(this);
+        a.execute(getUrl("/add_user"), user_id, getKey()
+                , device_id
+                , getData(getString(R.string.profile_tag_fbid))
+                , getData(getString(R.string.profile_tag_name))
+                , getData(getString(R.string.profile_tag_email))
+                , getData(getString(R.string.profile_tag_gender)));
+
     }
 }

@@ -10,12 +10,15 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cab.pickup.MyActivity;
+import cab.pickup.util.IOUtil;
 
 public class AddJourneyTask extends AsyncTask<String, Integer, String> {
     private static final String TAG = "SendMessageTask";
@@ -54,12 +57,21 @@ public class AddJourneyTask extends AsyncTask<String, Integer, String> {
 
             Log.d(TAG, statusCode + " : " + response.getStatusLine().getReasonPhrase());
 
+            JSONObject result = new JSONObject(IOUtil.buildStringFromIS(response.getEntity().getContent()));
+
+            String msg = result.get("message").toString();
+
             if(statusCode==200){
-                // do shit
+                //do shit
+            } else {
+                Log.e(TAG, "Error: "+msg);
+                Log.d(TAG, "user_id:"+user_id);
             }
         } catch (ClientProtocolException e) {
             Log.e(TAG, e.getMessage());
         } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+        } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
 

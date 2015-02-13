@@ -23,7 +23,7 @@ import cab.pickup.MyActivity;
 import cab.pickup.util.IOUtil;
 
 public class AddUserTask extends AsyncTask<String, Integer, String>{
-    private static final String TAG = "SendMessageTask";
+    private static final String TAG = "AddUserTask";
     MyActivity context;
 
     GoogleCloudMessaging gcm;
@@ -72,24 +72,27 @@ public class AddUserTask extends AsyncTask<String, Integer, String>{
 
             Log.d(TAG, statusCode + " : " + response.getStatusLine().getReasonPhrase());
 
-            JSONObject result = new JSONObject(IOUtil.buildStringFromIS(response.getEntity().getContent()));
+            String json = IOUtil.buildStringFromIS(response.getEntity().getContent());
+
+            Log.d(TAG, json);
+
+            JSONObject result = new JSONObject(json);
 
             String msg = result.get("message").toString();
 
-            if(statusCode==200){
+            Log.e(TAG, "Error: "+msg);
 
-                if(msg.equals("user added")){
-                    return result.get("user_id").toString();
-                }
-            } else {
-                Log.e(TAG, "Error: "+msg);
+            if(statusCode==200){
+                String usr = result.get("user_id").toString();
+                Log.d(TAG, "user_id extaracted: "+usr);
+                return usr;
             }
         } catch (ClientProtocolException e) {
             Log.e(TAG, e.getMessage());
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
         }
 
         return null;

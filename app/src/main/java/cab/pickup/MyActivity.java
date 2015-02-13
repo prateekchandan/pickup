@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.location.Address;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 
 import cab.pickup.util.IOUtil;
 import cab.pickup.widget.LocationSearchBar;
@@ -21,6 +22,10 @@ public class MyActivity extends Activity {
         prefs=getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
 
         device_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        user_id = prefs.getString("user_id",null);
+
+        Log.d("MyActivity", user_id==null?"user_id null":user_id);
     }
 
     public int getAppVersion(){
