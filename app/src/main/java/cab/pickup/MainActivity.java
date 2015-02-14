@@ -3,6 +3,7 @@ package cab.pickup;
 import android.content.Intent;
 import android.location.Address;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,8 @@ import cab.pickup.widget.LocationSearchBar;
 
 public class MainActivity extends MyActivity {
 
+    private static final String TAG = "Main";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +26,7 @@ public class MainActivity extends MyActivity {
 
         Intent i = new Intent();
         i.setClass(this,LoginActivity.class);
-        startActivity(i);
+        startActivityForResult(i, 1);
     }
 
 
@@ -51,6 +54,14 @@ public class MainActivity extends MyActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int req, int res, Intent data){
+        super.onActivityResult(req,res,data);
+
+        Log.d(TAG, "onActivityResult");
+        user_id=prefs.getString("user_id",null);
     }
 
     private TextView getListItem(Address a){

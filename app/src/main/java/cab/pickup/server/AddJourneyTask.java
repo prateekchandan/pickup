@@ -61,6 +61,8 @@ public class AddJourneyTask extends AsyncTask<String, Integer, String> {
 
             String msg = result.get("message").toString();
 
+            Log.d(TAG, msg);
+
             if(statusCode==200){
                 //do shit
             } else {

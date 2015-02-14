@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cab.pickup.LoginActivity;
 import cab.pickup.MyActivity;
 import cab.pickup.util.IOUtil;
 
@@ -84,7 +85,6 @@ public class AddUserTask extends AsyncTask<String, Integer, String>{
 
             if(statusCode==200){
                 String usr = result.get("user_id").toString();
-                Log.d(TAG, "user_id extaracted: "+usr);
                 return usr;
             }
         } catch (ClientProtocolException e) {
@@ -100,11 +100,9 @@ public class AddUserTask extends AsyncTask<String, Integer, String>{
 
     @Override
     protected void onPostExecute(String user_id){
-        context.getSharedPreferences().edit().putString("user_id",user_id);
-        context.getSharedPreferences().edit().putString("gcm_id", gcm_id);
-        context.getSharedPreferences().edit().putInt("app_version", IOUtil.getAppVersion(context));
+        Log.d(TAG, "user_id extracted: "+user_id);
 
-        context.getSharedPreferences().edit().commit();
+        ((LoginActivity)context).addDataToPrefs(user_id,gcm_id);
 
         context.finish();
     }

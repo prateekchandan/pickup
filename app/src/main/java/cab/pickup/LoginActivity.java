@@ -1,6 +1,7 @@
 package cab.pickup;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -59,13 +60,14 @@ public class LoginActivity extends MyActivity {
 
                 i.putExtra(getString(R.string.profile_tag_email), (String) graphUser.getProperty(getString(R.string.profile_tag_email)));
                 i.putExtra(getString(R.string.profile_tag_gender), (String)graphUser.getProperty(getString(R.string.profile_tag_gender)));
-                startActivityForResult(i, RESULT_OK);
+                startActivityForResult(i, 1);
             }
         });
     }
 
     private void addUser() {
         Log.d(TAG, "add user");
+        setResult(RESULT_OK);
         AddUserTask a = new AddUserTask(this);
         a.execute(getUrl("/add_user"), user_id, getKey()
                 , device_id
@@ -74,5 +76,15 @@ public class LoginActivity extends MyActivity {
                 , getData(getString(R.string.profile_tag_email))
                 , getData(getString(R.string.profile_tag_gender)));
 
+    }
+    
+    public void addDataToPrefs(String user_id, String gcm_id){
+        SharedPreferences.Editor spe = prefs.edit();
+        
+        spe.putString("user_id",user_id);
+        spe.putString("gcm_id", gcm_id);
+        spe.putInt("app_version", getAppVersion());
+
+        spe.commit();
     }
 }
