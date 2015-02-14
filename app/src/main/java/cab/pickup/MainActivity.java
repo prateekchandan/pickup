@@ -12,6 +12,9 @@ import android.widget.TimePicker;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import cab.pickup.server.AddJourneyTask;
 import cab.pickup.widget.LocationSearchBar;
 
@@ -78,14 +81,18 @@ public class MainActivity extends MyActivity {
         TimePicker journey_time = (TimePicker)findViewById(R.id.journey_time);
         String time = journey_time.getCurrentHour()+":"+journey_time.getCurrentMinute()+":00";
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd ");
+        String currentDate = sdf.format(new Date());
+
         new AddJourneyTask().execute(getUrl("/add_journey"), user_id, getKey()
                 ,start.getLatitude()+""
                 ,start.getLongitude()+""
                 ,end.getLatitude()+""
                 ,end.getLongitude()+""
-                ,time
+                ,currentDate+time
                 ,"30"
-                ,"30");
+                ,"30"
+                ,"1");
     }
 
     public void openChat(View v){

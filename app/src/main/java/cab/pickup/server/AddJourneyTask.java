@@ -48,6 +48,7 @@ public class AddJourneyTask extends AsyncTask<String, Integer, String> {
             nameValuePairs.add(new BasicNameValuePair("journey_time", params[7]));
             nameValuePairs.add(new BasicNameValuePair("margin_before", params[8]));
             nameValuePairs.add(new BasicNameValuePair("margin_after", params[9]));
+            nameValuePairs.add(new BasicNameValuePair("preference",params[10]));
 
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 

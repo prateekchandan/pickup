@@ -9,6 +9,7 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
+import com.facebook.widget.LoginButton;
 
 import cab.pickup.server.AddUserTask;
 
@@ -30,6 +31,8 @@ public class LoginActivity extends MyActivity {
             } else {
                 finish();
             }
+
+        ((LoginButton)findViewById(R.id.fb_login)).setReadPermissions("email");
 
     }
 
