@@ -76,7 +76,7 @@ public class MainActivity extends MyActivity {
 
     public void addJourney(View v) {
         Address start = ((LocationSearchBar)findViewById(R.id.field_start)).getAddress();
-        Address end = ((LocationSearchBar)findViewById(R.id.field_start)).getAddress();
+        Address end = ((LocationSearchBar)findViewById(R.id.field_end)).getAddress();
 
         TimePicker journey_time = (TimePicker)findViewById(R.id.journey_time);
         String time = journey_time.getCurrentHour()+":"+journey_time.getCurrentMinute()+":00";
