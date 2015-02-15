@@ -35,7 +35,7 @@
     <Button
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="Chat"
-        android:id="@+id/button_chat"
-        android:onClick="openChat"/>
+        android:text="Show Map"
+        android:id="@+id/button_map"
+        android:onClick="openMap"/>
 </LinearLayout>

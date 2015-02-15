@@ -1,16 +1,16 @@
 package cab.pickup;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import cab.pickup.util.IOUtil;
 import cab.pickup.widget.LocationSearchBar;
 
-public class MyActivity extends Activity {
+public class MyActivity extends FragmentActivity {
     String device_id, user_id;
 
     SharedPreferences prefs;

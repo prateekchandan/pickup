@@ -4,18 +4,17 @@ import android.graphics.Color;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,19 +22,16 @@ import java.util.ArrayList;
 import cab.pickup.util.IOUtil;
 import cab.pickup.util.MapUtil;
 
-public class MapsActivity extends FragmentActivity {
+public class MapsActivity extends MyActivity {
 
     private GoogleMap map; // Might be null if Google Play services APK is not available.
 
-    LatLng start, end;
+    JSONObject gmapResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
-        start = getIntent().getParcelableExtra(getString(R.string.extra_start_coord));
-        end = getIntent().getParcelableExtra(getString(R.string.extra_end_coord));
 
         setUpMapIfNeeded();
 
@@ -64,11 +60,7 @@ public class MapsActivity extends FragmentActivity {
 
     private void setUpMap() {
         map.setMyLocationEnabled(true);
-
-        map.addMarker(new MarkerOptions().position(start).title("Start"));
-        map.addMarker(new MarkerOptions().position(end).title("End"));
-
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng((start.latitude + end.latitude) / 2, (start.longitude + end.longitude) / 2), 12));
+        //map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng((start.latitude + end.latitude) / 2, (start.longitude + end.longitude) / 2), 12));
     }
 
     class MapDirectionsTask extends AsyncTask<String, Integer, String> {
@@ -82,10 +74,7 @@ public class MapsActivity extends FragmentActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String url =
-                    "http://maps.googleapis.com/maps/api/directions/json?origin="
-                            + start.latitude + "," + start.longitude + "&destination="
-                            + end.latitude + "," + end.longitude + "&sensor=false&mode=" + MODE_DRIVING;
+            String url ="http://pickup.prateekchandan.me/journey?key="+getKey();
 
             String json = "";
 
@@ -104,17 +93,23 @@ public class MapsActivity extends FragmentActivity {
                 Log.e(TAG, e.getMessage());
             }
 
+            client.close();
+
             return json;
         }
 
         @Override
         public void onPostExecute(String json) {
-            addPath(map, MapUtil.getPath(json));
+            gmapResult = MapUtil.getResult(json);
+
+            Log.d(TAG, gmapResult.toString());
+
+            addPath(MapUtil.getPath(gmapResult));
         }
 
     }
 
-    private void addPath(GoogleMap map, ArrayList<LatLng> directions){
+    private void addPath(ArrayList<LatLng> directions){
         PolylineOptions rectLine = new PolylineOptions().width(4).color(Color.BLUE);
 
         for(int i = 0 ; i < directions.size() ; i++) {
@@ -122,5 +117,7 @@ public class MapsActivity extends FragmentActivity {
         }
 
         map.addPolyline(rectLine);
+
+        map.moveCamera(CameraUpdateFactory.newLatLngBounds(MapUtil.getLatLngBounds(gmapResult),10));
     }
 }

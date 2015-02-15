@@ -10,8 +10,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -102,7 +100,10 @@ public class MainActivity extends MyActivity {
         startActivity(i);
     }
 
-    private LatLng getLatLng(Address a){
-        return new LatLng(a.getLatitude(),a.getLongitude());
+    public void openMap(View v){
+        Intent i = new Intent();
+        i.setClass(this, MapsActivity.class);
+
+        startActivity(i);
     }
 }

@@ -5,6 +5,7 @@ import android.location.Address;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,12 +17,39 @@ import java.util.List;
 public class MapUtil {
     private static final String TAG = "MapUtil";
 
-    public static ArrayList<LatLng> getPath(String returnValue) {
+    public static JSONObject getResult(String json){
+        try {
+            JSONArray result =new JSONArray(json);
+            JSONArray journey = (JSONArray) result.get(0);
+            return ((JSONObject) journey.get(2));
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+
+        return null;
+    }
+
+    public static LatLngBounds getLatLngBounds(JSONObject result){
+        try {
+            JSONObject bounds = result.getJSONObject("bounds");
+
+            JSONObject ne = bounds.getJSONObject("northeast");
+            JSONObject sw = bounds.getJSONObject("southwest");
+
+            return new LatLngBounds(new LatLng(sw.getDouble("lat"), sw.getDouble("lng")),
+                    new LatLng(ne.getDouble("lat"), ne.getDouble("lng")));
+        } catch (JSONException e){
+            Log.e(TAG, e.getMessage());
+        }
+
+        return null;
+    }
+
+    public static ArrayList<LatLng> getPath(JSONObject result) {
 
         ArrayList<LatLng> lines = new ArrayList<LatLng>();
 
         try {
-            JSONObject result = new JSONObject(returnValue);
             JSONArray routes = result.getJSONArray("routes");
 
             JSONArray steps = routes.getJSONObject(0).getJSONArray("legs")
