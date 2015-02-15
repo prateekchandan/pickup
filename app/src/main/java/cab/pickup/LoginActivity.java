@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.facebook.Request;
 import com.facebook.Response;
@@ -25,12 +26,15 @@ public class LoginActivity extends MyActivity {
 
         Session session = Session.getActiveSession();
 
-        if(session!=null && session.isOpened())
-            if (user_id == null){
+        if(session!=null && session.isOpened()) {
+            if (user_id == null) {
                 addUser();
             } else {
                 finish();
             }
+        } else {
+            findViewById(R.id.fb_login).setVisibility(View.VISIBLE);
+        }
 
         ((LoginButton)findViewById(R.id.fb_login)).setReadPermissions("email");
 
