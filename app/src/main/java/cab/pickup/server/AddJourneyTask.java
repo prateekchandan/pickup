@@ -3,6 +3,7 @@ package cab.pickup.server;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -65,7 +66,7 @@ public class AddJourneyTask extends AsyncTask<String, Integer, String> {
             Log.d(TAG, msg);
 
             if(statusCode==200){
-                //do shit
+                return msg;
             } else {
                 Log.e(TAG, "Error: "+msg);
                 Log.d(TAG, "user_id:"+user_id);
@@ -79,5 +80,16 @@ public class AddJourneyTask extends AsyncTask<String, Integer, String> {
         }
 
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(String ret){
+        if(ret==null)
+            ret="There was an error in adding journey";
+
+        Toast t = new Toast(context);
+        t.setText(ret);
+        t.setDuration(Toast.LENGTH_LONG);
+        t.show();
     }
 }
