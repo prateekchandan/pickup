@@ -82,7 +82,7 @@ public class MainActivity extends MyActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd ");
         String currentDate = sdf.format(new Date());
 
-        new AddJourneyTask().execute(getUrl("/add_journey"), user_id, getKey()
+        new AddJourneyTask(this).execute(getUrl("/add_journey"), user_id, getKey()
                 ,start.getLatitude()+""
                 ,start.getLongitude()+""
                 ,end.getLatitude()+""

@@ -107,6 +107,11 @@ public class MapUtil {
 
     public static String stringFromAddress(Address address) {
         if(address == null) return "";
-        return address.getFeatureName()+", "+address.getLocality();
+
+        String addr = address.getAddressLine(0);
+        if(address.getAddressLine(1)!=null) addr+=", "+address.getAddressLine(1);
+        if(address.getAddressLine(2)!=null) addr+=", "+address.getAddressLine(2);
+
+        return addr;
     }
 }

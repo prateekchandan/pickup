@@ -54,6 +54,9 @@ public class PlacesAdapter  extends ArrayAdapter<Address>{
 
         rowView.setText(MapUtil.stringFromAddress(addrs.get(position)));
         rowView.setTag(addrs.get(position));
+
+        rowView.setMinLines(0);
+        rowView.setMaxLines(2);
         return rowView;
     }
 }

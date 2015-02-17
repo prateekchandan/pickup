@@ -25,6 +25,10 @@ public class AddJourneyTask extends AsyncTask<String, Integer, String> {
     private static final String TAG = "SendMessageTask";
     MyActivity context;
 
+    public AddJourneyTask(MyActivity context){
+        this.context=context;
+    }
+
     @Override
     protected String doInBackground(String... params) {
         String url = params[0],
@@ -87,9 +91,7 @@ public class AddJourneyTask extends AsyncTask<String, Integer, String> {
         if(ret==null)
             ret="There was an error in adding journey";
 
-        Toast t = new Toast(context);
-        t.setText(ret);
-        t.setDuration(Toast.LENGTH_LONG);
+        Toast t = Toast.makeText(context, ret, Toast.LENGTH_LONG);
         t.show();
     }
 }

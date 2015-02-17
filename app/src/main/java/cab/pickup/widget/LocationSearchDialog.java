@@ -16,6 +16,8 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -27,6 +29,9 @@ public class LocationSearchDialog extends Dialog implements View.OnClickListener
     private static final String TAG = "LocationSearchDialog";
     EditText searchField;
     ListView list;
+
+    LatLng upperRight = new LatLng(19.289449, 73.174745); // Temporary jugaad... TODO change to user specific location
+    LatLng lowerLeft = new LatLng(18.913122, 72.756578);
 
     int searchBarId;
 
@@ -116,7 +121,7 @@ public class LocationSearchDialog extends Dialog implements View.OnClickListener
 
             List<Address> results=null;
             try {
-                results = gc.getFromLocationName(params[0], 5);
+                results = gc.getFromLocationName(params[0], 5, lowerLeft.latitude, lowerLeft.longitude, upperRight.latitude, upperRight.longitude);
 
             } catch (IOException e) {
                 e.printStackTrace();
