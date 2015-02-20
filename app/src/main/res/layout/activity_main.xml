@@ -21,21 +21,9 @@
         android:id="@+id/field_end"
         style="@style/LocationSearchBar"/>
 
-    <TimePicker
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/journey_time" />
-
-    <Button
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="Add Journey"
-        android:id="@+id/button_addjourney"
-        android:onClick="addJourney"/>
-    <Button
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="Show Map"
-        android:id="@+id/button_map"
-        android:onClick="openMap"/>
+    <fragment
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"/>
 </LinearLayout>

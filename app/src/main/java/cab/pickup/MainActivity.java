@@ -8,15 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import cab.pickup.server.AddJourneyTask;
-import cab.pickup.widget.LocationSearchBar;
-
-public class MainActivity extends MyActivity {
+public class MainActivity extends MapsActivity {
 
     private static final String TAG = "Main";
 
@@ -24,6 +17,8 @@ public class MainActivity extends MyActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setUpMapIfNeeded();
 
         Intent i = new Intent();
         i.setClass(this,LoginActivity.class);
@@ -72,7 +67,7 @@ public class MainActivity extends MyActivity {
         return tv;
     }
 
-    public void addJourney(View v) {
+    /*public void addJourney(View v) {
         Address start = ((LocationSearchBar)findViewById(R.id.field_start)).getAddress();
         Address end = ((LocationSearchBar)findViewById(R.id.field_end)).getAddress();
 
@@ -91,18 +86,11 @@ public class MainActivity extends MyActivity {
                 ,"30"
                 ,"30"
                 ,"1");
-    }
+    }*/
 
     public void openChat(View v){
         Intent i = new Intent();
         i.setClass(this, ChatActivity.class);
-
-        startActivity(i);
-    }
-
-    public void openMap(View v){
-        Intent i = new Intent();
-        i.setClass(this, MapsActivity.class);
 
         startActivity(i);
     }

@@ -1,15 +1,17 @@
 package cab.pickup;
 
 import android.graphics.Color;
+import android.location.Address;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.apache.http.HttpResponse;
@@ -18,26 +20,19 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import cab.pickup.util.IOUtil;
 import cab.pickup.util.MapUtil;
 
 public class MapsActivity extends MyActivity {
+    String url;
 
-    private GoogleMap map; // Might be null if Google Play services APK is not available.
+    HashMap<Integer, Marker> markers = new HashMap<Integer, Marker>();
+
+    GoogleMap map; // Might be null if Google Play services APK is not available.
 
     JSONObject gmapResult;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
-
-        setUpMapIfNeeded();
-
-        MapDirectionsTask getDir = new MapDirectionsTask();
-        getDir.execute();
-    }
 
     @Override
     protected void onResume() {
@@ -45,7 +40,12 @@ public class MapsActivity extends MyActivity {
         setUpMapIfNeeded();
     }
 
-    private void setUpMapIfNeeded() {
+    public void loadDir(){
+        MapDirectionsTask getDir = new MapDirectionsTask();
+        getDir.execute();
+    }
+
+    public void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (map == null) {
             // Try to obtain the map from the SupportMapFragment.
@@ -74,8 +74,6 @@ public class MapsActivity extends MyActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String url ="http://pickup.prateekchandan.me/journey?key="+getKey();
-
             String json = "";
 
             HttpResponse response;
@@ -119,5 +117,20 @@ public class MapsActivity extends MyActivity {
         map.addPolyline(rectLine);
 
         map.moveCamera(CameraUpdateFactory.newLatLngBounds(MapUtil.getLatLngBounds(gmapResult),10));
+    }
+
+    @Override
+    public void returnLocationSearchValue(Address address, int id){
+        super.returnLocationSearchValue(address,id);
+
+        LatLng newPt = new LatLng(address.getLatitude(), address.getLongitude());
+
+        if(!markers.containsKey(id)) {
+            markers.put(id, map.addMarker(new MarkerOptions().position(newPt)));
+        } else {
+            markers.get(id).setPosition(newPt);
+        }
+
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(newPt, 10));
     }
 }
