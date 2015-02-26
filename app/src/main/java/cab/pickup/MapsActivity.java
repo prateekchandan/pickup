@@ -9,10 +9,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -91,16 +93,20 @@ public class MapsActivity extends MyActivity {
 
         @Override
         public void onPostExecute(String json) {
-            gmapResult = MapUtil.getResult(json);
+            try {
+                gmapResult = new JSONObject(json);
 
-            Log.d(TAG, gmapResult.toString());
+                Log.d(TAG, gmapResult.toString());
 
-            addPath(MapUtil.getPath(gmapResult));
+                addPath(MapUtil.getPath(gmapResult));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
     }
 
-    private void addPath(ArrayList<LatLng> directions){
+    public void addPath(ArrayList<LatLng> directions){
         PolylineOptions rectLine = new PolylineOptions().width(4).color(Color.BLUE);
 
         for(int i = 0 ; i < directions.size() ; i++) {
@@ -109,6 +115,6 @@ public class MapsActivity extends MyActivity {
 
         map.addPolyline(rectLine);
 
-        map.moveCamera(CameraUpdateFactory.newLatLngBounds(MapUtil.getLatLngBounds(gmapResult),10));
+        map.moveCamera(CameraUpdateFactory.newLatLngBounds(new LatLngBounds(directions.get(0), directions.get(directions.size()-1)),10));
     }
 }

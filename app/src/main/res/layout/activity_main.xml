@@ -33,7 +33,8 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Book ride"/>
+            android:text="Book ride"
+            android:onClick="bookRide"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

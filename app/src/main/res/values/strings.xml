@@ -31,4 +31,6 @@
     <string name="profile_tag_office">office</string>
     <string name="profile_tag_fbid">fbid</string>
     <string name="profile_tag_email">email</string>
+    <string name="title_activity_book">Book A Ride</string>
+    <string name="title_activity_journey">JourneyActivity</string>
 </resources>

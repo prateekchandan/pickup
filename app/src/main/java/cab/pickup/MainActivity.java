@@ -16,6 +16,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.HashMap;
 
+import cab.pickup.widget.LocationSearchBar;
+
 public class MainActivity extends MapsActivity {
     HashMap<Integer, Marker> markers = new HashMap<Integer, Marker>();
 
@@ -75,26 +77,15 @@ public class MainActivity extends MapsActivity {
         return tv;
     }
 
-    /*public void addJourney(View v) {
-        Address start = ((LocationSearchBar)findViewById(R.id.field_start)).getAddress();
-        Address end = ((LocationSearchBar)findViewById(R.id.field_end)).getAddress();
+    public void bookRide(View v){
+        Intent i =new Intent();
+        i.setClass(this, BookActivity.class);
 
-        TimePicker journey_time = (TimePicker)findViewById(R.id.journey_time);
-        String time = journey_time.getCurrentHour()+":"+journey_time.getCurrentMinute()+":00";
+        i.putExtra("address_start", ((LocationSearchBar)findViewById(R.id.field_start)).getAddress());
+        i.putExtra("address_end", ((LocationSearchBar)findViewById(R.id.field_end)).getAddress());
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd ");
-        String currentDate = sdf.format(new Date());
-
-        new AddJourneyTask(this).execute(getUrl("/add_journey"), user_id, getKey()
-                ,start.getLatitude()+""
-                ,start.getLongitude()+""
-                ,end.getLatitude()+""
-                ,end.getLongitude()+""
-                ,currentDate+time
-                ,"30"
-                ,"30"
-                ,"1");
-    }*/
+        startActivity(i);
+    }
 
     public void openChat(View v){
         Intent i = new Intent();

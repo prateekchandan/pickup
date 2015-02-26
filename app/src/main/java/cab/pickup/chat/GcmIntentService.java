@@ -1,12 +1,17 @@
 package cab.pickup.chat;
 
 import android.app.IntentService;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import cab.pickup.JourneyActivity;
 
 public class GcmIntentService extends IntentService {
 
@@ -43,14 +48,40 @@ public class GcmIntentService extends IntentService {
             } else if (GoogleCloudMessaging.
                     MESSAGE_TYPE_MESSAGE.equals(messageType)) {
 
-                Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
-                // Post notification of received message.
-                sendMsg(extras.getString("message"));
+                String msg_type = extras.getString("type");
+
+                if(msg_type.equals("common_journey")){
+                    sendNotification(extras.getString("user")+" sent request", extras.getString("id"));
+                } else {
+                    sendMsg(extras.getString("message"));
+                }
+
                 Log.i(TAG, "Received: " + extras.getString("message"));
             }
         }
         // Release the wake lock provided by the WakefulBroadcastReceiver.
         GcmBroadcastReceiver.completeWakefulIntent(intent);
+    }
+
+    private void sendNotification(String msg, String id) {
+        NotificationManager mNotificationManager = (NotificationManager)
+                this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Intent i=new Intent(this, JourneyActivity.class);
+        i.putExtra("id",id);
+
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                i, 0);
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setContentTitle("Journey matched")
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(msg))
+                        .setContentText(msg);
+
+        mBuilder.setContentIntent(contentIntent);
+        mNotificationManager.notify(1, mBuilder.build());
     }
 
     private void sendMsg(String msg){

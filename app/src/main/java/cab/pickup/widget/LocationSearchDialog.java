@@ -135,9 +135,10 @@ public class LocationSearchDialog extends Dialog implements View.OnClickListener
 
             adapter.clear();
 
-            for(Address a : arr){
-                adapter.add(a);
-            }
+            if(arr!=null)
+                for(Address a : arr){
+                    adapter.add(a);
+                }
 
             adapter.notifyDataSetChanged();
 
