@@ -9,7 +9,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.HashMap;
+
 public class MainActivity extends MapsActivity {
+    HashMap<Integer, Marker> markers = new HashMap<Integer, Marker>();
 
     private static final String TAG = "Main";
 
@@ -93,5 +101,36 @@ public class MainActivity extends MapsActivity {
         i.setClass(this, ChatActivity.class);
 
         startActivity(i);
+    }
+
+    @Override
+    public void returnLocationSearchValue(Address address, int id){
+        super.returnLocationSearchValue(address,id);
+
+        LatLng newPt = new LatLng(address.getLatitude(), address.getLongitude());
+
+        if(!markers.containsKey(id)) {
+            markers.put(id, map.addMarker(new MarkerOptions().position(newPt)));
+        } else {
+            markers.get(id).setPosition(newPt);
+        }
+
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(newPt, 10));
+
+        displayPath();
+    }
+
+    private void displayPath() {
+        try {
+            LatLng start = markers.get(R.id.field_start).getPosition();
+            LatLng end = markers.get(R.id.field_end).getPosition();
+
+            String url="http://maps.googleapis.com/maps/api/directions/json?origin="
+                    + start.latitude + "," + start.longitude + "&destination="
+                    + end.latitude + "," + end.longitude;
+            new MapDirectionsTask().execute(url);
+        } catch (NullPointerException e){
+            return;
+        }
     }
 }
