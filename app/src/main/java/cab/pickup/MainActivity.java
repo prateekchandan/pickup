@@ -98,6 +98,8 @@ public class MainActivity extends MapsActivity {
     public void returnLocationSearchValue(Address address, int id){
         super.returnLocationSearchValue(address,id);
 
+        if(address == null) return;
+
         LatLng newPt = new LatLng(address.getLatitude(), address.getLongitude());
 
         if(!markers.containsKey(id)) {

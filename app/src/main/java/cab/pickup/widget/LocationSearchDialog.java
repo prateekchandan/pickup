@@ -9,12 +9,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -39,6 +41,7 @@ public class LocationSearchDialog extends Dialog implements View.OnClickListener
 
     PlacesAdapter adapter;
     Address addrSelected;
+    private AsyncTask<String, Integer, List<Address>> searchTask;
 
     public LocationSearchDialog(Context context, int id, Address a) {
         super(context);
@@ -84,7 +87,10 @@ public class LocationSearchDialog extends Dialog implements View.OnClickListener
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!running) new SearchTask().execute(s.toString());
+                if (!running) {
+                    searchTask = new SearchTask();
+                    searchTask.execute(s.toString());
+                }
             }
 
             @Override
@@ -108,6 +114,12 @@ public class LocationSearchDialog extends Dialog implements View.OnClickListener
         dismiss();
     }
 
+    @Override
+    public void onStop(){
+        if (searchTask!=null) searchTask.cancel(true);
+        super.onStop();
+    }
+
     final class SearchTask extends AsyncTask<String, Integer,  List<Address>>{
         @Override
         protected void onPreExecute(){
@@ -124,7 +136,7 @@ public class LocationSearchDialog extends Dialog implements View.OnClickListener
                 results = gc.getFromLocationName(params[0], 5, lowerLeft.latitude, lowerLeft.longitude, upperRight.latitude, upperRight.longitude);
 
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(TAG, "Server request timed out");
             }
             return results;
         }
@@ -135,10 +147,13 @@ public class LocationSearchDialog extends Dialog implements View.OnClickListener
 
             adapter.clear();
 
-            if(arr!=null)
-                for(Address a : arr){
+            if(arr!=null) {
+                for (Address a : arr) {
                     adapter.add(a);
                 }
+            } else {
+                Toast.makeText(getContext(),"No results!", Toast.LENGTH_SHORT).show();
+            }
 
             adapter.notifyDataSetChanged();
 

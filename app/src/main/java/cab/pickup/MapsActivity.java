@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -66,7 +67,7 @@ public class MapsActivity extends MyActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String json = "";
+            String json=null;
             String url = params[0];
 
             HttpResponse response;
@@ -98,7 +99,9 @@ public class MapsActivity extends MyActivity {
 
                 addPath(MapUtil.getPath(gmapResult));
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.e(TAG, "JSON error: "+e.getMessage());
+
+                Toast.makeText(getApplicationContext(), "Error while loading path!", Toast.LENGTH_SHORT).show();
             }
         }
 

@@ -7,6 +7,7 @@ import android.util.Log;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -58,6 +59,10 @@ public class FetchJourneyTask extends AsyncTask<String, Integer, String> {
         Log.d(TAG, ret);
         JSONObject gmapRes = MapUtil.getResult(ret);
 
-        context.addPath(MapUtil.getPath(gmapRes));
+        try {
+            context.addPath(MapUtil.getPath(gmapRes));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -3,6 +3,7 @@ package cab.pickup.server;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -75,17 +76,15 @@ public class AddUserTask extends AsyncTask<String, Integer, String>{
 
             String json = IOUtil.buildStringFromIS(response.getEntity().getContent());
 
-            Log.d(TAG, json);
-
             JSONObject result = new JSONObject(json);
 
             String msg = result.get("message").toString();
 
-            Log.e(TAG, "Error: "+msg);
-
             if(statusCode==200){
                 String usr = result.get("user_id").toString();
                 return usr;
+            } else {
+                Log.e(TAG, "Error: "+msg);
             }
         } catch (ClientProtocolException e) {
             Log.e(TAG, e.getMessage());
@@ -100,7 +99,9 @@ public class AddUserTask extends AsyncTask<String, Integer, String>{
 
     @Override
     protected void onPostExecute(String user_id){
-        Log.d(TAG, "user_id extracted: "+user_id);
+        if(user_id == null){
+            Toast.makeText(context, "Server registartion failed! Check your internet connection!", Toast.LENGTH_LONG).show();
+        }
 
         ((LoginActivity)context).addDataToPrefs(user_id,gcm_id);
 

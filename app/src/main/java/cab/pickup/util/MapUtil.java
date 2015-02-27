@@ -44,25 +44,21 @@ public class MapUtil {
         return null;
     }
 
-    public static ArrayList<LatLng> getPath(JSONObject result) {
+    public static ArrayList<LatLng> getPath(JSONObject result) throws JSONException {
 
         ArrayList<LatLng> lines = new ArrayList<LatLng>();
 
-        try {
-            //JSONArray routes = result.getJSONArray("routes");
+        JSONArray routes = result.getJSONArray("routes");
 
-            JSONArray steps = result.getJSONArray("legs")
-                    .getJSONObject(0).getJSONArray("steps");
+        JSONArray steps = ((JSONObject)(routes!=null?routes.get(0):result)).getJSONArray("legs")
+                .getJSONObject(0).getJSONArray("steps");
 
-            for (int i = 0; i < steps.length(); i++) {
-                String polyline = steps.getJSONObject(i).getJSONObject("polyline").getString("points");
+        for (int i = 0; i < steps.length(); i++) {
+            String polyline = steps.getJSONObject(i).getJSONObject("polyline").getString("points");
 
-                for (LatLng p : decodePolyline(polyline)) {
-                    lines.add(p);
-                }
+            for (LatLng p : decodePolyline(polyline)) {
+                lines.add(p);
             }
-        } catch (JSONException e){
-            Log.e(TAG, e.getMessage());
         }
 
         return lines;
