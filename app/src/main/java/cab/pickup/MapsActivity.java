@@ -5,11 +5,9 @@ import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.apache.http.HttpResponse;
@@ -115,6 +113,6 @@ public class MapsActivity extends MyActivity {
 
         map.addPolyline(rectLine);
 
-        map.moveCamera(CameraUpdateFactory.newLatLngBounds(new LatLngBounds(directions.get(0), directions.get(directions.size()-1)),10));
+        //map.moveCamera(CameraUpdateFactory.newLatLngBounds(new LatLngBounds(directions.get(0), directions.get(directions.size()-1)),10));
     }
 }

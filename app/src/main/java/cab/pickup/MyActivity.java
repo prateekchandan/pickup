@@ -33,7 +33,7 @@ public class MyActivity extends FragmentActivity {
     }
 
     public String getUrl(String... path){
-        return getString(R.string.base_url)+path[0];
+        return getString(R.string.base_url)+(path!=null?path[0]:"");
     }
 
     public String getKey(){

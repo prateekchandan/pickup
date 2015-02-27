@@ -11,9 +11,16 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import cab.pickup.JourneyActivity;
+import cab.pickup.R;
 
 public class GcmIntentService extends IntentService {
+
+    public static final int TYPE_NO_JOURNEY=0,
+                            TYPE_COMMON_JOURNEY=1;
 
     static final String TAG = "Intent Service";
     public static final String MSG_REC_INTENT_TAG = "MESSAGE_RECIEVED";
@@ -48,15 +55,30 @@ public class GcmIntentService extends IntentService {
             } else if (GoogleCloudMessaging.
                     MESSAGE_TYPE_MESSAGE.equals(messageType)) {
 
-                String msg_type = extras.getString("type");
+                Log.d(TAG, extras.toString());
 
-                if(msg_type.equals("common_journey")){
-                    sendNotification(extras.getString("user")+" sent request", extras.getString("id"));
-                } else {
-                    sendMsg(extras.getString("message"));
+                JSONObject msg = null;
+                try {
+                    msg = new JSONObject(extras.getString("message"));
+
+                    int msg_type = msg.getInt("type");
+
+                    if(msg_type==TYPE_COMMON_JOURNEY){
+                        sendNotification(msg.getString("name") + " sent request", msg.get("journey_id").toString());
+                    } else if(msg_type==TYPE_NO_JOURNEY){
+                        sendNotification("No common journey :(", msg.get("journey_id").toString());
+                    }
+
+                    Log.i(TAG, msg.getString("name"));
+                    Log.i(TAG, msg.get("journey_id").toString());
+                    Log.i(TAG, msg.get("type").toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
+
                 Log.i(TAG, "Received: " + extras.getString("message"));
+
             }
         }
         // Release the wake lock provided by the WakefulBroadcastReceiver.
@@ -75,6 +97,7 @@ public class GcmIntentService extends IntentService {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle("Journey matched")
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(msg))

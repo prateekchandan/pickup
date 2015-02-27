@@ -19,9 +19,8 @@ public class MapUtil {
 
     public static JSONObject getResult(String json){
         try {
-            JSONArray result =new JSONArray(json);
-            JSONArray journey = (JSONArray) result.get(0);
-            return ((JSONObject) journey.get(2));
+            JSONObject result =new JSONObject(json);
+            return (JSONObject)result.get("path");
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
@@ -50,9 +49,9 @@ public class MapUtil {
         ArrayList<LatLng> lines = new ArrayList<LatLng>();
 
         try {
-            JSONArray routes = result.getJSONArray("routes");
+            //JSONArray routes = result.getJSONArray("routes");
 
-            JSONArray steps = routes.getJSONObject(0).getJSONArray("legs")
+            JSONArray steps = result.getJSONArray("legs")
                     .getJSONObject(0).getJSONArray("steps");
 
             for (int i = 0; i < steps.length(); i++) {
