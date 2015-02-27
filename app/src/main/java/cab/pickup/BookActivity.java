@@ -3,6 +3,7 @@ package cab.pickup;
 import android.location.Address;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
@@ -29,14 +30,16 @@ public class BookActivity extends MyActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd ");
         String currentDate = sdf.format(new Date());
 
+        String pm_time = ((TextView)findViewById(R.id.pm_time)).getText().toString();
+
         new AddJourneyTask(this).execute(getUrl("/add_journey"), user_id, getKey()
                 ,start.getLatitude()+""
                 ,start.getLongitude()+""
                 ,end.getLatitude()+""
                 ,end.getLongitude()+""
                 ,currentDate+time
-                ,"30"
-                ,"30"
+                ,pm_time
+                ,pm_time
                 ,"1");
     }
 

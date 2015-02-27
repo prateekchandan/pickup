@@ -74,6 +74,7 @@ public class AddJourneyTask extends AsyncTask<String, Integer, String> {
             } else {
                 Log.e(TAG, "Error: "+msg);
                 Log.d(TAG, "user_id:"+user_id);
+                return "Error: "+msg;
             }
         } catch (ClientProtocolException e) {
             Log.e(TAG, e.getMessage());
@@ -88,9 +89,9 @@ public class AddJourneyTask extends AsyncTask<String, Integer, String> {
 
     @Override
     protected void onPostExecute(String ret){
-        if(ret==null)
+        if(ret == null){
             ret="There was an error in adding journey";
-
+        }
         Toast t = Toast.makeText(context, ret, Toast.LENGTH_LONG);
         t.show();
     }

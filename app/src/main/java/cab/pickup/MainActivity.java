@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -78,11 +79,19 @@ public class MainActivity extends MapsActivity {
     }
 
     public void bookRide(View v){
-        Intent i =new Intent();
-        i.setClass(this, BookActivity.class);
+        Intent i =new Intent(this, BookActivity.class);
 
-        i.putExtra("address_start", ((LocationSearchBar)findViewById(R.id.field_start)).getAddress());
-        i.putExtra("address_end", ((LocationSearchBar)findViewById(R.id.field_end)).getAddress());
+        Address start = ((LocationSearchBar)findViewById(R.id.field_start)).getAddress();
+        Address end = ((LocationSearchBar)findViewById(R.id.field_end)).getAddress();
+
+        if(start == null || end == null) {
+            Toast.makeText(this, "Select both start and destination before continuing.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+
+        i.putExtra("address_start", start);
+        i.putExtra("address_end", end);
 
         startActivity(i);
     }

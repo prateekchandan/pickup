@@ -10,14 +10,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/journey_time"/>
-    <TextView
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" android:text="+-"/>
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="time"
-        android:inputType="number"/>
+        android:hint="30"
+        android:inputType="number"
+        android:id="@+id/pm_time"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="mins"/>
+    </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
