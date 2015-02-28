@@ -22,9 +22,11 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import cab.pickup.MyActivity;
 import cab.pickup.R;
+import cab.pickup.util.LocationTracker;
 import cab.pickup.util.MapUtil;
 
 public class LocationSearchDialog extends Dialog implements View.OnClickListener{
@@ -37,13 +39,16 @@ public class LocationSearchDialog extends Dialog implements View.OnClickListener
 
     int searchBarId;
 
-    boolean running, doAgain;
+    boolean running, doAgain,
+            myLocationEnabled;
 
     PlacesAdapter adapter;
     Address addrSelected;
     private AsyncTask<String, Integer, List<Address>> searchTask;
 
-    public LocationSearchDialog(Context context, int id, Address a) {
+    LocationTracker tracker;
+
+    public LocationSearchDialog(Context context, int id, Address a, boolean myLocationEnabled) {
         super(context);
 
         searchBarId=id;
@@ -52,6 +57,10 @@ public class LocationSearchDialog extends Dialog implements View.OnClickListener
             setOwnerActivity((Activity)context);
 
         addrSelected=a;
+
+        this.myLocationEnabled=myLocationEnabled;
+
+        tracker=new LocationTracker(context);
     }
 
     @Override
@@ -78,6 +87,11 @@ public class LocationSearchDialog extends Dialog implements View.OnClickListener
         });
 
         findViewById(R.id.location_search_dialog_done).setOnClickListener(this);
+        findViewById(R.id.location_search_dialog_myloc).setOnClickListener(this);
+
+        if(myLocationEnabled)
+            findViewById(R.id.location_search_dialog_myloc).setVisibility(View.VISIBLE);
+
 
         searchField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -110,8 +124,30 @@ public class LocationSearchDialog extends Dialog implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        ((MyActivity)getOwnerActivity()).returnLocationSearchValue(addrSelected, searchBarId);
-        dismiss();
+        switch(v.getId()){
+            case R.id.location_search_dialog_done:
+                ((MyActivity)getOwnerActivity()).returnLocationSearchValue(addrSelected, searchBarId);
+                dismiss();
+                break;
+            case R.id.location_search_dialog_myloc:
+                if(!tracker.canGetLocation()){
+                    tracker.showSettingsAlert();
+
+                    break;
+                }
+
+                addrSelected = new Address(Locale.CHINA);
+
+                addrSelected.setLatitude(tracker.getLatitude());
+                addrSelected.setLongitude(tracker.getLongitude());
+
+                addrSelected.setAddressLine(0,"My Location");
+                addrSelected.setAddressLine(1,"");
+                addrSelected.setAddressLine(2,"");
+
+                searchField.setText(MapUtil.stringFromAddress(addrSelected));
+                break;
+        }
     }
 
     @Override

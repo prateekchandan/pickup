@@ -13,9 +13,20 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:id="@+id/location_search_dialog_list"/>
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Done"
-        android:id="@+id/location_search_dialog_done"/>
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Done"
+            android:id="@+id/location_search_dialog_done"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set as My Location"
+            android:id="@+id/location_search_dialog_myloc"
+            android:visibility="gone"/>
+        </LinearLayout>
     </LinearLayout>

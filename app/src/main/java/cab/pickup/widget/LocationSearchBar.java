@@ -31,7 +31,7 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        LocationSearchDialog dialog = new LocationSearchDialog(getContext(), getId(), (Address)getTag());
+        LocationSearchDialog dialog = new LocationSearchDialog(getContext(), getId(), (Address)getTag(), true);
 
         dialog.show();
     }
