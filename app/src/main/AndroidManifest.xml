@@ -75,10 +75,6 @@
             android:label="@string/title_activity_login" >
         </activity>
         <activity
-            android:name=".BookActivity"
-            android:label="@string/title_activity_book" >
-        </activity>
-        <activity
             android:name=".JourneyActivity"
             android:label="@string/title_activity_journey" >
         </activity>

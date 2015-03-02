@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -15,14 +17,21 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
+import cab.pickup.server.AddJourneyTask;
 import cab.pickup.widget.LocationSearchBar;
 
 public class MainActivity extends MapsActivity {
     HashMap<Integer, Marker> markers = new HashMap<Integer, Marker>();
 
+    FrameLayout container;
+
     private static final String TAG = "Main";
+
+    Address start, end;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +39,8 @@ public class MainActivity extends MapsActivity {
         setContentView(R.layout.activity_main);
 
         setUpMapIfNeeded();
+
+        container = (FrameLayout) findViewById(R.id.container);
 
         Intent i = new Intent();
         i.setClass(this,LoginActivity.class);
@@ -71,29 +82,18 @@ public class MainActivity extends MapsActivity {
         user_id=prefs.getString("user_id",null);
     }
 
-    private TextView getListItem(Address a){
-        TextView tv = new TextView(this);
-        tv.setText(a.getFeatureName()+" ,"+a.getLocality()+" ,"+a.getLatitude()+","+a.getLongitude());
-        tv.setTag(a);
-        return tv;
-    }
-
     public void bookRide(View v){
-        Intent i =new Intent(this, BookActivity.class);
-
-        Address start = ((LocationSearchBar)findViewById(R.id.field_start)).getAddress();
-        Address end = ((LocationSearchBar)findViewById(R.id.field_end)).getAddress();
+        start = ((LocationSearchBar)findViewById(R.id.field_start)).getAddress();
+        end = ((LocationSearchBar)findViewById(R.id.field_end)).getAddress();
 
         if(start == null || end == null) {
             Toast.makeText(this, "Select both start and destination before continuing.", Toast.LENGTH_LONG).show();
             return;
         }
 
+        findViewById(R.id.book_details).setVisibility(View.VISIBLE);
 
-        i.putExtra("address_start", start);
-        i.putExtra("address_end", end);
-
-        startActivity(i);
+        findViewById(R.id.map).setVisibility(View.GONE);
     }
 
     public void openChat(View v){
@@ -134,5 +134,26 @@ public class MainActivity extends MapsActivity {
         } catch (NullPointerException e){
             return;
         }
+    }
+
+    public void addJourney(View v){
+
+        TimePicker journey_time = (TimePicker)findViewById(R.id.journey_time);
+        String time = journey_time.getCurrentHour()+":"+journey_time.getCurrentMinute()+":00";
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd ");
+        String currentDate = sdf.format(new Date());
+
+        String pm_time = ((TextView)findViewById(R.id.pm_time)).getText().toString();
+
+        new AddJourneyTask(this).execute(getUrl("/add_journey"), user_id, getKey()
+                ,start.getLatitude()+""
+                ,start.getLongitude()+""
+                ,end.getLatitude()+""
+                ,end.getLongitude()+""
+                ,currentDate+time
+                ,pm_time
+                ,pm_time
+                ,"1");
     }
 }
