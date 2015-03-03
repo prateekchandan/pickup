@@ -48,10 +48,10 @@ public class MapUtil {
 
         ArrayList<LatLng> lines = new ArrayList<LatLng>();
 
-        JSONArray routes = result.getJSONArray("routes");
-
-        JSONArray steps = ((JSONObject)(routes!=null?routes.get(0):result)).getJSONArray("legs")
-                .getJSONObject(0).getJSONArray("steps");
+        JSONArray steps = ((JSONObject)(result.has("routes")?
+                            result.getJSONArray("routes").get(0):
+                            result)).getJSONArray("legs")
+                            .getJSONObject(0).getJSONArray("steps");
 
         for (int i = 0; i < steps.length(); i++) {
             String polyline = steps.getJSONObject(i).getJSONObject("polyline").getString("points");
