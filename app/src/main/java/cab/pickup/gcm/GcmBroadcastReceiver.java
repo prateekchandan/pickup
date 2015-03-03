@@ -1,4 +1,4 @@
-package cab.pickup.chat;
+package cab.pickup.gcm;
 
 import android.app.Activity;
 import android.content.ComponentName;

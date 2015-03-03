@@ -16,7 +16,7 @@ import java.util.List;
 import cab.pickup.LoginActivity;
 import cab.pickup.MyActivity;
 
-public class AddUserTask extends ServerTask{
+public class AddUserTask extends PostTask {
     private static final String TAG = "AddUserTask";
 
     GoogleCloudMessaging gcm;

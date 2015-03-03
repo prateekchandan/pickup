@@ -13,7 +13,7 @@ import java.util.List;
 
 import cab.pickup.MyActivity;
 
-public class AddJourneyTask extends ServerTask {
+public class AddJourneyTask extends PostTask {
     private static final String TAG = "AddJourneyTask";
 
     public AddJourneyTask(MyActivity context){
@@ -42,20 +42,21 @@ public class AddJourneyTask extends ServerTask {
 
     @Override
     protected void onPostExecute(String ret){
+        String toast="";
         if(ret == null){
-            ret="There was an error in adding journey";
+            toast="There was an error in adding journey";
+        } else {
+            try {
+                JSONObject result = new JSONObject(ret);
+                toast = result.get("message").toString();
+
+                Log.d(TAG, toast);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
-        try {
-            JSONObject result = new JSONObject(ret);
-            String msg = result.get("message").toString();
-
-            Log.d(TAG, msg);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        Toast.makeText(context, ret, Toast.LENGTH_LONG).show();
+        Toast.makeText(context, toast, Toast.LENGTH_LONG).show();
     }
 }

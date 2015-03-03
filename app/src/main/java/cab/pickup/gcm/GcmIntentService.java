@@ -1,4 +1,4 @@
-package cab.pickup.chat;
+package cab.pickup.gcm;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -90,7 +90,7 @@ public class GcmIntentService extends IntentService {
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent i=new Intent(this, JourneyActivity.class);
-        i.putExtra("id",id);
+        i.putExtra("journey_id",id);
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 i, 0);

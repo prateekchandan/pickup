@@ -165,4 +165,8 @@ public class MainActivity extends MapsActivity {
                 ,pm_time
                 ,"1");
     }
+
+    public void showRides(View v){
+        startActivity(new Intent(this, RideActivity.class));
+    }
 }

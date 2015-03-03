@@ -12,7 +12,7 @@ public class JourneyActivity extends MapsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journey);
 
-        new FetchJourneyTask(this).execute(getUrl("/journey"), getKey(), getIntent().getStringExtra("id"));
+        new FetchJourneyTask(this).execute(getUrl("/journey"), getKey(), getIntent().getStringExtra("journey_id"));
     }
 
 

@@ -9,7 +9,7 @@ import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SendMessageTask extends ServerTask {
+public class SendMessageTask extends PostTask {
     private static final String TAG = "SendMessageTask";
 
     public SendMessageTask(){

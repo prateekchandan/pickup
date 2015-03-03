@@ -16,11 +16,11 @@ import java.util.List;
 import cab.pickup.MyActivity;
 import cab.pickup.util.IOUtil;
 
-public abstract class ServerTask extends AsyncTask<String, Integer, String> {
+public abstract class PostTask extends AsyncTask<String, Integer, String> {
     private static final String TAG = "ServerTask";
     MyActivity context;
 
-    public ServerTask(MyActivity context){
+    public PostTask(MyActivity context){
         this.context=context;
     }
     @Override
