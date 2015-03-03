@@ -20,54 +20,53 @@
         android:hint="Enter Destination"
         android:id="@+id/field_end"
         style="@style/LocationSearchBar"/>
-    <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/container">
-        <fragment
+
+        <FrameLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"/>
-        <LinearLayout android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:id="@+id/book_details">
-
-            <TimePicker
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/journey_time"/>
-            <LinearLayout
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/container">
+            <fragment
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:text="+-"/>
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="30"
-                    android:inputType="number"
-                    android:id="@+id/pm_time"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="mins"/>
-            </LinearLayout>
+                android:layout_height="fill_parent"
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"/>
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:visibility="gone"
+                android:id="@+id/book_details">
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Book"
-                android:onClick="addJourney"/>
+                    <TimePicker
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/journey_time"/>
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:text="+-"/>
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="30"
+                            android:inputType="number"
+                            android:id="@+id/pm_time"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="mins"/>
+                    </LinearLayout>
 
-        </LinearLayout>
 
-    </FrameLayout>
+                </LinearLayout>
+            </ScrollView>
+        </FrameLayout>
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">

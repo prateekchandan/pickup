@@ -32,6 +32,9 @@ public class MainActivity extends MapsActivity {
     private static final String TAG = "Main";
 
     Address start, end;
+    private static final int MODE_MAP=0, MODE_DETAILS=1;
+
+    private int mode=MODE_MAP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,17 +86,23 @@ public class MainActivity extends MapsActivity {
     }
 
     public void bookRide(View v){
-        start = ((LocationSearchBar)findViewById(R.id.field_start)).getAddress();
-        end = ((LocationSearchBar)findViewById(R.id.field_end)).getAddress();
+        if(mode==MODE_MAP) {
+            start = ((LocationSearchBar) findViewById(R.id.field_start)).getAddress();
+            end = ((LocationSearchBar) findViewById(R.id.field_end)).getAddress();
 
-        if(start == null || end == null) {
-            Toast.makeText(this, "Select both start and destination before continuing.", Toast.LENGTH_LONG).show();
-            return;
+            if (start == null || end == null) {
+                Toast.makeText(this, "Select both start and destination before continuing.", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            findViewById(R.id.book_details).setVisibility(View.VISIBLE);
+
+            findViewById(R.id.map).setVisibility(View.GONE);
+
+            mode=MODE_DETAILS;
+        } else if(mode==MODE_DETAILS){
+            addJourney();
         }
-
-        findViewById(R.id.book_details).setVisibility(View.VISIBLE);
-
-        findViewById(R.id.map).setVisibility(View.GONE);
     }
 
     public void openChat(View v){
@@ -136,7 +145,7 @@ public class MainActivity extends MapsActivity {
         }
     }
 
-    public void addJourney(View v){
+    public void addJourney(){
 
         TimePicker journey_time = (TimePicker)findViewById(R.id.journey_time);
         String time = journey_time.getCurrentHour()+":"+journey_time.getCurrentMinute()+":00";
