@@ -37,6 +37,9 @@ public class AddJourneyTask extends PostTask {
         nameValuePairs.add(new BasicNameValuePair("margin_after", params[i++]));
         nameValuePairs.add(new BasicNameValuePair("preference",params[i++]));
 
+        nameValuePairs.add(new BasicNameValuePair("start_text",params[i++]));
+        nameValuePairs.add(new BasicNameValuePair("end_text",params[i++]));
+
         return nameValuePairs;
     }
 

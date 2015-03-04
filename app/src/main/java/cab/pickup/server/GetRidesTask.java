@@ -77,9 +77,9 @@ public class GetRidesTask extends AsyncTask<String, Integer, String> {
 
             for(int i=0 ; i<arr.length();i++) {
                 JSONObject result = (JSONObject)arr.get(i);
-                String text = "From:" + result.get("start_lat").toString() + "," + result.get("start_long").toString() +"\n"+
-                        "To:" + result.get("end_lat").toString() + "," + result.get("end_long").toString() +"\n"+
-                        "Time:" + result.get("journey_time").toString();
+                String text = "From:" + result.get("start_text").toString()+"\n"+
+                        "To:" + result.get("end_text").toString()+"\n"+
+                        "Time:" + result.get("journey_time").toString()+"\n";
 
                 TextView tv = new TextView(context);
 

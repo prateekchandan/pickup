@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import cab.pickup.server.AddJourneyTask;
+import cab.pickup.util.MapUtil;
 import cab.pickup.widget.LocationSearchBar;
 
 public class MainActivity extends MapsActivity {
@@ -163,7 +164,9 @@ public class MainActivity extends MapsActivity {
                 ,currentDate+time
                 ,pm_time
                 ,pm_time
-                ,"1");
+                ,"1"
+                ,MapUtil.stringFromAddress(start)
+                ,MapUtil.stringFromAddress(end));
     }
 
     public void showRides(View v){
