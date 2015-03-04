@@ -93,7 +93,7 @@ public class GcmIntentService extends IntentService {
         i.putExtra("journey_id",id);
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                i, 0);
+                i, PendingIntent.FLAG_CANCEL_CURRENT);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
