@@ -118,6 +118,6 @@ public class MapsActivity extends MyActivity {
 
         map.addPolyline(rectLine);
 
-        map.moveCamera(CameraUpdateFactory.newLatLngBounds(bnds, 10));
+        map.animateCamera(CameraUpdateFactory.newLatLngBounds(bnds, 10));
     }
 }

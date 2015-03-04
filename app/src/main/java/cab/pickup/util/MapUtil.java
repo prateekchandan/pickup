@@ -24,7 +24,9 @@ public class MapUtil {
 
     public static LatLngBounds getLatLngBounds(JSONObject result){
         try {
-            JSONObject bounds = result.getJSONObject("bounds");
+            JSONObject bounds = ((JSONObject)(result.has("routes")?
+                    result.getJSONArray("routes").get(0):
+                    result)).getJSONObject("bounds");
 
             JSONObject ne = bounds.getJSONObject("northeast");
             JSONObject sw = bounds.getJSONObject("southwest");

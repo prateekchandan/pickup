@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -17,8 +18,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 
 import cab.pickup.server.AddJourneyTask;
@@ -151,8 +150,11 @@ public class MainActivity extends MapsActivity {
         TimePicker journey_time = (TimePicker)findViewById(R.id.journey_time);
         String time = journey_time.getCurrentHour()+":"+journey_time.getCurrentMinute()+":00";
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd ");
-        String currentDate = sdf.format(new Date());
+        DatePicker date = ((DatePicker)findViewById(R.id.journey_date));
+
+        String currentDate = date.getYear()+"-"+date.getMonth()+"-"+date.getDayOfMonth()+" ";
+
+        Log.d(TAG, currentDate);
 
         String pm_time = ((TextView)findViewById(R.id.pm_time)).getText().toString();
 
