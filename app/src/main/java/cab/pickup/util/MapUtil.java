@@ -17,15 +17,9 @@ import java.util.List;
 public class MapUtil {
     private static final String TAG = "MapUtil";
 
-    public static JSONObject getResult(String json){
-        try {
+    public static JSONObject getResult(String json) throws JSONException{
             JSONObject result =new JSONObject(json);
             return (JSONObject)result.get("path");
-        } catch (JSONException e) {
-            Log.e(TAG, e.getMessage());
-        }
-
-        return null;
     }
 
     public static LatLngBounds getLatLngBounds(JSONObject result){
@@ -48,16 +42,18 @@ public class MapUtil {
 
         ArrayList<LatLng> lines = new ArrayList<LatLng>();
 
-        JSONArray steps = ((JSONObject)(result.has("routes")?
+        JSONArray legs = ((JSONObject)(result.has("routes")?
                             result.getJSONArray("routes").get(0):
-                            result)).getJSONArray("legs")
-                            .getJSONObject(0).getJSONArray("steps");
+                            result)).getJSONArray("legs");
 
-        for (int i = 0; i < steps.length(); i++) {
-            String polyline = steps.getJSONObject(i).getJSONObject("polyline").getString("points");
+        for (int i = 0; i < legs.length(); i++) {
+            JSONArray steps = legs.getJSONObject(i).getJSONArray("steps");
+            for(int j=0; j<steps.length(); j++) {
+                String polyline = steps.getJSONObject(j).getJSONObject("polyline").getString("points");
 
-            for (LatLng p : decodePolyline(polyline)) {
-                lines.add(p);
+                for (LatLng p : decodePolyline(polyline)) {
+                    lines.add(p);
+                }
             }
         }
 
