@@ -11,6 +11,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.apache.http.HttpResponse;
@@ -28,6 +29,7 @@ public class MapsActivity extends MyActivity {
     GoogleMap map; // Might be null if Google Play services APK is not available.
 
     JSONObject gmapResult;
+    Polyline currPath;
 
     @Override
     protected void onResume() {
@@ -110,13 +112,15 @@ public class MapsActivity extends MyActivity {
     }
 
     public void addPath(ArrayList<LatLng> directions, LatLngBounds bnds){
+        if(currPath!=null) currPath.remove();
+
         PolylineOptions rectLine = new PolylineOptions().width(4).color(Color.BLUE);
 
         for(int i = 0 ; i < directions.size() ; i++) {
             rectLine.add(directions.get(i));
         }
 
-        map.addPolyline(rectLine);
+        currPath=map.addPolyline(rectLine);
 
         map.animateCamera(CameraUpdateFactory.newLatLngBounds(bnds, 10));
     }
