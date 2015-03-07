@@ -1,5 +1,7 @@
 package cab.pickup;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,12 +28,23 @@ public class RideActivity extends MyActivity implements View.OnLongClickListener
     }
 
     @Override
-    public boolean onLongClick(View v) {
-        String id = (String)v.getTag();
+    public boolean onLongClick(final View v) {
+        final String id = (String)v.getTag();
 
-        new GetTask(this).execute(getUrl("/delete_journey/"+id+"?key="+getKey()));
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm delete")
+                .setMessage("Do you really want to delete journey?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
-        v.setVisibility(View.GONE);
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        new GetTask(RideActivity.this).execute(getUrl("/delete_journey/"+id+"?key="+getKey()));
+
+                        v.setVisibility(View.GONE);
+                    }})
+                .setNegativeButton(android.R.string.no, null).show();
+
+
 
         return true;
     }
