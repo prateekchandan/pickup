@@ -153,9 +153,11 @@ public class MainActivity extends MapsActivity {
 
         DatePicker date = ((DatePicker)findViewById(R.id.journey_date));
 
+        int day=date.getDayOfMonth(), month=date.getMonth()+1;
+
         String currentDate = date.getYear()+"-"+
-                (date.getMonth()>9?date.getMonth():"0"+date.getMonth())+"-"+
-                (date.getDayOfMonth()>9?date.getDayOfMonth():"0"+date.getDayOfMonth())+" "+time;
+                (month>9?month:"0"+month)+"-"+
+                (day>9?day:"0"+day)+" "+time;
 
                 Log.d(TAG, currentDate);
 
