@@ -179,4 +179,16 @@ public class MainActivity extends MapsActivity {
     public void showRides(View v){
         startActivity(new Intent(this, RideActivity.class));
     }
+
+    @Override
+    public void onBackPressed(){
+        if(mode==MODE_DETAILS){
+            findViewById(R.id.book_details).setVisibility(View.GONE);
+            findViewById(R.id.map).setVisibility(View.VISIBLE);
+
+            mode=MODE_MAP;
+        } else {
+            super.onBackPressed();
+        }
+    }
 }
