@@ -148,13 +148,16 @@ public class MainActivity extends MapsActivity {
     public void addJourney(){
 
         TimePicker journey_time = (TimePicker)findViewById(R.id.journey_time);
-        String time = journey_time.getCurrentHour()+":"+journey_time.getCurrentMinute()+":00";
+        String time = (journey_time.getCurrentHour()>9?journey_time.getCurrentHour():"0"+journey_time.getCurrentHour())+":"+
+                (journey_time.getCurrentMinute()>9?journey_time.getCurrentMinute():"0"+journey_time.getCurrentMinute())+":00";
 
         DatePicker date = ((DatePicker)findViewById(R.id.journey_date));
 
-        String currentDate = date.getYear()+"-"+date.getMonth()+"-"+date.getDayOfMonth()+" ";
+        String currentDate = date.getYear()+"-"+
+                (date.getMonth()>9?date.getMonth():"0"+date.getMonth())+"-"+
+                (date.getDayOfMonth()>9?date.getDayOfMonth():"0"+date.getDayOfMonth())+" "+time;
 
-        Log.d(TAG, currentDate);
+                Log.d(TAG, currentDate);
 
         String pm_time = ((TextView)findViewById(R.id.pm_time)).getText().toString();
 
@@ -163,7 +166,7 @@ public class MainActivity extends MapsActivity {
                 ,start.getLongitude()+""
                 ,end.getLatitude()+""
                 ,end.getLongitude()+""
-                ,currentDate+time
+                ,currentDate
                 ,pm_time
                 ,pm_time
                 ,"1"

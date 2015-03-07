@@ -45,6 +45,7 @@ public abstract class PostTask extends AsyncTask<String, Integer, String> {
             if(statusCode==200){
                 ret_value=IOUtil.buildStringFromIS(response.getEntity().getContent());
             } else {
+                Log.e(TAG, IOUtil.buildStringFromIS(response.getEntity().getContent()));
                 ret_value=null;
             }
         } catch (ClientProtocolException e) {
