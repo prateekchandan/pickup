@@ -27,9 +27,9 @@ public class RideActivity extends MyActivity implements View.OnLongClickListener
 
     @Override
     public boolean onLongClick(View v) {
-        int id = (Integer)v.getTag();
+        String id = (String)v.getTag();
 
-        new GetTask(this).execute(getUrl("/user/"+user_id+"/delete_journey/"+id+"?key="+getKey()));
+        new GetTask(this).execute(getUrl("/delete_journey/"+id+"?key="+getKey()));
 
         v.setVisibility(View.GONE);
 
