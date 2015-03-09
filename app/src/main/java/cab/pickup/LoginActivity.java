@@ -99,8 +99,9 @@ public class LoginActivity extends MyActivity {
     
     public void addDataToPrefs(String user_id, String gcm_id){
         SharedPreferences.Editor spe = prefs.edit();
-        
-        spe.putString("user_id",user_id);
+
+        me.id=user_id;
+        spe.putString("user_json",me.getJson());
         spe.putString("gcm_id", gcm_id);
         spe.putInt("app_version", getAppVersion());
 
