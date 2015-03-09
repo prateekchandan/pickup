@@ -93,7 +93,7 @@ public class JourneyActivity extends MapsActivity {
             Log.d(TAG, ret);
 
             try {
-                Journey result = new Journey(new JSONObject(ret));
+                Journey result = new Journey(new JSONObject(ret), Journey.TYPE_COMMON);
 
                 if(!result.u1.id.equals(me.id)) showProfile(result.u1);
                 if(!result.u2.id.equals(me.id)) showProfile(result.u2);

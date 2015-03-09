@@ -12,12 +12,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cab.pickup.MyActivity;
+import cab.pickup.util.Journey;
 
 public class AddJourneyTask extends PostTask {
     private static final String TAG = "AddJourneyTask";
 
-    public AddJourneyTask(MyActivity context){
+    Journey journey;
+
+    public AddJourneyTask(MyActivity context, Journey j){
         super(context);
+        journey=j;
     }
 
     @Override
@@ -26,6 +30,8 @@ public class AddJourneyTask extends PostTask {
 
         nameValuePairs.add(new BasicNameValuePair("user_id", params[i++]));
         nameValuePairs.add(new BasicNameValuePair("key", params[i++]));
+
+        nameValuePairs.add(new BasicNameValuePair("journey_id", params[i++]));
 
         nameValuePairs.add(new BasicNameValuePair("start_lat", params[i++]));
         nameValuePairs.add(new BasicNameValuePair("start_long", params[i++]));
@@ -52,6 +58,8 @@ public class AddJourneyTask extends PostTask {
             try {
                 JSONObject result = new JSONObject(ret);
                 toast = result.get("message").toString();
+
+                journey.id = result.getString("journey_id");
 
                 Log.d(TAG, toast);
 

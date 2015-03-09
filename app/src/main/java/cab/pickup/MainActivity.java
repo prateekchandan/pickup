@@ -35,9 +35,12 @@ public class MainActivity extends MapsActivity {
     private static final String TAG = "Main";
 
     Address start, end;
-    private static final int MODE_MAP=0, MODE_DETAILS=1;
+    private static final int MODE_MAP=0, MODE_DETAILS=1,
+                            REQUEST_LOGIN=1, REQUEST_JOURNEY=2;
 
     private int mode=MODE_MAP;
+
+    Journey journey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +51,11 @@ public class MainActivity extends MapsActivity {
 
         container = (FrameLayout) findViewById(R.id.container);
 
+        journey = new Journey();
+
         Intent i = new Intent();
         i.setClass(this,LoginActivity.class);
-        startActivityForResult(i, 1);
+        startActivityForResult(i, REQUEST_LOGIN);
     }
 
 
@@ -85,11 +90,25 @@ public class MainActivity extends MapsActivity {
         super.onActivityResult(req,res,data);
 
         Log.d(TAG, "onActivityResult");
-        try {
-            me=new User(new JSONObject(prefs.getString("user_json","")));
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if(res==RESULT_OK) {
+            try {
+                if (req == REQUEST_LOGIN)
+                    me = new User(new JSONObject(prefs.getString("user_json", "")));
+                else if (req == REQUEST_JOURNEY)
+                    setJourney(data.getStringExtra("journey_json"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    private void setJourney(String journey_json) throws JSONException{
+        journey = new Journey(new JSONObject(journey_json), Journey.TYPE_SINGLE);
+
+        returnLocationSearchValue(journey.start, R.id.field_start);
+        returnLocationSearchValue(journey.end, R.id.field_end);
+
+        displayPath();
     }
 
     public void bookRide(View v){
@@ -171,13 +190,19 @@ public class MainActivity extends MapsActivity {
         String pm_time = ((TextView)findViewById(R.id.pm_time)).getText().toString();
 
         Log.d(TAG, me.getJson());
-        Journey new_journey=new Journey(me, start, end, currentDate, pm_time, "1");
 
-        new_journey.addToServer(this);
+        journey.u1=me;
+        journey.start=start;
+        journey.end=end;
+        journey.datetime=currentDate;
+        journey.del_time=pm_time;
+        journey.cab_preference="1";
+
+        journey.addToServer(this);
     }
 
     public void showRides(View v){
-        startActivity(new Intent(this, RideActivity.class));
+        startActivityForResult(new Intent(this, RideActivity.class), REQUEST_JOURNEY);
     }
 
     @Override

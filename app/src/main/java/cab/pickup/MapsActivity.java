@@ -28,18 +28,12 @@ import cab.pickup.util.Journey;
 public class MapsActivity extends MyActivity {
     GoogleMap map; // Might be null if Google Play services APK is not available.
 
-    JSONObject gmapResult;
     Polyline currPath;
 
     @Override
     protected void onResume() {
         super.onResume();
         setUpMapIfNeeded();
-    }
-
-    public void loadDir(){
-        MapDirectionsTask getDir = new MapDirectionsTask();
-        getDir.execute();
     }
 
     public void setUpMapIfNeeded() {

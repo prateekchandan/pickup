@@ -7,6 +7,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MapUtil {
     private static final String TAG = "MapUtil";
@@ -53,5 +54,15 @@ public class MapUtil {
         if(address.getAddressLine(2)!=null) addr+=", "+address.getAddressLine(2);
 
         return addr;
+    }
+
+    public static Address addressFrom(double lat, double lng, String text){
+        Address a=new Address(Locale.CHINA);
+
+        a.setAddressLine(0,text);
+
+        a.setLatitude(lat); a.setLongitude(lng);
+
+        return a;
     }
 }

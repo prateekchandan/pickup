@@ -16,26 +16,39 @@ import cab.pickup.server.AddJourneyTask;
 
 // Wrapper class for Journey details json
 public class Journey {
+    public static final int TYPE_COMMON=0, TYPE_SINGLE=1;
+
     public User u1, u2;
     public JSONObject path;
     public Address start, end;
-    public String json, datetime, del_time, cab_preference;
+    public String id, datetime, del_time, cab_preference;
 
-    public Journey(JSONObject journey) throws JSONException {
-        json=journey.toString();
+    public Journey(){}
 
-        u1=new User(journey.getJSONObject("u1"));
-        u2=new User(journey.optJSONObject("u2"));
+    public Journey(JSONObject journey, int type) throws JSONException {
+        if(type==TYPE_COMMON){
+            u1=new User(journey.getJSONObject("u1"));
+            u2=new User(journey.optJSONObject("u2"));
+            path=journey.getJSONObject("path");
+        } else if(type==TYPE_SINGLE){
+            id=journey.getString("journey_id");
+            datetime=journey.getString("journey_time");
 
-        path=journey.getJSONObject("path");
+            start=MapUtil.addressFrom(journey.getDouble("start_lat"),journey.getDouble("start_long"),journey.getString("start_text"));
+            end=MapUtil.addressFrom(journey.getDouble("end_lat"),journey.getDouble("end_long"),journey.getString("end_text"));
+
+            del_time=journey.getString("margin_before");
+            cab_preference=journey.getString("preference");
+        }
+
     }
 
-    public Journey(JSONObject path, User... users){
+    public Journey(JSONObject path, User users){
         this.path=path;
 
-        u1=users[0];
-        if(users.length>1)
-            u2=users[1];
+        u1=users;
+        //if(users.length>1)
+        //    u2=users[1];
     }
 
     public Journey(User user, Address start, Address end, String datetime, String del_time, String cab_preference){
@@ -83,7 +96,8 @@ public class Journey {
     }
 
     public void addToServer(MyActivity context){
-        new AddJourneyTask(context).execute(context.getUrl("/add_journey"), u1.id, context.getKey()
+        new AddJourneyTask(context, this).execute(context.getUrl("/add_journey"), u1.id, context.getKey()
+                ,id
                 ,start.getLatitude()+""
                 ,start.getLongitude()+""
                 ,end.getLatitude()+""
@@ -94,5 +108,26 @@ public class Journey {
                 ,"1"
                 ,MapUtil.stringFromAddress(start)
                 ,MapUtil.stringFromAddress(end));
+    }
+
+    public String getJson(){
+        String json="{";
+
+        json+="\"journey_id\":\""+id+"\",";
+        json+="\"journey_time\":\""+datetime+"\",";
+
+        json+="\"start_lat\":\""+start.getLatitude()+"\",";
+        json+="\"start_long\":\""+start.getLongitude()+"\",";
+        json+="\"start_text\":\""+MapUtil.stringFromAddress(start)+"\",";
+
+        json+="\"end_lat\":\""+end.getLatitude()+"\",";
+        json+="\"end_long\":\""+end.getLongitude()+"\",";
+        json+="\"end_text\":\""+MapUtil.stringFromAddress(end)+"\",";
+
+        json+="\"margin_before\":\""+del_time+"\",";
+        json+="\"preference\":\""+cab_preference+"\"";
+
+        json+="}";
+        return json;
     }
 }
