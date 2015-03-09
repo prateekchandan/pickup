@@ -18,9 +18,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 
 import cab.pickup.util.Journey;
+import cab.pickup.util.User;
 import cab.pickup.widget.LocationSearchBar;
 
 public class MainActivity extends MapsActivity {
@@ -81,7 +85,11 @@ public class MainActivity extends MapsActivity {
         super.onActivityResult(req,res,data);
 
         Log.d(TAG, "onActivityResult");
-        me.id=prefs.getString("user_id",null);
+        try {
+            me=new User(new JSONObject(prefs.getString("user_json","")));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void bookRide(View v){
@@ -162,6 +170,7 @@ public class MainActivity extends MapsActivity {
 
         String pm_time = ((TextView)findViewById(R.id.pm_time)).getText().toString();
 
+        Log.d(TAG, me.getJson());
         Journey new_journey=new Journey(me, start, end, currentDate, pm_time, "1");
 
         new_journey.addToServer(this);
