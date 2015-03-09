@@ -24,7 +24,7 @@ public class RideActivity extends MyActivity implements View.OnLongClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ride);
 
-        new GetRidesTask(this).execute(getUrl("/user/"+user_id+"/all_journey?key="+getKey()));
+        new GetRidesTask(this).execute(getUrl("/user/"+me.id+"/all_journey?key="+getKey()));
     }
 
     @Override

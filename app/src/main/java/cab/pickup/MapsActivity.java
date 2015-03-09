@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import cab.pickup.util.IOUtil;
-import cab.pickup.util.MapUtil;
+import cab.pickup.util.Journey;
 
 public class MapsActivity extends MyActivity {
     GoogleMap map; // Might be null if Google Play services APK is not available.
@@ -97,11 +97,9 @@ public class MapsActivity extends MyActivity {
         @Override
         public void onPostExecute(String json) {
             try {
-                gmapResult = new JSONObject(json);
+                Journey j = new Journey(new JSONObject(json), me);
 
-                Log.d(TAG, gmapResult.toString());
-
-                addPath(MapUtil.getPath(gmapResult), MapUtil.getLatLngBounds(gmapResult));
+                addPath(j.getPath(), j.getLatLngBounds());
             } catch (JSONException e) {
                 Log.e(TAG, "JSON error: "+e.getMessage());
 

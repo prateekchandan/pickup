@@ -20,7 +20,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 import cab.pickup.util.IOUtil;
-import cab.pickup.util.MapUtil;
+import cab.pickup.util.Journey;
+import cab.pickup.util.User;
 
 
 public class JourneyActivity extends MapsActivity {
@@ -37,12 +38,12 @@ public class JourneyActivity extends MapsActivity {
         new FetchJourneyTask().execute(getUrl("/journey"), getKey(), getIntent().getStringExtra("journey_id"));
     }
 
-    public void showProfile(String user_id, String text){
+    public void showProfile(User user){
         LinearLayout ll = (LinearLayout)LayoutInflater.from(this).inflate(R.layout.user_profile, profile_list);
         ProfilePictureView pp = (ProfilePictureView)ll.findViewById(R.id.user_profile_img);
-        pp.setProfileId(user_id);
+        pp.setProfileId(user.fbid);
 
-        ((TextView)ll.findViewById(R.id.user_profile_name)).setText(text);
+        ((TextView)ll.findViewById(R.id.user_profile_name)).setText(user.name+"\n"+user.gender);
     }
 
     class FetchJourneyTask extends AsyncTask<String, Integer, String> {
@@ -92,15 +93,12 @@ public class JourneyActivity extends MapsActivity {
             Log.d(TAG, ret);
 
             try {
-                JSONObject result = new JSONObject(ret);
+                Journey result = new Journey(new JSONObject(ret));
 
-                JSONObject u1 = result.getJSONObject("u1"), u2 = result.getJSONObject("u2");
+                if(!result.u1.id.equals(me.id)) showProfile(result.u1);
+                if(!result.u2.id.equals(me.id)) showProfile(result.u2);
 
-                if(!u1.getString("id").equals(user_id)) showProfile(u1.getString("fbid"), u1.getString("first_name")+"\n"+u1.getString("gender"));
-                if(!u2.getString("id").equals(user_id)) showProfile(u2.getString("fbid"), u2.getString("first_name")+"\n"+u2.getString("gender"));
-
-                JSONObject gmapRes = MapUtil.getResult(ret);
-                addPath(MapUtil.getPath(gmapRes), MapUtil.getLatLngBounds(gmapRes));
+                addPath(result.getPath(), result.getLatLngBounds());
             } catch (JSONException e) {
                 e.printStackTrace();
             }

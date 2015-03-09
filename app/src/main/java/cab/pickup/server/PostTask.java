@@ -17,7 +17,7 @@ import cab.pickup.MyActivity;
 import cab.pickup.util.IOUtil;
 
 public abstract class PostTask extends AsyncTask<String, Integer, String> {
-    private static final String TAG = "ServerTask";
+    private static final String TAG = "PostTask";
     MyActivity context;
 
     public PostTask(MyActivity context){

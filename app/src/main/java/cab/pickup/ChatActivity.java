@@ -107,7 +107,7 @@ public class ChatActivity extends MyActivity {
         SendMessageTask task = new SendMessageTask();
 
         String msg = ((EditText)findViewById(R.id.msg_input)).getText().toString();
-        task.execute(msg, getUrl("/send.php"),device_id, getKey());
+        task.execute(msg, getUrl("/send.php"),me.device_id, getKey());
 
         newmsg.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         newmsg.setTextColor(0xffffffff);

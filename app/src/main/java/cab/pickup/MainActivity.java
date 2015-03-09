@@ -20,8 +20,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.HashMap;
 
-import cab.pickup.server.AddJourneyTask;
-import cab.pickup.util.MapUtil;
+import cab.pickup.util.Journey;
 import cab.pickup.widget.LocationSearchBar;
 
 public class MainActivity extends MapsActivity {
@@ -82,7 +81,7 @@ public class MainActivity extends MapsActivity {
         super.onActivityResult(req,res,data);
 
         Log.d(TAG, "onActivityResult");
-        user_id=prefs.getString("user_id",null);
+        me.id=prefs.getString("user_id",null);
     }
 
     public void bookRide(View v){
@@ -163,17 +162,9 @@ public class MainActivity extends MapsActivity {
 
         String pm_time = ((TextView)findViewById(R.id.pm_time)).getText().toString();
 
-        new AddJourneyTask(this).execute(getUrl("/add_journey"), user_id, getKey()
-                ,start.getLatitude()+""
-                ,start.getLongitude()+""
-                ,end.getLatitude()+""
-                ,end.getLongitude()+""
-                ,currentDate
-                ,pm_time
-                ,pm_time
-                ,"1"
-                ,MapUtil.stringFromAddress(start)
-                ,MapUtil.stringFromAddress(end));
+        Journey new_journey=new Journey(me, start, end, currentDate, pm_time, "1");
+
+        new_journey.addToServer(this);
     }
 
     public void showRides(View v){

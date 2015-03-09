@@ -7,11 +7,15 @@ import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import cab.pickup.util.IOUtil;
+import cab.pickup.util.User;
 import cab.pickup.widget.LocationSearchBar;
 
 public class MyActivity extends FragmentActivity {
-    String device_id, user_id;
+    User me;
 
     SharedPreferences prefs;
 
@@ -21,11 +25,17 @@ public class MyActivity extends FragmentActivity {
 
         prefs=getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
 
-        device_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        try {
+            me=new User(new JSONObject(prefs.getString("user_json","")));
+            Log.d("MyAct", me.getJson());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            me=new User();
+        }
 
-        user_id = prefs.getString("user_id",null);
+        me.device_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
-        Log.d("MyActivity", user_id==null?"user_id null":user_id);
+        Log.d("MyActivity", me.id==null?"user_id null":me.id);
     }
 
     public int getAppVersion(){
@@ -49,12 +59,5 @@ public class MyActivity extends FragmentActivity {
 
     public void returnLocationSearchValue(Address address, int id){
         ((LocationSearchBar)findViewById(id)).setAddress(address);
-    }
-
-    public String getData(String key){
-        if(getIntent().getStringExtra(key)==null)
-            return prefs.getString(key,"");
-        else
-            return getIntent().getStringExtra(key);
     }
 }

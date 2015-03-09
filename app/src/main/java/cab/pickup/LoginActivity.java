@@ -12,7 +12,11 @@ import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import cab.pickup.server.AddUserTask;
+import cab.pickup.util.User;
 
 
 public class LoginActivity extends MyActivity {
@@ -27,7 +31,7 @@ public class LoginActivity extends MyActivity {
         Session session = Session.getActiveSession();
 
         if(session!=null && session.isOpened()) {
-            if (user_id == null) {
+            if (me.id == null) {
                 addUser();
             } else {
                 finish();
@@ -45,7 +49,7 @@ public class LoginActivity extends MyActivity {
         Session.getActiveSession().onActivityResult(this, requestCode,
                 resultCode, data);
 
-        if(!prefs.contains("name")) {
+        if(!prefs.contains("user_json")) {
             getBiodata();
         } else {
             addUser();
@@ -75,13 +79,21 @@ public class LoginActivity extends MyActivity {
     private void addUser() {
         Log.d(TAG, "add user");
         setResult(RESULT_OK);
+
+        try {
+            me=new User(new JSONObject(prefs.getString("user_json","")));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            me=new User();
+        }
+
         AddUserTask a = new AddUserTask(this);
-        a.execute(getUrl("/add_user"), user_id, getKey()
-                , device_id
-                , getData(getString(R.string.profile_tag_fbid))
-                , getData(getString(R.string.profile_tag_name))
-                , getData(getString(R.string.profile_tag_email))
-                , getData(getString(R.string.profile_tag_gender)));
+        a.execute(getUrl("/add_user"), me.id, getKey()
+                , me.device_id
+                , me.fbid
+                , me.name
+                , me.email
+                , me.gender);
 
     }
     

@@ -15,14 +15,23 @@ public class SettingsActivity extends MyActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        setEditText(getData(getString(R.string.profile_tag_name)),R.id.profile_name);
+        me.name=getData(getString(R.string.profile_tag_name));
+        me.email=getData(getString(R.string.profile_tag_email));
+        me.gender=getData(getString(R.string.profile_tag_gender));
+        me.fbid=getData(getString(R.string.profile_tag_fbid));
+
+        /*setEditText(getData(getString(R.string.profile_tag_name)),R.id.profile_name);
         setEditText(getData(getString(R.string.profile_tag_email)),R.id.profile_email);
         setEditText(getData(getString(R.string.profile_tag_company)),R.id.profile_company);
         setEditText(getData(getString(R.string.profile_tag_number)),R.id.profile_number);
         setEditText(getData(getString(R.string.profile_tag_age)),R.id.profile_age);
         setEditText(getData(getString(R.string.profile_tag_gender)),R.id.profile_gender);
         setEditText(getData(getString(R.string.profile_tag_home)),R.id.profile_home);
-        setEditText(getData(getString(R.string.profile_tag_office)),R.id.profile_office);
+        setEditText(getData(getString(R.string.profile_tag_office)),R.id.profile_office);*/
+
+        setEditText(me.name,R.id.profile_name);
+        setEditText(me.email,R.id.profile_email);
+        setEditText(me.gender,R.id.profile_gender);
     }
 
     public void save(View v){
@@ -30,7 +39,13 @@ public class SettingsActivity extends MyActivity {
 
         spe.clear();
 
-        spe.putString(getString(R.string.profile_tag_name),getEditText(R.id.profile_name));
+        me.name=getEditText(R.id.profile_name);
+        me.email=getEditText(R.id.profile_email);
+        me.gender=getEditText(R.id.profile_gender);
+
+
+        spe.putString("user_json", me.getJson());
+        /*spe.putString(getString(R.string.profile_tag_name),getEditText(R.id.profile_name));
         spe.putString(getString(R.string.profile_tag_email),getEditText(R.id.profile_email));
         spe.putString(getString(R.string.profile_tag_company),getEditText(R.id.profile_company));
         spe.putString(getString(R.string.profile_tag_number),getEditText(R.id.profile_number));
@@ -40,7 +55,7 @@ public class SettingsActivity extends MyActivity {
         spe.putString(getString(R.string.profile_tag_home), getEditText(R.id.profile_home));
         spe.putString(getString(R.string.profile_tag_office),getEditText(R.id.profile_office));
 
-        spe.putString(getString(R.string.profile_tag_fbid),getData(getString(R.string.profile_tag_fbid)));
+        spe.putString(getString(R.string.profile_tag_fbid),getData(getString(R.string.profile_tag_fbid)));*/
 
         spe.commit();
 
@@ -58,5 +73,9 @@ public class SettingsActivity extends MyActivity {
 
     public void getAddress(int id){
         ((LocationSearchBar)findViewById(id)).getAddress();
+    }
+
+    public String getData(String key){
+       return getIntent().getStringExtra(key);
     }
 }
