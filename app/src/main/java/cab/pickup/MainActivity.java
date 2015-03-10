@@ -108,6 +108,19 @@ public class MainActivity extends MapsActivity {
         returnLocationSearchValue(journey.start, R.id.field_start);
         returnLocationSearchValue(journey.end, R.id.field_end);
 
+        TimePicker journey_time = (TimePicker)findViewById(R.id.journey_time);
+
+        DatePicker date = ((DatePicker)findViewById(R.id.journey_date));
+
+        //yyyy-mm-dd hh:mm:ss
+        //0123456789012345678
+        journey_time.setCurrentHour(Integer.valueOf(journey.datetime.substring(11,13)));
+        journey_time.setCurrentMinute(Integer.valueOf(journey.datetime.substring(14,16)));
+
+        date.updateDate(Integer.valueOf(journey.datetime.substring(0,14)),
+                Integer.valueOf(journey.datetime.substring(5,7)),
+                Integer.valueOf(journey.datetime.substring(8,10)));
+
         displayPath();
     }
 
@@ -191,7 +204,7 @@ public class MainActivity extends MapsActivity {
 
         Log.d(TAG, me.getJson());
 
-        journey.u1=me;
+        journey.users.clear();journey.users.add(me);
         journey.start=start;
         journey.end=end;
         journey.datetime=currentDate;

@@ -95,8 +95,9 @@ public class JourneyActivity extends MapsActivity {
             try {
                 Journey result = new Journey(new JSONObject(ret), Journey.TYPE_COMMON);
 
-                if(!result.u1.id.equals(me.id)) showProfile(result.u1);
-                if(!result.u2.id.equals(me.id)) showProfile(result.u2);
+                for(User user : result.users)
+                    if(!user.id.equals(me.id))
+                        showProfile(user);
 
                 addPath(result.getPath(), result.getLatLngBounds());
             } catch (JSONException e) {

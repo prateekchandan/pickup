@@ -18,7 +18,7 @@ import cab.pickup.server.AddJourneyTask;
 public class Journey {
     public static final int TYPE_COMMON=0, TYPE_SINGLE=1;
 
-    public User u1, u2;
+    public ArrayList<User> users=new ArrayList<>();
     public JSONObject path;
     public Address start, end;
     public String id, datetime, del_time, cab_preference;
@@ -27,8 +27,10 @@ public class Journey {
 
     public Journey(JSONObject journey, int type) throws JSONException {
         if(type==TYPE_COMMON){
-            u1=new User(journey.getJSONObject("u1"));
-            u2=new User(journey.optJSONObject("u2"));
+            JSONArray usrs = journey.getJSONArray("users");
+            for(int i=0; i<usrs.length(); i++)
+                users.add(new User(usrs.getJSONObject(i)));
+
             path=journey.getJSONObject("path");
         } else if(type==TYPE_SINGLE){
             id=journey.getString("journey_id");
@@ -43,16 +45,17 @@ public class Journey {
 
     }
 
-    public Journey(JSONObject path, User users){
+    public Journey(JSONObject path, User user){
         this.path=path;
 
-        u1=users;
+        users.clear();
+        users.add(user);
         //if(users.length>1)
         //    u2=users[1];
     }
 
     public Journey(User user, Address start, Address end, String datetime, String del_time, String cab_preference){
-        u1=user;
+        users.clear();users.add(user);
         this.start=start;
         this.end=end;
         this.datetime=datetime;
@@ -96,7 +99,7 @@ public class Journey {
     }
 
     public void addToServer(MyActivity context){
-        new AddJourneyTask(context, this).execute(context.getUrl("/add_journey"), u1.id, context.getKey()
+        new AddJourneyTask(context, this).execute(context.getUrl("/add_journey"), users.get(0).id, context.getKey()
                 ,id
                 ,start.getLatitude()+""
                 ,start.getLongitude()+""
