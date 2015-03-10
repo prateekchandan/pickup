@@ -11,7 +11,7 @@ public class User{
         id=user.getString("id");
         fbid=user.getString("fbid");
         device_id=user.getString("device_id");
-        name=user.getString("name");
+        name=user.getString("first_name");
         email=user.getString("email");
         gender=user.getString("gender");
     }
@@ -26,7 +26,7 @@ public class User{
         json+="\"id\":\""+id+"\",";
         json+="\"fbid\":\""+fbid+"\",";
         json+="\"device_id\":\""+device_id+"\",";
-        json+="\"name\":\""+name+"\",";
+        json+="\"first_name\":\""+name+"\",";
         json+="\"email\":\""+email+"\",";
         json+="\"gender\":\""+gender+"\"";
 
