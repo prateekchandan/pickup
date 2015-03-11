@@ -21,7 +21,7 @@ public class Journey {
     public ArrayList<User> users=new ArrayList<>();
     public JSONObject path;
     public Address start, end;
-    public String id, datetime, del_time, cab_preference;
+    public String id, datetime, del_time, cab_preference, distance, duration, cost;
 
     public Journey(){}
 
@@ -30,6 +30,10 @@ public class Journey {
             JSONArray usrs = journey.getJSONArray("users");
             for(int i=0; i<usrs.length(); i++)
                 users.add(new User(usrs.getJSONObject(i)));
+
+            distance = usrs.getJSONObject(0).getString("new_distance");
+            duration = usrs.getJSONObject(0).getString("new_time");
+            cost = usrs.getJSONObject(0).getString("new_cost");
 
             path=journey.getJSONObject("path");
         } else if(type==TYPE_SINGLE){
@@ -45,8 +49,12 @@ public class Journey {
 
     }
 
-    public Journey(JSONObject path, User user){
+    public Journey(JSONObject path, User user) throws JSONException{
         this.path=path;
+
+        distance=path.getJSONObject("distance").getString("value");
+        duration=path.getJSONObject("duration").getString("value");
+        cost="0";
 
         users.clear();
         users.add(user);

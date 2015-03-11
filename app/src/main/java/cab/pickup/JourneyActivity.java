@@ -99,7 +99,7 @@ public class JourneyActivity extends MapsActivity {
                     if(!user.id.equals(me.id))
                         showProfile(user);
 
-                addPath(result.getPath(), result.getLatLngBounds());
+                addPath(result.getPath(), result.getLatLngBounds(), "Distance:"+result.distance+", Duration:"+result.duration+", Cost:"+result.cost);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
