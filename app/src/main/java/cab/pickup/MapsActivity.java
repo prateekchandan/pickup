@@ -92,6 +92,7 @@ public class MapsActivity extends MyActivity {
         @Override
         public void onPostExecute(String json) {
             try {
+                Log.d(TAG, json);
                 Journey j = new Journey(new JSONObject(json), me);
 
                 addPath(j.getPath(), j.getLatLngBounds(), "Distance: "+j.distance+", Duration: "+j.duration);

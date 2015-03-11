@@ -31,9 +31,9 @@ public class Journey {
             for(int i=0; i<usrs.length(); i++)
                 users.add(new User(usrs.getJSONObject(i)));
 
-            distance = usrs.getJSONObject(0).getString("new_distance");
-            duration = usrs.getJSONObject(0).getString("new_time");
-            cost = usrs.getJSONObject(0).getString("new_cost");
+            distance =journey.getString("new_distance");
+            duration =journey.getString("new_time");
+            cost =journey.getString("new_cost");
 
             path=journey.getJSONObject("path");
         } else if(type==TYPE_SINGLE){
@@ -52,14 +52,23 @@ public class Journey {
     public Journey(JSONObject path, User user) throws JSONException{
         this.path=path;
 
-        distance=path.getJSONObject("distance").getString("value");
-        duration=path.getJSONObject("duration").getString("value");
+        long dist=0, dur=0;
+
+        JSONArray legs = ((JSONObject)(path.has("routes")?
+                path.getJSONArray("routes").get(0):
+                path)).getJSONArray("legs");
+
+        for(int i=0; i<legs.length(); i++){
+            dist+=legs.getJSONObject(i).getJSONObject("distance").getInt("value");
+            dur+=legs.getJSONObject(i).getJSONObject("duration").getInt("value");
+        }
+
+        distance=String.valueOf((double)dist/1000)+" kms";
+        duration=String.valueOf((double)dur/60)+" mins";
         cost="0";
 
         users.clear();
         users.add(user);
-        //if(users.length>1)
-        //    u2=users[1];
     }
 
     public Journey(User user, Address start, Address end, String datetime, String del_time, String cab_preference){

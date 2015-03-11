@@ -57,7 +57,7 @@ public class JourneyActivity extends MapsActivity {
                     access_key = params[1];
 
             AndroidHttpClient httpclient = AndroidHttpClient.newInstance(TAG);
-            url+="/"+params[2]+"?key="+access_key;
+            url+="/"+params[2]+"/"+me.id+"?key="+access_key;
             HttpGet httpget= new HttpGet(url);
             int statusCode = 0;
 
