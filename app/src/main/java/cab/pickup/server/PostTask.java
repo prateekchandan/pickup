@@ -6,7 +6,6 @@ import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 
@@ -48,13 +47,11 @@ public abstract class PostTask extends AsyncTask<String, Integer, String> {
             if(statusCode==200){
                 ret_value=IOUtil.buildStringFromIS(response.getEntity().getContent());
             } else {
-                Log.e(TAG, IOUtil.buildStringFromIS(response.getEntity().getContent()));
+                onFail(IOUtil.buildStringFromIS(response.getEntity().getContent()));
                 ret_value=null;
             }
-        } catch (ClientProtocolException e) {
-            Log.e(TAG, e.getMessage());
         } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
+            onFail(e.getMessage());
         }
 
         httpclient.close();
@@ -63,4 +60,8 @@ public abstract class PostTask extends AsyncTask<String, Integer, String> {
     }
 
     public abstract List<NameValuePair> getPostData(String[] params, int i);
+
+    public void onFail(String message){
+        Log.e(TAG, "Task failed : "+message);
+    }
 }

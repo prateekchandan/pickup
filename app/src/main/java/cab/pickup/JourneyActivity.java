@@ -18,6 +18,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import cab.pickup.util.IOUtil;
 import cab.pickup.util.Journey;
@@ -27,6 +30,8 @@ import cab.pickup.util.User;
 public class JourneyActivity extends MapsActivity {
 
     LinearLayout profile_list;
+
+    List<String> locations=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,10 @@ public class JourneyActivity extends MapsActivity {
         pp.setProfileId(user.fbid);
 
         ((TextView)ll.findViewById(R.id.user_profile_name)).setText(user.name+"\n"+user.gender);
+    }
+
+    public void saveLocation(String s) {
+        locations.add(s+","+new Date().getTime());
     }
 
     class FetchJourneyTask extends AsyncTask<String, Integer, String> {

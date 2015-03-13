@@ -253,6 +253,14 @@ public final class LocationTracker implements LocationListener {
                 e.printStackTrace();
             }
         }
+
+        @Override
+        public void onFail(String message){
+            ((JourneyActivity)mContext).saveLocation(getLatitude()+","+getLongitude());
+
+
+            super.onFail(message);
+        }
     }
 
 }
