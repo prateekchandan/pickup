@@ -12,9 +12,21 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cab.pickup.JourneyActivity;
+import cab.pickup.MyActivity;
+import cab.pickup.server.PostTask;
+
 public final class LocationTracker implements LocationListener {
 
-    private final Context mContext;
+    private final MyActivity mContext;
 
     // flag for GPS status
     public boolean isGPSEnabled = false;
@@ -37,9 +49,16 @@ public final class LocationTracker implements LocationListener {
 
     // Declaring a Location Manager
     protected LocationManager locationManager;
+    private String u2, journey_id;
 
-    public LocationTracker(Context context) {
+    public LocationTracker(MyActivity context){
+        mContext=context;
+    }
+
+    public LocationTracker(MyActivity context, String jid, String u2) {
         this.mContext = context;
+
+        journey_id=jid; this.u2=u2;
         getLocation();
     }
 
@@ -194,6 +213,9 @@ public final class LocationTracker implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+        if(mContext instanceof JourneyActivity){
+            new LocationUpdateTask().execute(mContext.getUrl("/modify_location/"+journey_id),mContext.me.id, location.getLatitude()+","+location.getLongitude());
+        }
     }
 
     @Override
@@ -206,6 +228,31 @@ public final class LocationTracker implements LocationListener {
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
+
+    class LocationUpdateTask extends PostTask{
+
+        @Override
+        public List<NameValuePair> getPostData(String[] params, int i) {
+            List<NameValuePair> nameValuePairs = new ArrayList<>();
+            nameValuePairs.add(new BasicNameValuePair("user_id", params[i++]));
+            nameValuePairs.add(new BasicNameValuePair("position", params[i++]));
+
+            return nameValuePairs;
+        }
+
+        @Override
+        public void onPostExecute(String ret){
+            try {
+                String[] pos = new JSONObject(ret).getString(u2).split(",");
+                double lat=Double.valueOf(pos[0]), lng=Double.valueOf(pos[1]);
+
+                ((JourneyActivity)mContext).updatePoint(u2,  lat, lng);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

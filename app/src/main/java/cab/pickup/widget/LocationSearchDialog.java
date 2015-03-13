@@ -60,7 +60,7 @@ public class LocationSearchDialog extends Dialog implements View.OnClickListener
 
         this.myLocationEnabled=myLocationEnabled;
 
-        tracker=new LocationTracker(context);
+        tracker=new LocationTracker((MyActivity)context);
     }
 
     @Override

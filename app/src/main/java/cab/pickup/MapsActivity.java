@@ -12,6 +12,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -22,6 +24,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import cab.pickup.util.IOUtil;
 import cab.pickup.util.Journey;
@@ -30,6 +33,7 @@ public class MapsActivity extends MyActivity {
     GoogleMap map; // Might be null if Google Play services APK is not available.
 
     Polyline currPath;
+    HashMap<String, Marker> user_pos=new HashMap<>();
 
     @Override
     protected void onResume() {
@@ -119,5 +123,13 @@ public class MapsActivity extends MyActivity {
         map.animateCamera(CameraUpdateFactory.newLatLngBounds(bnds, 10));
 
         ((TextView)findViewById(R.id.distance_time)).setText(data);
+    }
+
+    public void updatePoint(String user_id, double lat, double lng){
+        if(user_pos.containsKey(user_id)){
+            user_pos.get(user_id).setPosition(new LatLng(lat, lng));
+        } else {
+            user_pos.put(user_id, map.addMarker(new MarkerOptions().position(new LatLng(lat,lng))));
+        }
     }
 }

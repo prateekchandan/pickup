@@ -23,6 +23,9 @@ public abstract class PostTask extends AsyncTask<String, Integer, String> {
     public PostTask(MyActivity context){
         this.context=context;
     }
+
+    public PostTask(){}
+
     @Override
     protected String doInBackground(String... params) {
         String url = params[0], ret_value=null;

@@ -15,7 +15,7 @@ import cab.pickup.util.User;
 import cab.pickup.widget.LocationSearchBar;
 
 public class MyActivity extends FragmentActivity {
-    User me;
+    public User me;
 
     SharedPreferences prefs;
 
