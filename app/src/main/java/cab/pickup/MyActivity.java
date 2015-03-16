@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cab.pickup.util.IOUtil;
+import cab.pickup.util.LocationTracker;
 import cab.pickup.util.User;
 import cab.pickup.widget.LocationSearchBar;
 
@@ -18,6 +19,8 @@ public class MyActivity extends FragmentActivity {
     public User me;
 
     SharedPreferences prefs;
+
+    LocationTracker tracker;
 
     @Override
     protected void onCreate(Bundle icicle){
@@ -34,6 +37,8 @@ public class MyActivity extends FragmentActivity {
         }
 
         me.device_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        tracker=new LocationTracker(this);
 
         Log.d("MyActivity", me.id==null?"user_id null":me.id);
     }
@@ -59,5 +64,9 @@ public class MyActivity extends FragmentActivity {
 
     public void returnLocationSearchValue(Address address, int id){
         ((LocationSearchBar)findViewById(id)).setAddress(address);
+    }
+
+    public LocationTracker getLocationTracker() {
+        return tracker;
     }
 }

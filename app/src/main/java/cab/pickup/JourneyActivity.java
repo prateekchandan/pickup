@@ -43,6 +43,19 @@ public class JourneyActivity extends MapsActivity {
         new FetchJourneyTask().execute(getUrl("/journey"), getKey(), getIntent().getStringExtra("journey_id"));
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        tracker.connect();
+    }
+
+    @Override
+    public void onStop() {
+        tracker.stopLocationUpdates();
+        tracker.disconnect();
+        super.onStop();
+    }
+
     public void showProfile(User user){
         LinearLayout ll = (LinearLayout)LayoutInflater.from(this).inflate(R.layout.user_profile, profile_list);
         ProfilePictureView pp = (ProfilePictureView)ll.findViewById(R.id.user_profile_img);

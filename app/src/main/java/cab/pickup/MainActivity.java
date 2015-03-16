@@ -86,6 +86,19 @@ public class MainActivity extends MapsActivity {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        tracker.connect();
+    }
+
+    @Override
+    public void onStop() {
+        tracker.stopLocationUpdates();
+        tracker.disconnect();
+        super.onStop();
+    }
+
+    @Override
     public void onActivityResult(int req, int res, Intent data){
         super.onActivityResult(req,res,data);
 
