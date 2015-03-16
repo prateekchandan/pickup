@@ -91,5 +91,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View"
+            android:onClick="showJourneyLog"/>
         </LinearLayout>
 </LinearLayout>

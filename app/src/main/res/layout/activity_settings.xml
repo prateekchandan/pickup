@@ -16,38 +16,61 @@ android:layout_height="match_parent"
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/profile_name"/>
+        android:id="@+id/profile_name"
+        android:inputType="textPersonName"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
     <TextView android:text="Email:" android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/profile_email"/>
+        android:id="@+id/profile_email"
+        android:inputType="textEmailAddress"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
     <TextView android:text="Company:" android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/profile_company"/>
+    <TextView android:text="Company Email Address:" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/profile_company_email"/>
     <TextView android:text="Mobile number:" android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/profile_number"/>
+        android:id="@+id/profile_number"
+        android:inputType="phone" />
     <TextView android:text="Age:" android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/profile_age"/>
+        android:id="@+id/profile_age"
+        android:inputType="number"/>
 
     <TextView android:text="Gender:" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        />
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/profile_gender"/>
+        android:id="@+id/profile_gender"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
     <TextView android:text="Home location:" android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

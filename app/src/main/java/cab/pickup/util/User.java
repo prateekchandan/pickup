@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class User{
-    public String id, fbid, device_id, name, email, gender;
+    public String id, fbid, device_id, name, email, gender,company,mobile,age,company_email;
 
 
     public User(JSONObject user) throws JSONException{
@@ -14,6 +14,11 @@ public class User{
         name=user.getString("first_name");
         email=user.getString("email");
         gender=user.getString("gender");
+        company="";
+        mobile="";
+        age="";
+        company_email="";
+
     }
 
     public User(){
@@ -29,7 +34,10 @@ public class User{
         json+="\"first_name\":\""+name+"\",";
         json+="\"email\":\""+email+"\",";
         json+="\"gender\":\""+gender+"\"";
-
+        json+="\"comapany\":\""+company+"\"";
+        json+="\"mobile\":\""+mobile+"\"";
+        json+="\"age\":\""+age+"\"";
+        json+="\"company_email\":\""+company_email+"\"";
         json+="}";
 
         return json;

@@ -55,7 +55,7 @@ public class MainActivity extends MapsActivity {
 
         Intent i = new Intent();
         i.setClass(this,LoginActivity.class);
-        startActivityForResult(i, REQUEST_LOGIN);
+       startActivityForResult(i, REQUEST_LOGIN);
     }
 
 
@@ -241,5 +241,10 @@ public class MainActivity extends MapsActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    public void showJourneyLog(View v){
+        Intent intent = new Intent(this, JourneyLogActivity.class);
+        startActivity(intent);
     }
 }
