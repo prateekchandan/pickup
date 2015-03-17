@@ -1,11 +1,13 @@
 package cab.pickup;
 
 import android.location.Address;
+import android.location.Geocoder;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.MapView;
@@ -13,7 +15,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 
 public class LocationPickerActivity extends MapsActivity {
@@ -65,6 +70,28 @@ public class LocationPickerActivity extends MapsActivity {
         MapView mapView=(MapView) findViewById(R.id.map);
         LatLng center = map.getCameraPosition().target;
         Log.d("Center coordinates","("+center.latitude+","+center.longitude+")");
+        ;
+
+        Geocoder geoCoder = new Geocoder(
+                getBaseContext(), Locale.getDefault());
+        try {
+            List<Address> addresses = geoCoder.getFromLocation(
+                    center.latitude  ,
+                    center.longitude, 1);
+
+            String add = "";
+            if (addresses.size() > 0)
+            {
+                for (int i=0; i<addresses.get(0).getMaxAddressLineIndex();
+                     i++)
+                    add += addresses.get(0).getAddressLine(i) + "\n";
+            }
+
+            Toast.makeText(getBaseContext(), add, Toast.LENGTH_SHORT).show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
