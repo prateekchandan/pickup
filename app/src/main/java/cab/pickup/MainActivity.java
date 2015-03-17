@@ -244,7 +244,7 @@ public class MainActivity extends MapsActivity {
     }
 
     public void showJourneyLog(View v){
-        Intent intent = new Intent(this, JourneyLogActivity.class);
+        Intent intent = new Intent(this, LocationPickerActivity.class);
         startActivity(intent);
     }
 }

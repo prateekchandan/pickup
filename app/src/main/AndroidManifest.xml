@@ -86,6 +86,10 @@
             android:name=".JourneyLogActivity"
             android:label="@string/title_activity_journey_log" >
         </activity>
+        <activity
+            android:name=".LocationPickerActivity"
+            android:label="@string/title_activity_location_picker" >
+        </activity>
     </application>
 
 </manifest>

@@ -39,6 +39,7 @@ public class MapsActivity extends MyActivity {
     protected void onResume() {
         super.onResume();
         setUpMapIfNeeded();
+
     }
 
     public void setUpMapIfNeeded() {

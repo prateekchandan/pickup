@@ -32,5 +32,6 @@
     <string name="title_activity_journey">JourneyActivity</string>
     <string name="title_activity_ride">RideActivity</string>
     <string name="title_activity_journey_log">JourneyLogActivity</string>
+    <string name="title_activity_location_picker">LocationPickerActivity</string>
 
 </resources>
