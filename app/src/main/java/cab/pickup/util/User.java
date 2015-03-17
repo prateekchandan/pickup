@@ -40,7 +40,7 @@ public class User{
         json+="\"comapany\":\""+company+"\",";
         json+="\"mobile\":\""+mobile+"\",";
         json+="\"age\":\""+age+"\",";
-        json+="\"company_email\":\""+company_email+"\"";
+        json+="\"company_email\":\""+company_email+"\",";
         json+="}";
 
         return json;

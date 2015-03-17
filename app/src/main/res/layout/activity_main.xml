@@ -90,7 +90,8 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel"/>
+            android:text="Cancel"
+            android:visibility="gone"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

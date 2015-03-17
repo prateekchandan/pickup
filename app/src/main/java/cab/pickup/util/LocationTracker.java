@@ -1,9 +1,13 @@
 package cab.pickup.util;
 
 
+import android.app.Service;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -18,7 +22,7 @@ import java.util.Date;
 
 import cab.pickup.MyActivity;
 
-public class LocationTracker implements LocationListener,
+public class LocationTracker extends Service implements LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener{
 
@@ -48,6 +52,9 @@ public class LocationTracker implements LocationListener,
         locRequest.setInterval(INTERVAL);
         locRequest.setFastestInterval(FASTEST_INTERVAL);
         locRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+    }
+
+    public LocationTracker(){
     }
 
     public void connect(){
@@ -103,7 +110,11 @@ public class LocationTracker implements LocationListener,
         this.location = location;
         lastUpdateTime = DateFormat.getTimeInstance().format(new Date());
 
-        Log.d(TAG, "Location: "+getLatitude()+","+getLongitude());
+        //Toast.makeText(this, "Location: "+getLatitude()+","+getLongitude(),Toast.LENGTH_LONG).show();
+
+        if(context!=null) context.onLocationUpdate(location);
+
+        Log.d(TAG, "Location: "+getLatitude()+","+getLongitude()+", Time: "+lastUpdateTime);
     }
 
     @Override
@@ -120,5 +131,46 @@ public class LocationTracker implements LocationListener,
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.d(TAG, "Connection failed: " + connectionResult.toString());
+    }
+
+    @Override
+    public void onCreate(){
+        super.onCreate();
+
+        apiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+
+        locRequest = new LocationRequest();
+        locRequest.setInterval(INTERVAL);
+        locRequest.setFastestInterval(FASTEST_INTERVAL);
+        locRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId){
+        super.onStartCommand(intent, flags, startId);
+
+        connect();
+
+        return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy(){
+
+        stopLocationUpdates();
+        disconnect();
+
+        Toast.makeText(this, "Location tracker done", Toast.LENGTH_SHORT).show();
+
+        super.onDestroy();
     }
 }

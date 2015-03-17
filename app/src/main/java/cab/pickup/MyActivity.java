@@ -1,7 +1,9 @@
 package cab.pickup;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
+import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
@@ -40,6 +42,9 @@ public class MyActivity extends FragmentActivity {
 
         tracker=new LocationTracker(this);
 
+        Intent i = new Intent(this, LocationTracker.class);
+        startService(i);
+
         Log.d("MyActivity", me.id==null?"user_id null":me.id);
     }
 
@@ -68,5 +73,9 @@ public class MyActivity extends FragmentActivity {
 
     public LocationTracker getLocationTracker() {
         return tracker;
+    }
+
+    public void onLocationUpdate(Location location){
+        // do nothing
     }
 }

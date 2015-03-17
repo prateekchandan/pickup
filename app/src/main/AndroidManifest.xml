@@ -42,6 +42,7 @@
         </receiver>
 
         <service android:name=".gcm.GcmIntentService" />
+        <service android:name=".util.LocationTracker"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

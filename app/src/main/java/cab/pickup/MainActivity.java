@@ -130,7 +130,7 @@ public class MainActivity extends MapsActivity {
         journey_time.setCurrentHour(Integer.valueOf(journey.datetime.substring(11,13)));
         journey_time.setCurrentMinute(Integer.valueOf(journey.datetime.substring(14,16)));
 
-        date.updateDate(Integer.valueOf(journey.datetime.substring(0,14)),
+        date.updateDate(Integer.valueOf(journey.datetime.substring(0,4)),
                 Integer.valueOf(journey.datetime.substring(5,7)),
                 Integer.valueOf(journey.datetime.substring(8,10)));
 

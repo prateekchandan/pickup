@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.MapView;
@@ -60,9 +61,8 @@ public class LocationPickerActivity extends MapsActivity {
 
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(newPt, 10));
     }
-    public void Accept()
+    public void Accept(View view)
     {
-        MapView mapView=(MapView) findViewById(R.id.map);
         LatLng center = map.getCameraPosition().target;
         Log.d("Center coordinates","("+center.latitude+","+center.longitude+")");
     }

@@ -1,5 +1,6 @@
 package cab.pickup;
 
+import android.location.Location;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,28 +11,40 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.widget.ProfilePictureView;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
+import cab.pickup.server.PostTask;
 import cab.pickup.util.IOUtil;
 import cab.pickup.util.Journey;
+import cab.pickup.util.LocationTracker;
 import cab.pickup.util.User;
 
 
 public class JourneyActivity extends MapsActivity {
+    HashMap<String, Marker> markers = new HashMap<String, Marker>();
 
+    private static final String TAG = "JourneyActivity";
     LinearLayout profile_list;
 
     List<String> locations=new ArrayList<>();
+
+    Journey journey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +75,11 @@ public class JourneyActivity extends MapsActivity {
         pp.setProfileId(user.fbid);
 
         ((TextView)ll.findViewById(R.id.user_profile_name)).setText(user.name+"\n"+user.gender);
+    }
+
+    @Override
+    public void onLocationUpdate(Location location){
+            new UpdateLocationTask().execute(getUrl("/modify_location/"+getIntent().getStringExtra("journey_id")), location.getLatitude()+","+location.getLongitude());
     }
 
     public void saveLocation(String s) {
@@ -115,18 +133,52 @@ public class JourneyActivity extends MapsActivity {
             Log.d(TAG, ret);
 
             try {
-                Journey result = new Journey(new JSONObject(ret), Journey.TYPE_COMMON);
+                journey = new Journey(new JSONObject(ret), Journey.TYPE_COMMON);
 
-                for(User user : result.users)
+                for(User user : journey.users)
                     if(!user.id.equals(me.id))
                         showProfile(user);
 
-                addPath(result.getPath(), result.getLatLngBounds(), "Distance:"+result.distance+", Duration:"+result.duration+", Cost:"+result.cost);
+                addPath(journey.getPath(), journey.getLatLngBounds(), "Distance:"+journey.distance+", Duration:"+journey.duration+", Cost:"+journey.cost);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     }
 
+    class UpdateLocationTask extends PostTask {
+
+        @Override
+        public List<NameValuePair> getPostData(String[] params, int i) {
+            List<NameValuePair> data = new ArrayList<>();
+
+            data.add(new BasicNameValuePair("user_id", me.id));
+            data.add(new BasicNameValuePair("key", getKey()));
+            data.add(new BasicNameValuePair("position", params[i++]));
+            return data;
+        }
+
+        @Override
+        public void onPostExecute(String result){
+            try{
+                JSONObject positions = new JSONObject(result);
+
+                for(User user : journey.users){
+                    Log.d(TAG, "User: "+user.id);
+
+                    user.setPosition(positions.getString(user.id));
+
+                    if(!markers.containsKey(user.id)) {
+                        markers.put(user.id, map.addMarker(new MarkerOptions().position(user.position)));
+                    } else {
+                        markers.get(user.id).setPosition(user.position);
+                    }
+                }
+
+            } catch (JSONException e){
+                Log.e(TAG, e.getMessage());
+            }
+        }
+    }
 
 }
