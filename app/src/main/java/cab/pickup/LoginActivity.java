@@ -5,17 +5,25 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import cab.pickup.server.AddUserTask;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import cab.pickup.server.PostTask;
 import cab.pickup.util.User;
 
 
@@ -88,12 +96,7 @@ public class LoginActivity extends MyActivity {
         }
 
         AddUserTask a = new AddUserTask(this);
-        a.execute(getUrl("/add_user"), me.id, getKey()
-                , me.device_id
-                , me.fbid
-                , me.name
-                , me.email
-                , me.gender);
+        a.execute(getUrl("/add_user"));
 
     }
     
@@ -106,5 +109,71 @@ public class LoginActivity extends MyActivity {
         spe.putInt("app_version", getAppVersion());
 
         spe.commit();
+    }
+
+    class AddUserTask extends PostTask {
+        private static final String TAG = "AddUserTask";
+
+        GoogleCloudMessaging gcm;
+
+        String SENDER_ID = "1032273645702",
+                gcm_id;
+
+        public AddUserTask(MyActivity context){
+            super(context);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            if (gcm == null) {
+                gcm = GoogleCloudMessaging.getInstance(context);
+            }
+            try {
+                gcm_id = gcm.register(SENDER_ID);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return super.doInBackground(params);
+        }
+
+        @Override
+        public List<NameValuePair> getPostData(String[] params, int i) {
+            List<NameValuePair> nameValuePairs = new ArrayList<>();
+            nameValuePairs.add(new BasicNameValuePair("user_id", me.id));
+            nameValuePairs.add(new BasicNameValuePair("key", getKey()));
+
+            nameValuePairs.add(new BasicNameValuePair("gcm_id", gcm_id));
+
+            nameValuePairs.add(new BasicNameValuePair("device_id", me.device_id));
+            nameValuePairs.add(new BasicNameValuePair("fbid", me.fbid));
+            nameValuePairs.add(new BasicNameValuePair("name", me.name));
+            nameValuePairs.add(new BasicNameValuePair("email", me.email));
+            nameValuePairs.add(new BasicNameValuePair("gender", me.gender));
+
+            return nameValuePairs;
+        }
+
+
+        @Override
+        protected void onPostExecute(String ret){
+            if(ret==null){
+                ret="Server registration failed! Check your internet connection!";
+            } else
+
+                try {
+                    JSONObject result = new JSONObject(ret);
+
+                    ret = result.get("message").toString();
+
+                    ((LoginActivity) context).addDataToPrefs(result.get("user_id").toString(), gcm_id);
+                } catch (JSONException e){
+                    e.printStackTrace();
+                }
+
+            Toast.makeText(context, ret, Toast.LENGTH_LONG).show();
+
+            context.finish();
+        }
     }
 }
