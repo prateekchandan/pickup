@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -16,7 +17,8 @@ import java.util.HashMap;
 
 
 public class LocationPickerActivity extends MapsActivity {
-    HashMap<Integer, Marker> markers = new HashMap<Integer, Marker>();
+    Marker home, office;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -51,18 +53,20 @@ public class LocationPickerActivity extends MapsActivity {
 
         LatLng newPt = new LatLng(address.getLatitude(), address.getLongitude());
 
-        if(!markers.containsKey(id)) {
-            markers.put(id, map.addMarker(new MarkerOptions().position(newPt)));
-        } else {
-            markers.get(id).setPosition(newPt);
-        }
-
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(newPt, 10));
     }
     public void Accept(View view)
     {
         LatLng center = map.getCameraPosition().target;
         Log.d("Center coordinates","("+center.latitude+","+center.longitude+")");
+
+        if(home==null){
+            home=map.addMarker(new MarkerOptions().position(center));
+        } else {
+            office=map.addMarker(new MarkerOptions().position(center));
+        }
+
+        ((TextView)view).setText("Set Office");
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
