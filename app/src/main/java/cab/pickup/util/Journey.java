@@ -1,18 +1,23 @@
 package cab.pickup.util;
 
 import android.location.Address;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cab.pickup.MyActivity;
-import cab.pickup.server.AddJourneyTask;
+import cab.pickup.server.PostTask;
 
 // Wrapper class for Journey details json
 public class Journey {
@@ -116,18 +121,7 @@ public class Journey {
     }
 
     public void addToServer(MyActivity context){
-        new AddJourneyTask(context, this).execute(context.getUrl("/add_journey"), users.get(0).id, context.getKey()
-                ,id
-                ,start.getLatitude()+""
-                ,start.getLongitude()+""
-                ,end.getLatitude()+""
-                ,end.getLongitude()+""
-                ,datetime
-                ,del_time
-                ,del_time
-                ,"1"
-                ,MapUtil.stringFromAddress(start)
-                ,MapUtil.stringFromAddress(end));
+        new AddJourneyTask(context).execute(context.getUrl("/add_journey"));
     }
 
     public String getJson(){
@@ -149,5 +143,60 @@ public class Journey {
 
         json+="}";
         return json;
+    }
+
+    class AddJourneyTask extends PostTask {
+        private static final String TAG = "AddJourneyTask";
+
+        public AddJourneyTask(MyActivity context){
+            super(context);
+        }
+
+        @Override
+        public List<NameValuePair> getPostData(String[] params, int i) {
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+
+            nameValuePairs.add(new BasicNameValuePair("user_id", users.get(0).id));
+            nameValuePairs.add(new BasicNameValuePair("key", context.getKey()));
+
+            nameValuePairs.add(new BasicNameValuePair("journey_id", id));
+
+            nameValuePairs.add(new BasicNameValuePair("start_lat", start.getLatitude()+""));
+            nameValuePairs.add(new BasicNameValuePair("start_long", start.getLongitude()+""));
+            nameValuePairs.add(new BasicNameValuePair("end_lat", end.getLatitude()+""));
+            nameValuePairs.add(new BasicNameValuePair("end_long", end.getLongitude()+""));
+
+            nameValuePairs.add(new BasicNameValuePair("journey_time", datetime));
+            nameValuePairs.add(new BasicNameValuePair("margin_before", del_time));
+            nameValuePairs.add(new BasicNameValuePair("margin_after", del_time));
+            nameValuePairs.add(new BasicNameValuePair("preference","1"));
+
+            nameValuePairs.add(new BasicNameValuePair("start_text",MapUtil.stringFromAddress(start)));
+            nameValuePairs.add(new BasicNameValuePair("end_text",MapUtil.stringFromAddress(end)));
+
+            return nameValuePairs;
+        }
+
+        @Override
+        protected void onPostExecute(String ret){
+            String toast="";
+            if(ret == null){
+                toast="There was an error in adding journey";
+            } else {
+                try {
+                    JSONObject result = new JSONObject(ret);
+                    toast = result.get("message").toString();
+
+                    id = result.getString("journey_id");
+
+                    Log.d(TAG, toast);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Toast.makeText(context, toast, Toast.LENGTH_LONG).show();
+        }
     }
 }
