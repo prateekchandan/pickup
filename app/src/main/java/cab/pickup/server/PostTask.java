@@ -3,11 +3,14 @@ package cab.pickup.server;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,7 +18,7 @@ import java.util.List;
 import cab.pickup.MyActivity;
 import cab.pickup.util.IOUtil;
 
-public abstract class PostTask extends AsyncTask<String, Integer, String> {
+public abstract class PostTask extends AsyncTask<String, Integer, Result> {
     private static final String TAG = "PostTask";
     public MyActivity context;
 
@@ -26,12 +29,12 @@ public abstract class PostTask extends AsyncTask<String, Integer, String> {
     public PostTask(){}
 
     @Override
-    protected String doInBackground(String... params) {
-        String url = params[0], ret_value=null;
+    protected Result doInBackground(String... params) {
+        String url = params[0];
+        Result res=new Result();
 
         AndroidHttpClient httpclient = AndroidHttpClient.newInstance(TAG);
         HttpPost httppost = new HttpPost(url);
-        int statusCode = 0;
 
         try {
             List<NameValuePair> nameValuePairs = getPostData(params, 1);
@@ -40,28 +43,40 @@ public abstract class PostTask extends AsyncTask<String, Integer, String> {
 
             HttpResponse response = httpclient.execute(httppost);
 
-            statusCode = response.getStatusLine().getStatusCode();
+            res.statusCode = response.getStatusLine().getStatusCode();
+            res.statusMessage=response.getStatusLine().getReasonPhrase();
 
-            Log.d(TAG, statusCode + " : " + response.getStatusLine().getReasonPhrase());
+            Log.d(TAG, res.statusCode + " : " + response.getStatusLine().getReasonPhrase());
 
-            if(statusCode==200){
-                ret_value=IOUtil.buildStringFromIS(response.getEntity().getContent());
-            } else {
-                onFail(IOUtil.buildStringFromIS(response.getEntity().getContent()));
-                ret_value=null;
-            }
+            res.data=IOUtil.buildStringFromIS(response.getEntity().getContent());
         } catch (IOException e) {
             onFail(e.getMessage());
         }
 
         httpclient.close();
 
-        return ret_value;
+        return res;
     }
 
     public abstract List<NameValuePair> getPostData(String[] params, int i);
 
     public void onFail(String message){
         Log.e(TAG, "Task failed : "+message);
+    }
+
+    @Override
+    public void onPostExecute(Result res) {
+        if(res.statusCode !=200){
+            String toast;
+            try {
+                JSONObject result = new JSONObject(res.data);
+
+                toast=result.get("message").toString();
+            } catch (JSONException e){
+                toast=res.statusMessage;
+            }
+
+            Toast.makeText(context, toast, Toast.LENGTH_LONG).show();
+        }
     }
 }

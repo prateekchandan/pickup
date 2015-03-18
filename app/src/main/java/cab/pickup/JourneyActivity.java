@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import cab.pickup.server.PostTask;
+import cab.pickup.server.Result;
 import cab.pickup.util.CommonJourney;
 import cab.pickup.util.IOUtil;
 import cab.pickup.util.Journey;
@@ -160,24 +161,27 @@ public class JourneyActivity extends MapsActivity {
         }
 
         @Override
-        public void onPostExecute(String result){
-            try{
-                JSONObject positions = new JSONObject(result);
+        public void onPostExecute(Result result){
+            super.onPostExecute(result);
+            if(result.statusCode==200) {
+                try {
+                    JSONObject positions = new JSONObject(result.data);
 
-                for(User user : journey.users){
-                    Log.d(TAG, "User: "+user.id);
+                    for (User user : journey.users) {
+                        Log.d(TAG, "User: " + user.id);
 
-                    user.setPosition(positions.getString(user.id));
+                        user.setPosition(positions.getString(user.id));
 
-                    if(!markers.containsKey(user.id)) {
-                        markers.put(user.id, map.addMarker(new MarkerOptions().position(user.position)));
-                    } else {
-                        markers.get(user.id).setPosition(user.position);
+                        if (!markers.containsKey(user.id)) {
+                            markers.put(user.id, map.addMarker(new MarkerOptions().position(user.position)));
+                        } else {
+                            markers.get(user.id).setPosition(user.position);
+                        }
                     }
-                }
 
-            } catch (JSONException e){
-                Log.e(TAG, e.getMessage());
+                } catch (JSONException e) {
+                    Log.e(TAG, e.getMessage());
+                }
             }
         }
     }

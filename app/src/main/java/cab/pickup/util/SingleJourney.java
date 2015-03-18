@@ -15,6 +15,7 @@ import java.util.List;
 
 import cab.pickup.MyActivity;
 import cab.pickup.server.PostTask;
+import cab.pickup.server.Result;
 
 public class SingleJourney extends Journey{
     public User user;
@@ -125,13 +126,12 @@ public class SingleJourney extends Journey{
         }
 
         @Override
-        protected void onPostExecute(String ret){
-            String toast="";
-            if(ret == null){
-                toast="There was an error in adding journey";
-            } else {
+        public void onPostExecute(Result ret){
+            super.onPostExecute(ret);
+            if(ret.statusCode==200){
+                String toast="";
                 try {
-                    JSONObject result = new JSONObject(ret);
+                    JSONObject result = new JSONObject(ret.data);
                     toast = result.get("message").toString();
 
                     id = result.getString("journey_id");
@@ -139,11 +139,10 @@ public class SingleJourney extends Journey{
                     Log.d(TAG, toast);
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    toast="JSONException: "+e.getMessage();
                 }
+                Toast.makeText(context, toast, Toast.LENGTH_LONG).show();
             }
-
-            Toast.makeText(context, toast, Toast.LENGTH_LONG).show();
         }
     }
 }

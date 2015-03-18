@@ -27,7 +27,7 @@ public class SendMessageTask extends PostTask {
     }
 
     @Override
-    public void onPostExecute(String ret){
-        Log.d(TAG, "Send response : " + ret);
+    public void onPostExecute(Result ret){
+        Log.d(TAG, "Send response : " + ret.data);
     }
 }

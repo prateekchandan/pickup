@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cab.pickup.server.PostTask;
+import cab.pickup.server.Result;
 import cab.pickup.util.User;
 
 
@@ -124,7 +125,7 @@ public class LoginActivity extends MyActivity {
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected Result doInBackground(String... params) {
             if (gcm == null) {
                 gcm = GoogleCloudMessaging.getInstance(context);
             }
@@ -156,24 +157,24 @@ public class LoginActivity extends MyActivity {
 
 
         @Override
-        protected void onPostExecute(String ret){
-            if(ret==null){
-                ret="Server registration failed! Check your internet connection!";
-            } else
-
+        public void onPostExecute(Result ret){
+            super.onPostExecute(ret);
+            if(ret.statusCode ==200) {
+                String toast;
                 try {
-                    JSONObject result = new JSONObject(ret);
+                    JSONObject result = new JSONObject(ret.data);
 
-                    ret = result.get("message").toString();
+                    toast = result.get("message").toString();
 
                     ((LoginActivity) context).addDataToPrefs(result.get("user_id").toString(), gcm_id);
-                } catch (JSONException e){
-                    e.printStackTrace();
+                } catch (JSONException e) {
+                    toast="JSONException: "+e.getMessage();
                 }
 
-            Toast.makeText(context, ret, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, toast, Toast.LENGTH_LONG).show();
 
-            context.finish();
+                context.finish();
+            }
         }
     }
 }
