@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import cab.pickup.server.PostTask;
+import cab.pickup.util.CommonJourney;
 import cab.pickup.util.IOUtil;
 import cab.pickup.util.Journey;
 import cab.pickup.util.LocationTracker;
@@ -44,7 +45,7 @@ public class JourneyActivity extends MapsActivity {
 
     List<String> locations=new ArrayList<>();
 
-    Journey journey;
+    CommonJourney journey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +134,7 @@ public class JourneyActivity extends MapsActivity {
             Log.d(TAG, ret);
 
             try {
-                journey = new Journey(new JSONObject(ret), Journey.TYPE_COMMON);
+                journey = new CommonJourney(new JSONObject(ret));
 
                 for(User user : journey.users)
                     if(!user.id.equals(me.id))

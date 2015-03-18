@@ -28,6 +28,7 @@ import java.util.HashMap;
 
 import cab.pickup.util.IOUtil;
 import cab.pickup.util.Journey;
+import cab.pickup.util.SingleJourney;
 
 public class MapsActivity extends MyActivity {
     GoogleMap map; // Might be null if Google Play services APK is not available.
@@ -98,7 +99,7 @@ public class MapsActivity extends MyActivity {
         public void onPostExecute(String json) {
             try {
                 Log.d(TAG, json);
-                Journey j = new Journey(new JSONObject(json), me);
+                SingleJourney j = new SingleJourney(new JSONObject(json), me);
 
                 addPath(j.getPath(), j.getLatLngBounds(), "Distance: "+j.distance+", Duration: "+j.duration);
             } catch (JSONException e) {

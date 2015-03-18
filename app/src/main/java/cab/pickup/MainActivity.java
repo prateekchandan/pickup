@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 import cab.pickup.util.Journey;
+import cab.pickup.util.SingleJourney;
 import cab.pickup.util.User;
 import cab.pickup.widget.LocationSearchBar;
 
@@ -40,7 +41,7 @@ public class MainActivity extends MapsActivity {
 
     private int mode=MODE_MAP;
 
-    Journey journey;
+    SingleJourney journey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class MainActivity extends MapsActivity {
 
         container = (FrameLayout) findViewById(R.id.container);
 
-        journey = new Journey();
+        journey = new SingleJourney();
 
         Intent i = new Intent();
         i.setClass(this,LoginActivity.class);
@@ -116,7 +117,7 @@ public class MainActivity extends MapsActivity {
     }
 
     private void setJourney(String journey_json) throws JSONException{
-        journey = new Journey(new JSONObject(journey_json), Journey.TYPE_SINGLE);
+        journey = new SingleJourney(new JSONObject(journey_json));
 
         returnLocationSearchValue(journey.start, R.id.field_start);
         returnLocationSearchValue(journey.end, R.id.field_end);
@@ -217,7 +218,7 @@ public class MainActivity extends MapsActivity {
 
         Log.d(TAG, me.getJson());
 
-        journey.users.clear();journey.users.add(me);
+        journey.user=me;
         journey.start=start;
         journey.end=end;
         journey.datetime=currentDate;

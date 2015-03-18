@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import cab.pickup.server.GetTask;
 import cab.pickup.util.Journey;
 import cab.pickup.util.MapUtil;
+import cab.pickup.util.SingleJourney;
 
 
 public class RideActivity extends MyActivity implements View.OnLongClickListener, View.OnClickListener{
@@ -49,11 +50,11 @@ public class RideActivity extends MyActivity implements View.OnLongClickListener
 
     @Override
     public void onClick(View v) {
-        Journey j= (Journey)v.getTag();
+        SingleJourney j= (SingleJourney)v.getTag();
 
         Intent i=new Intent();
 
-        i.putExtra("journey_json", j.getJson());
+        i.putExtra("journey_json", j.toString());
 
         setResult(RESULT_OK, i);
 
@@ -79,7 +80,7 @@ public class RideActivity extends MyActivity implements View.OnLongClickListener
                 JSONArray arr = new JSONArray(ret);
 
                 for(int i=0 ; i<arr.length();i++) {
-                    Journey journey = new Journey((JSONObject)arr.get(i), Journey.TYPE_SINGLE);
+                    SingleJourney journey = new SingleJourney((JSONObject)arr.get(i));
                     String text = "From:" + MapUtil.stringFromAddress(journey.start)+"\n"+
                             "To:" + MapUtil.stringFromAddress(journey.end)+"\n"+
                             "Time:" + journey.datetime+"\n";

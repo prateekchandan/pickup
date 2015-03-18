@@ -1,7 +1,6 @@
 package cab.pickup;
 
 import android.annotation.TargetApi;
-import android.app.ListActivity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -10,50 +9,45 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
-//import com.google.android.gms.plus.model.people.Person;
-
 import java.util.ArrayList;
-import java.util.List;
 
 import cab.pickup.util.User;
+
+//import com.google.android.gms.plus.model.people.Person;
 
 
 public class JourneyLogActivity extends MyActivity {
     LinearLayout steps;
     private ArrayList<JourneySteps> stepList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journey_log);
 
-        steps=(LinearLayout)findViewById(R.id.JourneyList);
+        steps = (LinearLayout) findViewById(R.id.JourneyList);
 
-                initList();
+        initList();
         //ListAdapter adapter = new CustomAdapter(this, stepList);
         displayLog();
-       //setListAdapter(adapter);
+        //setListAdapter(adapter);
 
     }
-   // public void JourneyLogActivity() {}
-    private void displayLog()
-    {
-        for (int position=0;position<stepList.size();position++) {
-            ViewGroup view = (ViewGroup)LayoutInflater.from(this).inflate(R.layout.activity_journey_log_row_layout, steps,false);
+
+    // public void JourneyLogActivity() {}
+    private void displayLog() {
+        for (int position = 0; position < stepList.size(); position++) {
+            ViewGroup view = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.activity_journey_log_row_layout, steps, false);
             JourneySteps step = stepList.get(position);
             TextView name = (TextView) view.findViewById(R.id.name);
             name.setText(step.getName());
@@ -65,21 +59,23 @@ public class JourneyLogActivity extends MyActivity {
         }
 
     }
+
     private void initList() {
 
         stepList = new ArrayList<JourneySteps>();
-        addItem("arbit",null);
-        addItem("arbit2",null);
+        addItem("arbit", null);
+        addItem("arbit2", null);
 
     }
 
-    private void addItem(String message,User user) {
+    private void addItem(String message, User user) {
         Bitmap avatar = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_accept);
         JourneySteps step = new JourneySteps(message);
         step.setUser(user);
         step.setImage(avatar);
         stepList.add(step);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -101,14 +97,14 @@ public class JourneyLogActivity extends MyActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    public String generateNotification()
-    {
-        String notification="";
+
+    public String generateNotification() {
+        String notification = "";
         return notification;
     }
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public void sendNotification()
-    {
+    public void sendNotification() {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.mipmap.ic_launcher)
@@ -137,37 +133,38 @@ public class JourneyLogActivity extends MyActivity {
 // mId allows you to update the notification later on.
         mNotificationManager.notify(45, mBuilder.build());
     }
-}
 
-class JourneySteps {
-    private String message;
-    private Bitmap image;
-    private User user;
-    public JourneySteps(String name) {
-        message = name;
+
+    class JourneySteps {
+        private String message;
+        private Bitmap image;
+        private User user;
+
+        public JourneySteps(String name) {
+            message = name;
+        }
+
+        public String getName() {
+            return message;
+        }
+
+
+        public Bitmap getImage() {
+            return image;
+        }
+
+        public void setImage(Bitmap avatar) {
+            image = avatar;
+        }
+
+        public void setUser(User u) {
+            user = u;
+        }
+
+        public User getUser() {
+            return user;
+        }
     }
-
-    public String getName() {
-        return message;
-    }
-
-
-
-
-
-    public Bitmap getImage() {
-        return image;
-    }
-
-    public void setImage(Bitmap avatar) {
-        image = avatar;
-    }
-    public void setUser(User u)
-    {
-        user=u;
-    }
-    public User getUser() {return user; }
-}
 
 /*class CustomAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
@@ -222,5 +219,6 @@ class JourneySteps {
         public TextView message;
     }
 }*/
+}
 
 
