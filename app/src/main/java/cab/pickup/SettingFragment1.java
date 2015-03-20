@@ -33,7 +33,7 @@ public class SettingFragment1 extends Fragment {
 
     // Container Activity must implement this interface
     public interface OnButtonPressedListener {
-        public void changeFrame(int framenumber);
+        public void changeFrame();
     }
     /**
      * Use this factory method to create a new instance of
@@ -50,11 +50,12 @@ public class SettingFragment1 extends Fragment {
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
+
         return fragment;
     }
     public void onNextPressed(View v)
     {
-        mCallback.changeFrame(1);
+        mCallback.changeFrame();
     }
     public SettingFragment1() {
         // Required empty public constructor
@@ -67,9 +68,9 @@ public class SettingFragment1 extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        setEditText(getData(getString(R.string.profile_tag_name)),R.id.profile_name);
+        /*setEditText(getData(getString(R.string.profile_tag_name)),R.id.profile_name);
         setEditText(getData(getString(R.string.profile_tag_email)),R.id.profile_email);
-        setEditText(getData(getString(R.string.profile_tag_gender)),R.id.profile_gender);
+        setEditText(getData(getString(R.string.profile_tag_gender)),R.id.profile_gender);*/
     }
 
     @Override
@@ -79,10 +80,14 @@ public class SettingFragment1 extends Fragment {
 
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_setting_fragment1, container, false);
+        View v = inflater.inflate(R.layout.fragment_setting_fragment1, container, false);
+        setEditText(getData(getString(R.string.profile_tag_name)),R.id.profile_name,v);
+        setEditText(getData(getString(R.string.profile_tag_email)),R.id.profile_email,v);
+        setEditText(getData(getString(R.string.profile_tag_gender)),R.id.profile_gender,v);
+        return v;
     }
 
-    // TODO: Rename metho, update argument and hook method into UI event
+    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -91,15 +96,16 @@ public class SettingFragment1 extends Fragment {
     public String getData(String key){
         return getArguments().getString(key);
     }
-    public void setEditText(String text, int id){
-        ((TextView)getView().findViewById(id)).setText(text);
+    public void setEditText(String text, int id,View v){
+        ((TextView)v.findViewById(id)).setText(text);
     }
     @Override
     public void onAttach(Activity activity) {
 
         super.onAttach(activity);
         try {
-            ((SettingsActivity)activity).onSectionAttach(1);
+            ((SettingsActivity)activity).onSectionAttach(0);
+
             mCallback = (OnButtonPressedListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()

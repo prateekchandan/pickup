@@ -2,8 +2,10 @@ package cab.pickup;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,10 +13,15 @@ import android.widget.Toast;
 import cab.pickup.widget.LocationSearchBar;
 
 
-public class SettingsActivity extends MyActivity implements SettingFragment1.OnButtonPressedListener{
-
+public class SettingsActivity extends MyActivity implements SettingFragment1.OnButtonPressedListener,SettingFragment2.OnFragmentInteractionListener
+,SettingFragment3.OnFragmentInteractionListener,SettingFragment4.OnFragmentInteractionListener{
+    boolean saved[]=new boolean[5];
     int fragment=1;
     @Override
+    public void onFragmentInteraction(Uri uri)
+    {
+
+    }
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
@@ -50,17 +57,21 @@ public class SettingsActivity extends MyActivity implements SettingFragment1.OnB
     }
     public void onNextPressedFrame(View v)
     {
-        fragment++;
-        onSectionAttach(fragment);
+        Log.d("OnNextPressed executed ",""+fragment);
+        onSectionAttach(1);
     }
-    public void changeFrame(int framenumber)
+    public void changeFrame()
     {
-        switch (framenumber)
+        Log.d("Value of framenumber: ",""+fragment);
+        switch (fragment)
         {
 
-            case 2:
-                if (validate(1)) {
+            case 1:
+                if (!saved[1] && validate(1)) {
+                    saved[fragment]=true;
+                    Log.d("Case Executed ","1,"+fragment);
                     save(1);
+                    fragment++;
                     SettingFragment2 newFragment = new SettingFragment2();
                     newFragment.setArguments(getIntent().getExtras());
                     FragmentTransaction transaction1 = getSupportFragmentManager().beginTransaction();
@@ -70,8 +81,10 @@ public class SettingsActivity extends MyActivity implements SettingFragment1.OnB
                 }
                     break;
 
-            case 3:
-                if (validate(2)) {
+            case 2:
+                if (!saved[2] && validate(2)) {
+                    saved[fragment]=true;
+                    fragment++;
                     save(2);
                     SettingFragment3 newFragment = new SettingFragment3();
                     newFragment.setArguments(getIntent().getExtras());
@@ -81,8 +94,10 @@ public class SettingsActivity extends MyActivity implements SettingFragment1.OnB
                     transaction1.commit();
                 }
                     break;
-            case 4:
-                if (validate(3)) {
+            case 3:
+                if (!saved[3] && validate(3)) {
+                    saved[fragment]=true;
+                    fragment++;
                     save(3);
                     SettingFragment4 newFragment = new SettingFragment4();
                     newFragment.setArguments(getIntent().getExtras());
@@ -92,8 +107,10 @@ public class SettingsActivity extends MyActivity implements SettingFragment1.OnB
                     transaction1.commit();
                 }
                 break;
-            case 5:
-                if (validate(4)) {
+            case 4:
+                if (!saved[4] && validate(4)) {
+                    saved[fragment]=true;
+                    fragment++;
                     save(4);
 
                 }
@@ -103,10 +120,14 @@ public class SettingsActivity extends MyActivity implements SettingFragment1.OnB
     }
     public void onSectionAttach(int i)
     {
-        changeFrame(i);
+        if (i!=0) {
+            Log.d("OnSectionAttach executed ", "" + fragment);
+                changeFrame();
+        }
     }
     public boolean validate(int fragmentnumber)
     {
+        Log.d("Validate executed with framenumber ",""+fragmentnumber);
         if (fragmentnumber==1) {
             if (getEditText(R.id.profile_name).equals("")) {
                 Context context = getApplicationContext();
@@ -172,6 +193,7 @@ public class SettingsActivity extends MyActivity implements SettingFragment1.OnB
     }
     public void save(int fragmentnumber){
         SharedPreferences.Editor spe = prefs.edit();
+        Log.d("Save executed with framenumber ",""+fragmentnumber);
         if (fragmentnumber==1) {
 
             spe.clear();
@@ -179,6 +201,7 @@ public class SettingsActivity extends MyActivity implements SettingFragment1.OnB
             me.email = getEditText(R.id.profile_email);
             me.gender = getEditText(R.id.profile_gender);
             me.age=getEditText(R.id.profile_age);
+            me.fbid=getData(getString(R.string.profile_tag_fbid));
         }
         else if (fragmentnumber==2)
         {

@@ -78,7 +78,7 @@ public class SettingFragment2 extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            ((SettingsActivity)activity).onSectionAttach(1);
+            ((SettingsActivity)activity).onSectionAttach(0);
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
