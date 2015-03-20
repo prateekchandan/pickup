@@ -19,5 +19,5 @@ tools:context="com.udiboy.commonpath.SettingsActivity">
         android:layout_height="wrap_content"
         android:text="Next"
         android:id="@+id/next_fragment"
-        android:onClick="onNextPressedFrame"/>
+        android:onClick="nextFragment"/>
 </LinearLayout>

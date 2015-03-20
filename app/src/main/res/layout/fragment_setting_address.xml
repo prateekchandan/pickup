@@ -1,11 +1,9 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="cab.pickup.SettingFragment4">
-    <LinearLayout
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <!-- TODO: Update blank fragment layout -->
     <TextView android:text="Home location:" android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <cab.pickup.widget.LocationSearchBar
@@ -21,6 +19,4 @@
         style="@style/LocationSearchBar"
         android:id="@+id/profile_office"/>
 
-    </LinearLayout>
-
-</FrameLayout>
+</LinearLayout>

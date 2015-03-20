@@ -64,7 +64,7 @@ public class SettingFragment2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_setting_fragment2, container, false);
+        return inflater.inflate(R.layout.fragment_setting_company, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -78,7 +78,7 @@ public class SettingFragment2 extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            ((SettingsActivity)activity).onSectionAttach(0);
+            ((SettingsActivity)activity).onSectionAttached(0);
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()

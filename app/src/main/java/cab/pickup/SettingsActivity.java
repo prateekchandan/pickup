@@ -2,7 +2,6 @@ package cab.pickup;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -13,55 +12,59 @@ import android.widget.Toast;
 import cab.pickup.widget.LocationSearchBar;
 
 
-public class SettingsActivity extends MyActivity implements SettingFragment1.OnButtonPressedListener,SettingFragment2.OnFragmentInteractionListener
-,SettingFragment3.OnFragmentInteractionListener,SettingFragment4.OnFragmentInteractionListener{
+public class SettingsActivity extends MyActivity {
     private static final String TAG = "SettingsActivity";
-    boolean saved[]=new boolean[5];
-    int fragment=1;
-    @Override
-    public void onFragmentInteraction(Uri uri)
-    {
+    int current_fragment_id;
 
-    }
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
         if (findViewById(R.id.fragment_container) != null) {
 
-            if (savedInstanceState != null) {
-                return;
-            }
-
-            SettingFragment1 f1=new SettingFragment1();
-            f1.setArguments(getIntent().getExtras());
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, f1).commit();
             me.name=getData(getString(R.string.profile_tag_name));
             me.email=getData(getString(R.string.profile_tag_email));
             me.gender=getData(getString(R.string.profile_tag_gender));
             me.fbid=getData(getString(R.string.profile_tag_fbid));
 
-
+            loadFragment(R.layout.fragment_setting_basic);
         }
-
-        /*setEditText(getData(getString(R.string.profile_tag_name)),R.id.profile_name);
-        setEditText(getData(getString(R.string.profile_tag_email)),R.id.profile_email);
-        setEditText(getData(getString(R.string.profile_tag_company)),R.id.profile_company);
-        setEditText(getData(getString(R.string.profile_tag_number)),R.id.profile_number);
-        setEditText(getData(getString(R.string.profile_tag_age)),R.id.profile_age);
-        setEditText(getData(getString(R.string.profile_tag_gender)),R.id.profile_gender);
-        setEditText(getData(getString(R.string.profile_tag_home)),R.id.profile_home);
-        setEditText(getData(getString(R.string.profile_tag_office)),R.id.profile_office);*/
-
-
     }
-    public void onNextPressedFrame(View v)
+
+    public void nextFragment(View v)
     {
-        Log.d(TAG, "OnNextPressed executed : "+fragment);
-        onSectionAttach(1);
+        switch(current_fragment_id){
+            case R.layout.fragment_setting_basic:
+                loadFragment(R.layout.fragment_setting_company);
+                break;
+            case R.layout.fragment_setting_company:
+                loadFragment(R.layout.fragment_setting_phone);
+                break;
+            case R.layout.fragment_setting_phone:
+                loadFragment(R.layout.fragment_setting_address);
+                break;
+            case R.layout.fragment_setting_address:
+                if(validate(current_fragment_id)) save(current_fragment_id);
+                break;
+        }
     }
-    public void changeFrame()
+
+    public void loadFragment(int fragment_id){
+        if(validate(current_fragment_id)) {
+            save(current_fragment_id);
+
+            Log.d(TAG, "loadFragment : "+fragment_id);
+
+            current_fragment_id = fragment_id;
+
+            SettingsFragment f1 = SettingsFragment.newInstance(fragment_id);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, f1).commit();
+        }
+    }
+
+    /*public void changeFrame()
     {
         Log.d(TAG, "Value of framenumber: "+fragment);
         switch (fragment)
@@ -118,18 +121,34 @@ public class SettingsActivity extends MyActivity implements SettingFragment1.OnB
                 break;
 
         }
-    }
-    public void onSectionAttach(int i)
+    }*/
+    public void onSectionAttached(int fragment_id)
     {
-        if (i!=0) {
-            Log.d(TAG, "OnSectionAttach executed:" + fragment);
-                changeFrame();
+        Log.d(TAG, "onSectionAttached: "+fragment_id);
+        switch(fragment_id) {
+            case R.layout.fragment_setting_basic:
+                setEditText(getData(getString(R.string.profile_tag_name)), R.id.profile_name);
+                setEditText(getData(getString(R.string.profile_tag_email)), R.id.profile_email);
+                setEditText(getData(getString(R.string.profile_tag_age)), R.id.profile_age);
+                setEditText(getData(getString(R.string.profile_tag_gender)), R.id.profile_gender);
+                break;
+            case R.layout.fragment_setting_company:
+                setEditText(getData(getString(R.string.profile_tag_company)), R.id.profile_company);
+
+                break;
+            case R.layout.fragment_setting_phone:
+                setEditText(getData(getString(R.string.profile_tag_number)), R.id.profile_number);
+                break;
+
+            //setEditText(getData(getString(R.string.profile_tag_home)), R.id.profile_home);
+            //setEditText(getData(getString(R.string.profile_tag_office)), R.id.profile_office);
         }
     }
-    public boolean validate(int fragmentnumber)
+
+    public boolean validate(int fragment_id)
     {
-        Log.d(TAG,"Validate executed with framenumber :"+fragmentnumber);
-        if (fragmentnumber==1) {
+        Log.d(TAG,"Validate executed with framenumber :"+fragment_id);
+        if (fragment_id==R.layout.fragment_setting_basic) {
             if (getEditText(R.id.profile_name).equals("")) {
                 Context context = getApplicationContext();
                 CharSequence text = "Name field musn't be empty!";
@@ -169,7 +188,7 @@ public class SettingsActivity extends MyActivity implements SettingFragment1.OnB
             }
             return true;
         }
-        else if (fragmentnumber==2)
+        else if (fragment_id==R.layout.fragment_setting_company)
         {
             if (getEditText(R.id.profile_company).equals(""))
             {
@@ -192,45 +211,31 @@ public class SettingsActivity extends MyActivity implements SettingFragment1.OnB
         }
         return true;
     }
-    public void save(int fragmentnumber){
-        SharedPreferences.Editor spe = prefs.edit();
-        Log.d(TAG, "Save executed with framenumber :"+fragmentnumber);
-        if (fragmentnumber==1) {
 
-            spe.clear();
+    public void save(int fragment_id){
+        Log.d(TAG, "Save executed with framenumber :"+fragment_id);
+        if (fragment_id==R.layout.fragment_setting_basic) {
+
             me.name = getEditText(R.id.profile_name);
             me.email = getEditText(R.id.profile_email);
             me.gender = getEditText(R.id.profile_gender);
             me.age=getEditText(R.id.profile_age);
-            me.fbid=getData(getString(R.string.profile_tag_fbid));
         }
-        else if (fragmentnumber==2)
+        else if (fragment_id==R.layout.fragment_setting_company)
         {
             me.company=getEditText(R.id.profile_company);
             me.company_email=getEditText(R.id.profile_company_email);
         }
-        else if (fragmentnumber==3)
+        else if (fragment_id==R.layout.fragment_setting_phone)
         {
             me.mobile=getEditText(R.id.profile_number);
         }
 
-        else if (fragmentnumber==4) {
+        else if (fragment_id==R.layout.fragment_setting_address) {
 
-
+            SharedPreferences.Editor spe = prefs.edit();
 
             spe.putString("user_json", me.getJson());
-        /*spe.putString(getString(R.string.profile_tag_name),getEditText(R.id.profile_name));
-        spe.putString(getString(R.string.profile_tag_email),getEditText(R.id.profile_email));
-        spe.putString(getString(R.string.profile_tag_company),getEditText(R.id.profile_company));
-        spe.putString(getString(R.string.profile_tag_number),getEditText(R.id.profile_number));
-        spe.putString(getString(R.string.profile_tag_age),getEditText(R.id.profile_age));
-        spe.putString(getString(R.string.profile_tag_gender),getEditText(R.id.profile_gender));
-
-        spe.putString(getString(R.string.profile_tag_home), getEditText(R.id.profile_home));
-        spe.putString(getString(R.string.profile_tag_office),getEditText(R.id.profile_office));
-
-        spe.putString(getString(R.string.profile_tag_fbid),getData(getString(R.string.profile_tag_fbid)));*/
-
             spe.commit();
 
             setResult(RESULT_OK);

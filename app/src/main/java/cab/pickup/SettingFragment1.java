@@ -80,7 +80,7 @@ public class SettingFragment1 extends Fragment {
 
 
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_setting_fragment1, container, false);
+        View v = inflater.inflate(R.layout.fragment_setting_basic, container, false);
         setEditText(getData(getString(R.string.profile_tag_name)),R.id.profile_name,v);
         setEditText(getData(getString(R.string.profile_tag_email)),R.id.profile_email,v);
         setEditText(getData(getString(R.string.profile_tag_gender)),R.id.profile_gender,v);
@@ -104,7 +104,7 @@ public class SettingFragment1 extends Fragment {
 
         super.onAttach(activity);
         try {
-            ((SettingsActivity)activity).onSectionAttach(0);
+            ((SettingsActivity)activity).onSectionAttached(0);
 
             mCallback = (OnButtonPressedListener) activity;
         } catch (ClassCastException e) {
