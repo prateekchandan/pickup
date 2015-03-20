@@ -37,10 +37,10 @@ public class User{
         json+="\"first_name\":\""+name+"\",";
         json+="\"email\":\""+email+"\",";
         json+="\"gender\":\""+gender+"\",";
-        json+="\"comapany\":\""+company+"\",";
+        json+="\"company\":\""+company+"\",";
         json+="\"mobile\":\""+mobile+"\",";
         json+="\"age\":\""+age+"\",";
-        json+="\"company_email\":\""+company_email+"\",";
+        json+="\"company_email\":\""+company_email+"\"";
         json+="}";
 
         return json;

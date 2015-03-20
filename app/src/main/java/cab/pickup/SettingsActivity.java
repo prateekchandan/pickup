@@ -15,6 +15,7 @@ import cab.pickup.widget.LocationSearchBar;
 
 public class SettingsActivity extends MyActivity implements SettingFragment1.OnButtonPressedListener,SettingFragment2.OnFragmentInteractionListener
 ,SettingFragment3.OnFragmentInteractionListener,SettingFragment4.OnFragmentInteractionListener{
+    private static final String TAG = "SettingsActivity";
     boolean saved[]=new boolean[5];
     int fragment=1;
     @Override
@@ -57,19 +58,19 @@ public class SettingsActivity extends MyActivity implements SettingFragment1.OnB
     }
     public void onNextPressedFrame(View v)
     {
-        Log.d("OnNextPressed executed ",""+fragment);
+        Log.d(TAG, "OnNextPressed executed : "+fragment);
         onSectionAttach(1);
     }
     public void changeFrame()
     {
-        Log.d("Value of framenumber: ",""+fragment);
+        Log.d(TAG, "Value of framenumber: "+fragment);
         switch (fragment)
         {
 
             case 1:
                 if (!saved[1] && validate(1)) {
                     saved[fragment]=true;
-                    Log.d("Case Executed ","1,"+fragment);
+                    Log.d(TAG, "Case Executed 1, "+fragment);
                     save(1);
                     fragment++;
                     SettingFragment2 newFragment = new SettingFragment2();
@@ -121,13 +122,13 @@ public class SettingsActivity extends MyActivity implements SettingFragment1.OnB
     public void onSectionAttach(int i)
     {
         if (i!=0) {
-            Log.d("OnSectionAttach executed ", "" + fragment);
+            Log.d(TAG, "OnSectionAttach executed:" + fragment);
                 changeFrame();
         }
     }
     public boolean validate(int fragmentnumber)
     {
-        Log.d("Validate executed with framenumber ",""+fragmentnumber);
+        Log.d(TAG,"Validate executed with framenumber :"+fragmentnumber);
         if (fragmentnumber==1) {
             if (getEditText(R.id.profile_name).equals("")) {
                 Context context = getApplicationContext();
@@ -193,7 +194,7 @@ public class SettingsActivity extends MyActivity implements SettingFragment1.OnB
     }
     public void save(int fragmentnumber){
         SharedPreferences.Editor spe = prefs.edit();
-        Log.d("Save executed with framenumber ",""+fragmentnumber);
+        Log.d(TAG, "Save executed with framenumber :"+fragmentnumber);
         if (fragmentnumber==1) {
 
             spe.clear();

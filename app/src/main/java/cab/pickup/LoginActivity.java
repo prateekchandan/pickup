@@ -76,6 +76,8 @@ public class LoginActivity extends MyActivity {
                 i.putExtra(getString(R.string.profile_tag_name), graphUser.getName());
                 i.putExtra(getString(R.string.profile_tag_fbid), graphUser.getId());
 
+                me.fbid=graphUser.getId();
+
                 Log.i(TAG, "fbid : " + graphUser.getId());
 
                 i.putExtra(getString(R.string.profile_tag_email), (String) graphUser.getProperty(getString(R.string.profile_tag_email)));
