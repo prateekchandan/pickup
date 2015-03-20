@@ -16,6 +16,8 @@ public class Journey {
     public JSONObject path;
     public String id, distance, duration, cost;
 
+    public Address start, end;
+
     public Journey(){}
 
     public LatLngBounds getLatLngBounds() throws JSONException{

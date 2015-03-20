@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cab.pickup.server.GetTask;
+import cab.pickup.server.Result;
 import cab.pickup.util.Journey;
 import cab.pickup.util.MapUtil;
 import cab.pickup.util.SingleJourney;
@@ -69,34 +70,32 @@ public class RideActivity extends MyActivity implements View.OnLongClickListener
         }
 
         @Override
-        public void onPostExecute(String ret){
-            if(ret==null) {
-                Toast.makeText(context, "Error while getting rides from server!", Toast.LENGTH_LONG).show();
-                return;
-            }
+        public void onPostExecute(Result ret) {
+            super.onPostExecute(ret);
+            if (ret.statusCode == 200) {
+                Log.d(TAG, ret.data);
+                try {
+                    JSONArray arr = new JSONArray(ret.data);
 
-            Log.d(TAG, ret);
-            try {
-                JSONArray arr = new JSONArray(ret);
+                    for (int i = 0; i < arr.length(); i++) {
+                        SingleJourney journey = new SingleJourney((JSONObject) arr.get(i));
+                        String text = "From:" + MapUtil.stringFromAddress(journey.start) + "\n" +
+                                "To:" + MapUtil.stringFromAddress(journey.end) + "\n" +
+                                "Time:" + journey.datetime + "\n";
 
-                for(int i=0 ; i<arr.length();i++) {
-                    SingleJourney journey = new SingleJourney((JSONObject)arr.get(i));
-                    String text = "From:" + MapUtil.stringFromAddress(journey.start)+"\n"+
-                            "To:" + MapUtil.stringFromAddress(journey.end)+"\n"+
-                            "Time:" + journey.datetime+"\n";
+                        TextView tv = new TextView(context);
 
-                    TextView tv = new TextView(context);
+                        tv.setText(text);
+                        tv.setTag(journey);
+                        tv.setOnLongClickListener(RideActivity.this);
+                        tv.setOnClickListener(RideActivity.this);
 
-                    tv.setText(text);
-                    tv.setTag(journey);
-                    tv.setOnLongClickListener(RideActivity.this);
-                    tv.setOnClickListener(RideActivity.this);
-
-                    Log.d(TAG, text);
-                    ((LinearLayout) context.findViewById(R.id.ride_list)).addView(tv);
+                        Log.d(TAG, text);
+                        ((LinearLayout) context.findViewById(R.id.ride_list)).addView(tv);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            }catch (JSONException e){
-                e.printStackTrace();
             }
         }
     }

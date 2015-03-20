@@ -1,45 +1,37 @@
 package cab.pickup;
 
 import android.location.Location;
-import android.net.http.AndroidHttpClient;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.widget.ProfilePictureView;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import cab.pickup.server.GetTask;
 import cab.pickup.server.PostTask;
 import cab.pickup.server.Result;
 import cab.pickup.util.CommonJourney;
-import cab.pickup.util.IOUtil;
 import cab.pickup.util.Journey;
-import cab.pickup.util.LocationTracker;
 import cab.pickup.util.User;
 
 
 public class JourneyActivity extends MapsActivity {
-    HashMap<String, Marker> markers = new HashMap<String, Marker>();
+    HashMap<String, Marker> markers = new HashMap<>();
 
     private static final String TAG = "JourneyActivity";
     LinearLayout profile_list;
@@ -55,7 +47,7 @@ public class JourneyActivity extends MapsActivity {
 
         profile_list = (LinearLayout)findViewById(R.id.fb_profile_list);
 
-        new FetchJourneyTask().execute(getUrl("/journey"), getKey(), getIntent().getStringExtra("journey_id"));
+        new FetchJourneyTask(this, getUrl("/journey/"+getIntent().getStringExtra("journey_id"))+"/"+me.id+"?key="+getKey()).execute();
     }
 
     @Override
@@ -88,62 +80,82 @@ public class JourneyActivity extends MapsActivity {
         locations.add(s+","+new Date().getTime());
     }
 
-    class FetchJourneyTask extends AsyncTask<String, Integer, String> {
+    class FetchJourneyTask extends GetTask {
         private static final String TAG = "FetchJourney";
 
-        @Override
-        protected String doInBackground(String... params) {
-            String ret_value=null;
-
-            String url = params[0],
-                    access_key = params[1];
-
-            AndroidHttpClient httpclient = AndroidHttpClient.newInstance(TAG);
-            url+="/"+params[2]+"/"+me.id+"?key="+access_key;
-            HttpGet httpget= new HttpGet(url);
-            int statusCode = 0;
-
-            try {
-                HttpResponse response = httpclient.execute(httpget);
-                statusCode = response.getStatusLine().getStatusCode();
-
-                Log.d(TAG, statusCode + " : " + response.getStatusLine().getReasonPhrase());
-
-                if(statusCode==200){
-                    ret_value = IOUtil.buildStringFromIS(response.getEntity().getContent());
-                } else {
-                    Log.e(TAG, "url : "+url+"\n"+IOUtil.buildStringFromIS(response.getEntity().getContent()));
-                }
-            } catch (ClientProtocolException e) {
-                Log.e(TAG, e.getMessage());
-            } catch (IOException e) {
-                Log.e(TAG, e.getMessage());
-            }
-
-            httpclient.close();
-
-            return ret_value;
+        public FetchJourneyTask(MyActivity context, String url){
+            super(context);
+            this.url=url;
         }
 
         @Override
-        protected void onPostExecute(String ret){
-            if(ret==null) {
-                Toast.makeText(getApplicationContext(), "Error while getting path from server!", Toast.LENGTH_LONG).show();
-                return;
+        public void onPostExecute(Result ret){
+            super.onPostExecute(ret);
+            if(ret.statusCode==200) {
+                Log.d(TAG, ret.data);
+
+                try {
+                    journey = new CommonJourney(new JSONObject(ret.data));
+
+                    for (User user : journey.users)
+                        if (!user.id.equals(me.id))
+                            showProfile(user);
+
+                    addPath(journey.getPath(), journey.getLatLngBounds(), "Distance:" + journey.distance + ", Duration:" + journey.duration + ", Cost:" + journey.cost);
+
+                    new UberDataTask(JourneyActivity.this,UberDataTask.DATA_PRICE).execute();
+                    new UberDataTask(JourneyActivity.this,UberDataTask.DATA_TIME).execute();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
+        }
+    }
 
-            Log.d(TAG, ret);
+    class UberDataTask extends GetTask {
+        public static final String TAG = "FetchJourney",
+                                DATA_PRICE="price",
+                                DATA_TIME="time";
 
-            try {
-                journey = new CommonJourney(new JSONObject(ret));
+        String data_type;
 
-                for(User user : journey.users)
-                    if(!user.id.equals(me.id))
-                        showProfile(user);
+        public UberDataTask(MyActivity context, String data){
+            super(context);
+            this.url="https://api.uber.com/v1/estimates/"+data+"?"+
+                        "start_latitude="+journey.start.getLatitude()+
+                        "&start_longitude="+journey.start.getLongitude()+
+                        "&end_latitude="+journey.end.getLatitude()+
+                        "&end_longitude="+journey.end.getLongitude();
 
-                addPath(journey.getPath(), journey.getLatLngBounds(), "Distance:"+journey.distance+", Duration:"+journey.duration+", Cost:"+journey.cost);
-            } catch (JSONException e) {
-                e.printStackTrace();
+            data_type=data;
+        }
+
+        @Override
+        public void onPostExecute(Result ret){
+            super.onPostExecute(ret);
+            if(ret.statusCode==200) {
+                Log.d(TAG, ret.data);
+
+                try {
+                    JSONObject result = new JSONObject(ret.data);
+                    JSONArray arr=result.getJSONArray(data_type+"s");
+
+                    String display="";
+
+                    for(int i=0; i<arr.length(); i++){
+                        JSONObject elem = arr.getJSONObject(i);
+
+                        display+=elem.getString("display_name")+":"+elem.getString("estimate")+",";
+                    }
+
+                    if(data_type.equals(DATA_PRICE)){
+                        ((TextView)findViewById(R.id.uber_price_estimate)).setText(display);
+                    } else if(data_type.equals(DATA_TIME)) {
+                        ((TextView) findViewById(R.id.uber_time_estimate)).setText(display);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

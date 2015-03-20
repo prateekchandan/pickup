@@ -8,41 +8,39 @@ import android.widget.Toast;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
 import cab.pickup.MyActivity;
 import cab.pickup.util.IOUtil;
 
-public class GetTask extends AsyncTask<String, Integer, String> {
+public class GetTask extends AsyncTask<String, Integer, Result> {
     private static final String TAG = "GetTask";
-     public MyActivity context;
+    public MyActivity context;
+    public String url;
 
     public GetTask(MyActivity context) {
         this.context=context;
     }
 
     @Override
-    protected String doInBackground(String... params) {
-        String ret_value = null;
+    protected Result doInBackground(String... params) {
+        Result ret = new Result();
 
-        String url = params[0];
+        if(url==null) url = params[0];
 
         AndroidHttpClient httpclient = AndroidHttpClient.newInstance(TAG);
         HttpGet httpget = new HttpGet(url);
-        int statusCode = 0;
-
         try {
             HttpResponse response = httpclient.execute(httpget);
-            statusCode = response.getStatusLine().getStatusCode();
+            ret.statusCode = response.getStatusLine().getStatusCode();
+            ret.statusMessage = response.getStatusLine().getReasonPhrase();
 
-            Log.d(TAG, statusCode + " : " + response.getStatusLine().getReasonPhrase());
+            Log.d(TAG, ret.statusCode + " : " + response.getStatusLine().getReasonPhrase());
 
-            if (statusCode == 200) {
-                ret_value = IOUtil.buildStringFromIS(response.getEntity().getContent());
-            } else {
-                Log.e(TAG, "url : " + url + "\n" + IOUtil.buildStringFromIS(response.getEntity().getContent()));
-            }
+            ret.data = IOUtil.buildStringFromIS(response.getEntity().getContent());
         } catch (ClientProtocolException e) {
             Log.e(TAG, e.getMessage());
         } catch (IOException e) {
@@ -51,15 +49,22 @@ public class GetTask extends AsyncTask<String, Integer, String> {
 
         httpclient.close();
 
-        return ret_value;
+        return ret;
     }
 
     @Override
-    public void onPostExecute(String ret){
-        if(ret!=null){
-            Toast.makeText(context, "Task successfull : "+ret, Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(context, "Task failed!", Toast.LENGTH_LONG).show();
+    public void onPostExecute(Result res){
+        if(res.statusCode !=200){
+            String toast;
+            try {
+                JSONObject result = new JSONObject(res.data);
+
+                toast=result.get("message").toString();
+            } catch (JSONException e){
+                toast=res.statusMessage;
+            }
+
+            Toast.makeText(context, toast, Toast.LENGTH_LONG).show();
         }
     }
 }

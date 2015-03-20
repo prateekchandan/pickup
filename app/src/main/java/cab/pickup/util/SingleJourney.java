@@ -19,7 +19,6 @@ import cab.pickup.server.Result;
 
 public class SingleJourney extends Journey{
     public User user;
-    public Address start, end;
     public String datetime, del_time, cab_preference;
 
     public SingleJourney(){
