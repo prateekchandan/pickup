@@ -28,7 +28,7 @@ import cab.pickup.api.SingleJourney;
 import cab.pickup.api.User;
 import cab.pickup.ui.widget.LocationSearchBar;
 
-public class MainActivity extends MapsActivity {
+public class MainActivity extends MapsActivity implements LocationSearchBar.OnAddressSelectedListener {
     HashMap<Integer, Marker> markers = new HashMap<Integer, Marker>();
 
     FrameLayout container;
@@ -53,6 +53,9 @@ public class MainActivity extends MapsActivity {
         container = (FrameLayout) findViewById(R.id.container);
 
         journey = new SingleJourney();
+
+        ((LocationSearchBar)findViewById(R.id.field_start)).setOnAddressSelectedListener(this);
+        ((LocationSearchBar)findViewById(R.id.field_end)).setOnAddressSelectedListener(this);
 
         Intent i = new Intent();
         i.setClass(this,LoginActivity.class);
@@ -119,8 +122,8 @@ public class MainActivity extends MapsActivity {
     private void setJourney(String journey_json) throws JSONException{
         journey = new SingleJourney(new JSONObject(journey_json));
 
-        returnLocationSearchValue(journey.start, R.id.field_start);
-        returnLocationSearchValue(journey.end, R.id.field_end);
+        ((LocationSearchBar)findViewById(R.id.field_start)).setAddress(journey.start);
+        ((LocationSearchBar)findViewById(R.id.field_end)).setAddress(journey.end);
 
         TimePicker journey_time = (TimePicker)findViewById(R.id.journey_time);
 
@@ -166,17 +169,16 @@ public class MainActivity extends MapsActivity {
     }
 
     @Override
-    public void returnLocationSearchValue(Address address, int id){
-        super.returnLocationSearchValue(address,id);
+    public void onAddressSelected(LocationSearchBar bar, Address address){
 
         if(address == null) return;
 
         LatLng newPt = new LatLng(address.getLatitude(), address.getLongitude());
 
-        if(!markers.containsKey(id)) {
-            markers.put(id, map.addMarker(new MarkerOptions().position(newPt)));
+        if(!markers.containsKey(bar.getId())) {
+            markers.put(bar.getId(), map.addMarker(new MarkerOptions().position(newPt)));
         } else {
-            markers.get(id).setPosition(newPt);
+            markers.get(bar.getId()).setPosition(newPt);
         }
 
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(newPt, 10));

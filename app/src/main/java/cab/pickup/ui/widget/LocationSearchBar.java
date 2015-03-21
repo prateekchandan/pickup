@@ -37,6 +37,7 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
     private Address address;
     LocationTracker tracker;
     MyActivity context;
+    OnAddressSelectedListener addrListener;
 
     public LocationSearchBar(Context context) {
         super(context);
@@ -59,9 +60,13 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
         }
     }
 
+    public void setOnAddressSelectedListener(OnAddressSelectedListener lstn){
+        addrListener=lstn;
+    }
+
     @Override
     public void onClick(View v) {
-        LocationSearchDialog dialog = new LocationSearchDialog(getId(), (Address)getTag(), true);
+        LocationSearchDialog dialog = new LocationSearchDialog((Address)getTag(), true);
 
         dialog.show();
     }
@@ -84,21 +89,16 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
         LatLng upperRight = new LatLng(19.289449, 73.174745); // Temporary jugaad... TODO change to user specific location
         LatLng lowerLeft = new LatLng(18.913122, 72.756578);
 
-        int searchBarId;
-
         boolean running, doAgain,
                 myLocationEnabled;
 
         PlacesAdapter adapter;
-        Address addrSelected;
         private AsyncTask<String, Integer, List<Address>> searchTask;
 
-        public LocationSearchDialog(int id, Address a, boolean myLocationEnabled) {
+        public LocationSearchDialog(Address a, boolean myLocationEnabled) {
             super(context);
 
-            searchBarId=id;
-
-            addrSelected=a;
+            setAddress(a);
 
             this.myLocationEnabled=myLocationEnabled;
         }
@@ -107,7 +107,7 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
         public void onCreate(Bundle savedInstanceState){
             requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-            setContentView(R.layout.location_search_dialog);
+            setContentView(R.layout.widget_location_search_dialog);
 
             searchField = (EditText)findViewById(R.id.location_search_dialog_edittext);
             list = (ListView) findViewById(R.id.location_search_dialog_list);
@@ -120,7 +120,7 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    addrSelected = (Address) view.getTag();
+                    setAddress((Address)view.getTag());
 
                     updateSearch();
                 }
@@ -159,18 +159,18 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
         }
 
         private void updateSearch() {
-            searchField.setText(MapUtil.stringFromAddress(addrSelected));
+            searchField.setText(MapUtil.stringFromAddress(address));
         }
 
         @Override
         public void onClick(View v) {
             switch(v.getId()){
                 case R.id.location_search_dialog_done:
-                    context.returnLocationSearchValue(addrSelected, searchBarId);
+                    if(addrListener != null) addrListener.onAddressSelected(LocationSearchBar.this, address);
                     dismiss();
                     break;
                 case R.id.location_search_dialog_myloc:
-                    addrSelected = new Address(Locale.CHINA);
+                    address = new Address(Locale.getDefault());
 
                     Location loc=tracker.getLastKnownLocation();
 
@@ -179,14 +179,14 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
                         break;
                     }
 
-                    addrSelected.setLatitude(loc.getLatitude());
-                    addrSelected.setLongitude(loc.getLongitude());
+                    address.setLatitude(loc.getLatitude());
+                    address.setLongitude(loc.getLongitude());
 
-                    addrSelected.setAddressLine(0,"My Location");
-                    addrSelected.setAddressLine(1,"");
-                    addrSelected.setAddressLine(2,"");
+                    address.setAddressLine(0,"My Location");
+                    address.setAddressLine(1,"");
+                    address.setAddressLine(2,"");
 
-                    searchField.setText(MapUtil.stringFromAddress(addrSelected));
+                    updateSearch();
                     break;
             }
         }
@@ -240,6 +240,10 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
                 }
             }
         }
+    }
+
+    public interface OnAddressSelectedListener{
+        public void onAddressSelected(LocationSearchBar bar, Address a);
     }
 
 }
