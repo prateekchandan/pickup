@@ -1,4 +1,4 @@
-package cab.pickup;
+package cab.pickup.ui.activity;
 
 import android.location.Address;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.HashMap;
+import cab.pickup.R;
 
 
 public class LocationPickerActivity extends MapsActivity {

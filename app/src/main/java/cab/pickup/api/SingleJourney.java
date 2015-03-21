@@ -1,4 +1,4 @@
-package cab.pickup.util;
+package cab.pickup.api;
 
 import android.location.Address;
 import android.util.Log;
@@ -13,9 +13,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import cab.pickup.MyActivity;
 import cab.pickup.server.PostTask;
 import cab.pickup.server.Result;
+import cab.pickup.ui.activity.MyActivity;
+import cab.pickup.util.MapUtil;
 
 public class SingleJourney extends Journey{
     public User user;
@@ -28,7 +29,7 @@ public class SingleJourney extends Journey{
         id=journey.getString("journey_id");
         datetime=journey.getString("journey_time");
 
-        start=MapUtil.addressFrom(journey.getDouble("start_lat"),journey.getDouble("start_long"),journey.getString("start_text"));
+        start= MapUtil.addressFrom(journey.getDouble("start_lat"), journey.getDouble("start_long"), journey.getString("start_text"));
         end=MapUtil.addressFrom(journey.getDouble("end_lat"),journey.getDouble("end_long"),journey.getString("end_text"));
 
         del_time=journey.getString("margin_before");

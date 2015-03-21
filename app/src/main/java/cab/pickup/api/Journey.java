@@ -1,4 +1,4 @@
-package cab.pickup.util;
+package cab.pickup.api;
 
 import android.location.Address;
 
@@ -10,6 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import cab.pickup.util.MapUtil;
 
 // Wrapper class for Journey details json
 public class Journey {

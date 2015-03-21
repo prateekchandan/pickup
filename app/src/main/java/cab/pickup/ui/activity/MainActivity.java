@@ -1,4 +1,4 @@
-package cab.pickup;
+package cab.pickup.ui.activity;
 
 import android.content.Intent;
 import android.location.Address;
@@ -23,10 +23,10 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-import cab.pickup.util.Journey;
-import cab.pickup.util.SingleJourney;
-import cab.pickup.util.User;
-import cab.pickup.widget.LocationSearchBar;
+import cab.pickup.R;
+import cab.pickup.api.SingleJourney;
+import cab.pickup.api.User;
+import cab.pickup.ui.widget.LocationSearchBar;
 
 public class MainActivity extends MapsActivity {
     HashMap<Integer, Marker> markers = new HashMap<Integer, Marker>();

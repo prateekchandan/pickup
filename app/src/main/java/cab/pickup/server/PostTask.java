@@ -15,7 +15,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.List;
 
-import cab.pickup.MyActivity;
+import cab.pickup.ui.activity.MyActivity;
 import cab.pickup.util.IOUtil;
 
 public abstract class PostTask extends AsyncTask<String, Integer, Result> {

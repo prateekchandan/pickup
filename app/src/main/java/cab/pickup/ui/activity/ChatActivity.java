@@ -1,4 +1,4 @@
-package cab.pickup;
+package cab.pickup.ui.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import cab.pickup.R;
 import cab.pickup.gcm.GcmIntentService;
 import cab.pickup.server.SendMessageTask;
 import cab.pickup.util.IOUtil;

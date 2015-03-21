@@ -14,8 +14,8 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import cab.pickup.JourneyActivity;
 import cab.pickup.R;
+import cab.pickup.ui.activity.JourneyActivity;
 
 public class GcmIntentService extends IntentService {
 

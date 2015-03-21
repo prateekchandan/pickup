@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import cab.pickup.MyActivity;
+import cab.pickup.ui.activity.MyActivity;
 import cab.pickup.util.IOUtil;
 
 public class GetTask extends AsyncTask<String, Integer, Result> {

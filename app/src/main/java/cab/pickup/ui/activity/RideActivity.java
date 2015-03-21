@@ -1,4 +1,4 @@
-package cab.pickup;
+package cab.pickup.ui.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -8,17 +8,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cab.pickup.R;
+import cab.pickup.api.Journey;
+import cab.pickup.api.SingleJourney;
 import cab.pickup.server.GetTask;
 import cab.pickup.server.Result;
-import cab.pickup.util.Journey;
 import cab.pickup.util.MapUtil;
-import cab.pickup.util.SingleJourney;
 
 
 public class RideActivity extends MyActivity implements View.OnLongClickListener, View.OnClickListener{

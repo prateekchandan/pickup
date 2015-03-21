@@ -1,4 +1,4 @@
-package cab.pickup;
+package cab.pickup.ui.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,10 +12,11 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cab.pickup.R;
+import cab.pickup.api.User;
+import cab.pickup.ui.widget.LocationSearchBar;
 import cab.pickup.util.IOUtil;
 import cab.pickup.util.LocationTracker;
-import cab.pickup.util.User;
-import cab.pickup.widget.LocationSearchBar;
 
 public class MyActivity extends FragmentActivity {
     public User me;

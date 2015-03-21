@@ -20,7 +20,7 @@ import com.google.android.gms.location.LocationServices;
 import java.text.DateFormat;
 import java.util.Date;
 
-import cab.pickup.MyActivity;
+import cab.pickup.ui.activity.MyActivity;
 
 public class LocationTracker extends Service implements LocationListener,
         GoogleApiClient.ConnectionCallbacks,

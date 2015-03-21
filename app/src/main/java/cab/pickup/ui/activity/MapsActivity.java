@@ -1,4 +1,4 @@
-package cab.pickup;
+package cab.pickup.ui.activity;
 
 import android.graphics.Color;
 import android.net.http.AndroidHttpClient;
@@ -26,9 +26,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cab.pickup.R;
+import cab.pickup.api.SingleJourney;
 import cab.pickup.util.IOUtil;
-import cab.pickup.util.Journey;
-import cab.pickup.util.SingleJourney;
 
 public class MapsActivity extends MyActivity {
     GoogleMap map; // Might be null if Google Play services APK is not available.

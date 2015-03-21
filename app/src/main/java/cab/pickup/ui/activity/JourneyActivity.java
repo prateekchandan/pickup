@@ -1,4 +1,4 @@
-package cab.pickup;
+package cab.pickup.ui.activity;
 
 import android.location.Location;
 import android.os.Bundle;
@@ -22,12 +22,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import cab.pickup.R;
+import cab.pickup.api.CommonJourney;
+import cab.pickup.api.User;
 import cab.pickup.server.GetTask;
 import cab.pickup.server.PostTask;
 import cab.pickup.server.Result;
-import cab.pickup.util.CommonJourney;
-import cab.pickup.util.Journey;
-import cab.pickup.util.User;
 
 
 public class JourneyActivity extends MapsActivity {

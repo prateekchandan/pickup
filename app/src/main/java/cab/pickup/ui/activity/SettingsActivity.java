@@ -1,15 +1,16 @@
-package cab.pickup;
+package cab.pickup.ui.activity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import cab.pickup.widget.LocationSearchBar;
+import cab.pickup.R;
+import cab.pickup.SettingsFragment;
+import cab.pickup.ui.widget.LocationSearchBar;
 
 
 public class SettingsActivity extends MyActivity {

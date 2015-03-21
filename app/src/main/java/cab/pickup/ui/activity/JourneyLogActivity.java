@@ -1,4 +1,4 @@
-package cab.pickup;
+package cab.pickup.ui.activity;
 
 import android.annotation.TargetApi;
 import android.app.NotificationManager;
@@ -21,7 +21,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import cab.pickup.util.User;
+import cab.pickup.R;
+import cab.pickup.api.User;
 
 //import com.google.android.gms.plus.model.people.Person;
 

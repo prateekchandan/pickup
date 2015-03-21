@@ -8,13 +8,13 @@
     tools:context="com.udiboy.commonpath.MainActivity"
     android:orientation="vertical">
 
-    <cab.pickup.widget.LocationSearchBar
+    <cab.pickup.ui.activity.widget.LocationSearchBar
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="Enter Start"
         android:id="@+id/field_start"
         style="@style/LocationSearchBar"/>
-    <cab.pickup.widget.LocationSearchBar
+    <cab.pickup.ui.activity.widget.LocationSearchBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter Destination"

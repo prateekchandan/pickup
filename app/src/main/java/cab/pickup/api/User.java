@@ -1,4 +1,4 @@
-package cab.pickup.util;
+package cab.pickup.api;
 
 import com.google.android.gms.maps.model.LatLng;
 

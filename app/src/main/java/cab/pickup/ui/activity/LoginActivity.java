@@ -1,4 +1,4 @@
-package cab.pickup;
+package cab.pickup.ui.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,9 +23,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cab.pickup.R;
+import cab.pickup.api.User;
 import cab.pickup.server.PostTask;
 import cab.pickup.server.Result;
-import cab.pickup.util.User;
 
 
 public class LoginActivity extends MyActivity {
