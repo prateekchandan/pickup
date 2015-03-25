@@ -93,7 +93,7 @@ public class LoginActivity extends MyActivity {
         setResult(RESULT_OK);
 
         try {
-            me=new User(new JSONObject(prefs.getString("user_json","")));
+            me=new User(new JSONObject(prefs.getString("user_json","")), true);
         } catch (JSONException e) {
             e.printStackTrace();
             me=new User();

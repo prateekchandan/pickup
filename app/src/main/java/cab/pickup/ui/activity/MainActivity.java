@@ -27,11 +27,14 @@ import cab.pickup.R;
 import cab.pickup.api.SingleJourney;
 import cab.pickup.api.User;
 import cab.pickup.ui.widget.LocationSearchBar;
+import cab.pickup.util.PeerDetector;
 
 public class MainActivity extends MapsActivity implements LocationSearchBar.OnAddressSelectedListener {
     HashMap<Integer, Marker> markers = new HashMap<Integer, Marker>();
 
     FrameLayout container;
+
+    PeerDetector peerDetector;
 
     private static final String TAG = "Main";
 
@@ -51,6 +54,8 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
         setUpMapIfNeeded();
 
         container = (FrameLayout) findViewById(R.id.container);
+
+        peerDetector = new PeerDetector(this);
 
         journey = new SingleJourney();
 
@@ -93,24 +98,26 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
     public void onStart() {
         super.onStart();
         tracker.connect();
+        peerDetector.start();
     }
 
     @Override
     public void onStop() {
         tracker.stopLocationUpdates();
         tracker.disconnect();
+        peerDetector.stop();
         super.onStop();
     }
 
     @Override
     public void onActivityResult(int req, int res, Intent data){
-        super.onActivityResult(req,res,data);
+        super.onActivityResult(req, res, data);
 
         Log.d(TAG, "onActivityResult");
         if(res==RESULT_OK) {
             try {
                 if (req == REQUEST_LOGIN)
-                    me = new User(new JSONObject(prefs.getString("user_json", "")));
+                    me = new User(new JSONObject(prefs.getString("user_json", "")), true);
                 else if (req == REQUEST_JOURNEY)
                     setJourney(data.getStringExtra("journey_json"));
             } catch (JSONException e) {
