@@ -1,20 +1,5 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-    <TextView android:text="Home location:" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <cab.pickup.ui.activity.widget.LocationSearchBar
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        style="@style/LocationSearchBar"
-        android:id="@+id/profile_home"/>
-    <TextView android:text="Office location:" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <cab.pickup.ui.activity.widget.LocationSearchBar
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        style="@style/LocationSearchBar"
-        android:id="@+id/profile_office"/>
-
-</LinearLayout>
+<cab.pickup.ui.widget.LocationPickerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/home_office_picker"/>

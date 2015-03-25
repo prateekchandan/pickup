@@ -1,6 +1,5 @@
 package cab.pickup.ui.activity;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,12 +9,14 @@ import android.widget.Toast;
 
 import cab.pickup.R;
 import cab.pickup.SettingsFragment;
-import cab.pickup.ui.widget.LocationSearchBar;
+import cab.pickup.ui.widget.LocationPickerView;
 
 
 public class SettingsActivity extends MyActivity {
     private static final String TAG = "SettingsActivity";
     int current_fragment_id;
+
+    LocationPickerView homeOfficePicker;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +46,7 @@ public class SettingsActivity extends MyActivity {
                 loadFragment(R.layout.fragment_setting_address);
                 break;
             case R.layout.fragment_setting_address:
+                homeOfficePicker=(LocationPickerView)findViewById(R.id.home_office_picker);
                 if(validate(current_fragment_id)) save(current_fragment_id);
                 break;
         }
@@ -148,66 +150,46 @@ public class SettingsActivity extends MyActivity {
 
     public boolean validate(int fragment_id)
     {
+
         Log.d(TAG,"Validate executed with framenumber :"+fragment_id);
         if (fragment_id==R.layout.fragment_setting_basic) {
             if (getEditText(R.id.profile_name).equals("")) {
-                Context context = getApplicationContext();
-                CharSequence text = "Name field musn't be empty!";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                Toast.makeText(this,"Name field musn't be empty!",Toast.LENGTH_LONG).show();
                 return false;
             } else if (getEditText(R.id.profile_email).equals("")) {
-                Context context = getApplicationContext();
-                CharSequence text = "Email field musn't be empty!";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                Toast.makeText(this,"Email field musn't be empty!",Toast.LENGTH_LONG).show();
                 return false;
             }
             else if (getEditText(R.id.profile_age).equals(""))
             {
-                Context context = getApplicationContext();
-                CharSequence text = "Age field musn't be empty!";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                Toast.makeText(this,"Age field musn't be empty!",Toast.LENGTH_LONG).show();
                 return false;
             }
             else if (getEditText(R.id.profile_gender).equals(""))
             {
-                Context context = getApplicationContext();
-                CharSequence text = "Gender field musn't be empty!";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                Toast.makeText(this,"Gender field musn't be empty!",Toast.LENGTH_LONG).show();
                 return false;
             }
-            return true;
         }
         else if (fragment_id==R.layout.fragment_setting_company)
         {
             if (getEditText(R.id.profile_company).equals(""))
             {
-                Context context = getApplicationContext();
-                CharSequence text = "Company field musn't be empty!";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                Toast.makeText(this,"Company field musn't be empty!",Toast.LENGTH_LONG).show();
+                return false;
             }
             else if (getEditText(R.id.profile_company_email).equals(""))
             {
-                Context context = getApplicationContext();
-                CharSequence text = "Company Email Address musn't be empty!";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                Toast.makeText(this,"Company Email Address musn't be empty!",Toast.LENGTH_LONG).show();
+                return false;
+            }
+        } else if (fragment_id == R.layout.fragment_setting_address){
+            if(homeOfficePicker.home==null){
+                Toast.makeText(this,"You should pick a location for home before proceeding!",Toast.LENGTH_LONG).show();
+                return false;
+            } else if(homeOfficePicker.office==null){
+                Toast.makeText(this,"You should pick a location for office before proceeding!",Toast.LENGTH_LONG).show();
+                return false;
             }
         }
         return true;
@@ -233,7 +215,8 @@ public class SettingsActivity extends MyActivity {
         }
 
         else if (fragment_id==R.layout.fragment_setting_address) {
-
+            me.home=homeOfficePicker.home;
+            me.office=homeOfficePicker.office;
             SharedPreferences.Editor spe = prefs.edit();
 
             spe.putString("user_json", me.getJson());
@@ -250,10 +233,6 @@ public class SettingsActivity extends MyActivity {
 
     public void setEditText(String text, int id){
         ((TextView)findViewById(id)).setText(text);
-    }
-
-    public void getAddress(int id){
-        ((LocationSearchBar)findViewById(id)).getAddress();
     }
 
     public String getData(String key){

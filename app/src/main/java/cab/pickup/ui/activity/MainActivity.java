@@ -245,9 +245,4 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
             super.onBackPressed();
         }
     }
-
-    public void showJourneyLog(View v){
-        Intent intent = new Intent(this, LocationPickerActivity.class);
-        startActivity(intent);
-    }
 }
