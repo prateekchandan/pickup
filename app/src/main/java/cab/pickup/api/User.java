@@ -11,20 +11,22 @@ public class User{
     public LatLng home, office;
 
 
-    public User(JSONObject user) throws JSONException{
-        id=user.getString("id");
-        fbid=user.getString("fbid");
-        device_id=user.getString("device_id");
-        name=user.getString("first_name");
-        email=user.getString("email");
-        gender=user.getString("gender");
+    public User(JSONObject user, boolean hasAddress) throws JSONException{
+        id=user.optString("id");
+        fbid=user.optString("fbid");
+        device_id=user.optString("device_id");
+        name=user.optString("first_name");
+        email=user.optString("email");
+        gender=user.optString("gender");
         company=user.optString("company");
-        mobile=user.getString("mobile");
-        age=user.getString("age");
-        company_email=user.getString("company_email");
+        mobile=user.optString("mobile");
+        age=user.optString("age");
+        company_email=user.optString("company_email");
 
-        home = new LatLng(user.getJSONObject("home").getDouble("lat"),user.getJSONObject("home").getDouble("lng"));
-        office = new LatLng(user.getJSONObject("office").getDouble("lat"),user.getJSONObject("office").getDouble("lng"));
+        if(hasAddress){
+            home = new LatLng(user.getJSONObject("home").getDouble("lat"),user.getJSONObject("home").getDouble("lng"));
+            office = new LatLng(user.getJSONObject("office").getDouble("lat"),user.getJSONObject("office").getDouble("lng"));
+        }
     }
 
     public User(){

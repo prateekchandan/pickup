@@ -15,7 +15,7 @@ public class CommonJourney extends Journey {
     public CommonJourney(JSONObject journey) throws JSONException {
         JSONArray usrs = journey.getJSONArray("users");
             for(int i=0; i<usrs.length(); i++)
-                users.add(new User(usrs.getJSONObject(i)));
+                users.add(new User(usrs.getJSONObject(i), false));
 
             distance =journey.getString("new_distance");
             duration =journey.getString("new_time");

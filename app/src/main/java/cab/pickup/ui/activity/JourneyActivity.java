@@ -121,7 +121,7 @@ public class JourneyActivity extends MapsActivity {
 
         public UberDataTask(MyActivity context, String data){
             super(context);
-            this.url="https://api.uber.com/v1/estimates/"+data+"?"+
+            this.url="https://api.uber.com/v1/estimates/"+data+"?server_token=nBYm_lQMqtaKhNqw4UArBdXHf4QHdVeDEyKly8Ft&"+
                         "start_latitude="+journey.start.getLatitude()+
                         "&start_longitude="+journey.start.getLongitude()+
                         "&end_latitude="+journey.end.getLatitude()+
@@ -197,5 +197,4 @@ public class JourneyActivity extends MapsActivity {
             }
         }
     }
-
 }

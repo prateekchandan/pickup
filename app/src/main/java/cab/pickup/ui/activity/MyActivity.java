@@ -30,7 +30,7 @@ public class MyActivity extends FragmentActivity {
         prefs=getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
 
         try {
-            me=new User(new JSONObject(prefs.getString("user_json","")));
+            me=new User(new JSONObject(prefs.getString("user_json","")), true);
             Log.d("MyAct", me.getJson());
         } catch (JSONException e) {
             e.printStackTrace();
