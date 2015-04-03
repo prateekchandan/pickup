@@ -129,19 +129,11 @@ public class SingleJourney extends Journey{
         public void onPostExecute(Result ret){
             super.onPostExecute(ret);
             if(ret.statusCode==200){
-                String toast="";
-                try {
-                    JSONObject result = new JSONObject(ret.data);
-                    toast = result.get("message").toString();
+                id = ret.data.optString("journey_id");
 
-                    id = result.getString("journey_id");
+                Log.d(TAG, ret.statusMessage);
 
-                    Log.d(TAG, toast);
-
-                } catch (JSONException e) {
-                    toast="JSONException: "+e.getMessage();
-                }
-                Toast.makeText(context, toast, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, ret.statusMessage, Toast.LENGTH_LONG).show();
             }
         }
     }

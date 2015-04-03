@@ -9,8 +9,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
@@ -43,12 +41,9 @@ public abstract class PostTask extends AsyncTask<String, Integer, Result> {
 
             HttpResponse response = httpclient.execute(httppost);
 
-            res.statusCode = response.getStatusLine().getStatusCode();
-            res.statusMessage=response.getStatusLine().getReasonPhrase();
-
             Log.d(TAG, res.statusCode + " : " + response.getStatusLine().getReasonPhrase());
 
-            res.data=IOUtil.buildStringFromIS(response.getEntity().getContent());
+            res = new Result(IOUtil.buildStringFromIS(response.getEntity().getContent()));
         } catch (IOException e) {
             onFail(e.getMessage());
         }
@@ -67,16 +62,7 @@ public abstract class PostTask extends AsyncTask<String, Integer, Result> {
     @Override
     public void onPostExecute(Result res) {
         if(res.statusCode !=200){
-            String toast;
-            try {
-                JSONObject result = new JSONObject(res.data);
-
-                toast=result.get("message").toString();
-            } catch (JSONException e){
-                toast=res.statusMessage;
-            }
-
-            Toast.makeText(context, toast, Toast.LENGTH_LONG).show();
+            Toast.makeText(context, res.statusMessage, Toast.LENGTH_LONG).show();
         }
     }
 }

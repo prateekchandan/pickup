@@ -163,18 +163,9 @@ public class LoginActivity extends MyActivity {
         public void onPostExecute(Result ret){
             super.onPostExecute(ret);
             if(ret.statusCode ==200) {
-                String toast;
-                try {
-                    JSONObject result = new JSONObject(ret.data);
+                ((LoginActivity) context).addDataToPrefs(ret.data.optString("user_id"), gcm_id);
 
-                    toast = result.get("message").toString();
-
-                    ((LoginActivity) context).addDataToPrefs(result.get("user_id").toString(), gcm_id);
-                } catch (JSONException e) {
-                    toast="JSONException: "+e.getMessage();
-                }
-
-                Toast.makeText(context, toast, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, ret.statusMessage, Toast.LENGTH_LONG).show();
 
                 context.finish();
             }

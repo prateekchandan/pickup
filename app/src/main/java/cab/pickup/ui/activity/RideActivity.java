@@ -73,9 +73,9 @@ public class RideActivity extends MyActivity implements View.OnLongClickListener
         public void onPostExecute(Result ret) {
             super.onPostExecute(ret);
             if (ret.statusCode == 200) {
-                Log.d(TAG, ret.data);
+                Log.d(TAG, ret.data.toString());
                 try {
-                    JSONArray arr = new JSONArray(ret.data);
+                    JSONArray arr = new JSONArray(ret.data.toString());
 
                     for (int i = 0; i < arr.length(); i++) {
                         SingleJourney journey = new SingleJourney((JSONObject) arr.get(i));

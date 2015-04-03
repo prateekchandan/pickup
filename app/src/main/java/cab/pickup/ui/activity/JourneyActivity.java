@@ -92,10 +92,8 @@ public class JourneyActivity extends MapsActivity {
         public void onPostExecute(Result ret){
             super.onPostExecute(ret);
             if(ret.statusCode==200) {
-                Log.d(TAG, ret.data);
-
-                try {
-                    journey = new CommonJourney(new JSONObject(ret.data));
+                try{
+                    journey = new CommonJourney(ret.data);
 
                     for (User user : journey.users)
                         if (!user.id.equals(me.id))
@@ -134,11 +132,10 @@ public class JourneyActivity extends MapsActivity {
         public void onPostExecute(Result ret){
             super.onPostExecute(ret);
             if(ret.statusCode==200) {
-                Log.d(TAG, ret.data);
+                Log.d(TAG, ret.data.toString());
 
                 try {
-                    JSONObject result = new JSONObject(ret.data);
-                    JSONArray arr=result.getJSONArray(data_type+"s");
+                    JSONArray arr=ret.data.getJSONArray(data_type+"s");
 
                     String display="";
 
@@ -176,23 +173,18 @@ public class JourneyActivity extends MapsActivity {
         public void onPostExecute(Result result){
             super.onPostExecute(result);
             if(result.statusCode==200) {
-                try {
-                    JSONObject positions = new JSONObject(result.data);
+                JSONObject positions = result.data;
 
-                    for (User user : journey.users) {
-                        Log.d(TAG, "User: " + user.id);
+                for (User user : journey.users) {
+                    Log.d(TAG, "User: " + user.id);
 
-                        user.setPosition(positions.getString(user.id));
+                    user.setPosition(positions.optString(user.id));
 
-                        if (!markers.containsKey(user.id)) {
-                            markers.put(user.id, map.addMarker(new MarkerOptions().position(user.position)));
-                        } else {
-                            markers.get(user.id).setPosition(user.position);
-                        }
+                    if (!markers.containsKey(user.id)) {
+                        markers.put(user.id, map.addMarker(new MarkerOptions().position(user.position)));
+                    } else {
+                        markers.get(user.id).setPosition(user.position);
                     }
-
-                } catch (JSONException e) {
-                    Log.e(TAG, e.getMessage());
                 }
             }
         }
