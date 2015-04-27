@@ -94,10 +94,6 @@
             android:name=".ui.activity.RideActivity"
             android:label="@string/title_activity_ride" >
         </activity>
-        <activity
-            android:name=".ui.activity.JourneyLogActivity"
-            android:label="@string/title_activity_journey_log" >
-        </activity>
 
         <service android:name="com.parse.PushService" />
         <receiver android:name="com.parse.ParseBroadcastReceiver">

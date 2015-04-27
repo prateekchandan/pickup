@@ -28,10 +28,13 @@ import cab.pickup.api.User;
 import cab.pickup.server.GetTask;
 import cab.pickup.server.PostTask;
 import cab.pickup.server.Result;
+import cab.pickup.util.PeerDetector;
 
 
 public class JourneyActivity extends MapsActivity {
     HashMap<String, Marker> markers = new HashMap<>();
+
+    PeerDetector peerDetector;
 
     private static final String TAG = "JourneyActivity";
     LinearLayout profile_list;
@@ -47,6 +50,8 @@ public class JourneyActivity extends MapsActivity {
 
         profile_list = (LinearLayout)findViewById(R.id.fb_profile_list);
 
+        peerDetector = new PeerDetector(this);
+
         new FetchJourneyTask(this, getUrl("/journey/"+getIntent().getStringExtra("journey_id"))+"/"+me.id+"?key="+getKey()).execute();
     }
 
@@ -54,12 +59,14 @@ public class JourneyActivity extends MapsActivity {
     public void onStart() {
         super.onStart();
         tracker.connect();
+        peerDetector.start();
     }
 
     @Override
     public void onStop() {
         tracker.stopLocationUpdates();
         tracker.disconnect();
+        peerDetector.stop();
         super.onStop();
     }
 

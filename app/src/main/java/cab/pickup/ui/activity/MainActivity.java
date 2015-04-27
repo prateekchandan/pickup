@@ -27,14 +27,11 @@ import cab.pickup.R;
 import cab.pickup.api.SingleJourney;
 import cab.pickup.api.User;
 import cab.pickup.ui.widget.LocationSearchBar;
-import cab.pickup.util.PeerDetector;
 
 public class MainActivity extends MapsActivity implements LocationSearchBar.OnAddressSelectedListener {
     HashMap<Integer, Marker> markers = new HashMap<Integer, Marker>();
 
     FrameLayout container;
-
-    PeerDetector peerDetector;
 
     private static final String TAG = "Main";
 
@@ -54,8 +51,6 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
         setUpMapIfNeeded();
 
         container = (FrameLayout) findViewById(R.id.container);
-
-        peerDetector = new PeerDetector(this);
 
         journey = new SingleJourney();
 
@@ -98,14 +93,12 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
     public void onStart() {
         super.onStart();
         tracker.connect();
-        peerDetector.start();
     }
 
     @Override
     public void onStop() {
         tracker.stopLocationUpdates();
         tracker.disconnect();
-        peerDetector.stop();
         super.onStop();
     }
 
