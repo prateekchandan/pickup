@@ -7,10 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.DatePicker;
-import android.widget.FrameLayout;
-import android.widget.TextView;
-import android.widget.TimePicker;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,6 +18,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 import cab.pickup.R;
@@ -30,8 +29,6 @@ import cab.pickup.ui.widget.LocationSearchBar;
 
 public class MainActivity extends MapsActivity implements LocationSearchBar.OnAddressSelectedListener {
     HashMap<Integer, Marker> markers = new HashMap<Integer, Marker>();
-
-    FrameLayout container;
 
     private static final String TAG = "Main";
 
@@ -49,8 +46,6 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
         setContentView(R.layout.activity_main);
 
         setUpMapIfNeeded();
-
-        container = (FrameLayout) findViewById(R.id.container);
 
         journey = new SingleJourney();
 
@@ -77,7 +72,6 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent i = new Intent();
             i.setClass(this, SettingsActivity.class);
@@ -125,40 +119,10 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
         ((LocationSearchBar)findViewById(R.id.field_start)).setAddress(journey.start);
         ((LocationSearchBar)findViewById(R.id.field_end)).setAddress(journey.end);
 
-        TimePicker journey_time = (TimePicker)findViewById(R.id.journey_time);
-
-        DatePicker date = ((DatePicker)findViewById(R.id.journey_date));
-
         //yyyy-mm-dd hh:mm:ss
         //0123456789012345678
-        journey_time.setCurrentHour(Integer.valueOf(journey.datetime.substring(11,13)));
-        journey_time.setCurrentMinute(Integer.valueOf(journey.datetime.substring(14,16)));
-
-        date.updateDate(Integer.valueOf(journey.datetime.substring(0,4)),
-                Integer.valueOf(journey.datetime.substring(5,7)),
-                Integer.valueOf(journey.datetime.substring(8,10)));
 
         displayPath();
-    }
-
-    public void bookRide(View v){
-        if(mode==MODE_MAP) {
-            start = ((LocationSearchBar) findViewById(R.id.field_start)).getAddress();
-            end = ((LocationSearchBar) findViewById(R.id.field_end)).getAddress();
-
-            if (start == null || end == null) {
-                Toast.makeText(this, "Select both start and destination before continuing.", Toast.LENGTH_LONG).show();
-                return;
-            }
-
-            findViewById(R.id.book_details).setVisibility(View.VISIBLE);
-
-            findViewById(R.id.map).setVisibility(View.GONE);
-
-            mode=MODE_DETAILS;
-        } else if(mode==MODE_DETAILS){
-            addJourney();
-        }
     }
 
     public void openChat(View v){
@@ -200,32 +164,39 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
         }
     }
 
-    public void addJourney(){
+    public void addJourney(View v){
+        start = ((LocationSearchBar) findViewById(R.id.field_start)).getAddress();
+        end = ((LocationSearchBar) findViewById(R.id.field_end)).getAddress();
 
-        TimePicker journey_time = (TimePicker)findViewById(R.id.journey_time);
-        String time = (journey_time.getCurrentHour()>9?journey_time.getCurrentHour():"0"+journey_time.getCurrentHour())+":"+
-                (journey_time.getCurrentMinute()>9?journey_time.getCurrentMinute():"0"+journey_time.getCurrentMinute())+":00";
+        if (start == null || end == null) {
+            Toast.makeText(this, "Select both start and destination before continuing.", Toast.LENGTH_LONG).show();
+            return;
+        }
 
-        DatePicker date = ((DatePicker)findViewById(R.id.journey_date));
+        Date now = new Date();
 
-        int day=date.getDayOfMonth(), month=date.getMonth()+1;
+        int time_op = ((RadioGroup)findViewById(R.id.option_time)).getCheckedRadioButtonId();
 
-        String currentDate = date.getYear()+"-"+
-                (month>9?month:"0"+month)+"-"+
-                (day>9?day:"0"+day)+" "+time;
+        if(time_op == R.id.time_15)
+            now=new Date(now.getTime()+15*60*1000);
+        else if(time_op == R.id.time_30)
+            now=new Date(now.getTime()+30*60*1000);
+        else if(time_op == R.id.time_45)
+            now=new Date(now.getTime()+45*60*1000);
 
-                Log.d(TAG, currentDate);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        String pm_time = ((TextView)findViewById(R.id.pm_time)).getText().toString();
 
         Log.d(TAG, me.getJson());
 
         journey.user=me;
         journey.start=start;
         journey.end=end;
-        journey.datetime=currentDate;
-        journey.del_time=pm_time;
+        journey.datetime=formatter.format(now);
+        journey.del_time="30";
         journey.cab_preference="1";
+
+        Log.d(TAG, "Journey time : " +journey.datetime);
 
         journey.addToServer(this);
     }
@@ -234,15 +205,4 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
         startActivityForResult(new Intent(this, RideActivity.class), REQUEST_JOURNEY);
     }
 
-    @Override
-    public void onBackPressed(){
-        if(mode==MODE_DETAILS){
-            findViewById(R.id.book_details).setVisibility(View.GONE);
-            findViewById(R.id.map).setVisibility(View.VISIBLE);
-
-            mode=MODE_MAP;
-        } else {
-            super.onBackPressed();
-        }
-    }
 }

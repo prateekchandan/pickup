@@ -1,14 +1,14 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.udiboy.commonpath.MainActivity"
-    android:orientation="vertical">
+    tools:context="com.udiboy.commonpath.MainActivity">
 
-    <cab.pickup.ui.widget.LocationSearchBar
+
+    <!--<cab.pickup.ui.widget.LocationSearchBar
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="Enter Start"
@@ -97,5 +97,112 @@
             android:layout_height="wrap_content"
             android:text="View"
             android:onClick="showJourneyLog"/>
+        </LinearLayout>-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="I&apos;m at :"
+        android:id="@+id/label_start"
+        android:layout_alignParentLeft="true"
+        android:layout_alignBottom="@+id/field_start"
+        android:textSize="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Going to:"
+        android:id="@+id/label_end"
+        android:layout_alignParentLeft="true"
+        android:layout_alignBottom="@+id/field_end"
+        android:textSize="20dp" />
+
+    <cab.pickup.ui.widget.LocationSearchBar
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/label_start"
+        android:layout_alignParentTop="true"
+        android:id="@+id/field_start"
+        style="@style/LocationSearchBar"
+        android:layout_alignLeft="@+id/field_end"
+        android:layout_marginLeft="0dp" />
+    <cab.pickup.ui.widget.LocationSearchBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/field_start"
+        android:layout_toRightOf="@id/label_end"
+        android:id="@+id/field_end"
+        style="@style/LocationSearchBar"/>
+
+    <fragment
+        android:layout_width="fill_parent"
+        android:layout_height="90dp"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_below="@+id/field_end"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:layout_marginTop="5dp" />
+
+    <RadioGroup
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/leave_time"
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/option_time">
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15 mins"
+            android:id="@+id/time_15"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30 mins"
+            android:id="@+id/time_30"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="45 mins"
+            android:id="@+id/time_45"/>
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Leave In:"
+        android:id="@+id/leave_time"
+        android:layout_below="@+id/map"
+        android:layout_centerHorizontal="true"
+        android:textSize="20dp"
+        android:layout_marginTop="5dp" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/scrollView"
+        android:layout_above="@+id/button_register"
+        android:layout_below="@+id/option_time" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/list_user_match">
+
         </LinearLayout>
-</LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register Ride"
+        android:onClick="addJourney"
+        android:id="@+id/button_register"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

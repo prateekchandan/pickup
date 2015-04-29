@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -124,7 +123,6 @@ public class MapsActivity extends MyActivity {
 
         map.animateCamera(CameraUpdateFactory.newLatLngBounds(bnds, 10));
 
-        ((TextView)findViewById(R.id.distance_time)).setText(data);
     }
 
     public void updatePoint(String user_id, double lat, double lng){
