@@ -1,7 +1,5 @@
 package cab.pickup.api;
 
-import android.location.Address;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
@@ -18,7 +16,7 @@ public class Journey {
     public JSONObject path;
     public String id, distance, duration, cost;
 
-    public Address start, end;
+    public Location start, end;
 
     public Journey(){}
 

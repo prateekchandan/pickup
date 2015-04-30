@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -25,16 +24,15 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 
 import cab.pickup.R;
+import cab.pickup.api.Location;
 import cab.pickup.ui.activity.MyActivity;
 import cab.pickup.util.LocationTracker;
-import cab.pickup.util.MapUtil;
 
 public class LocationSearchBar extends TextView implements View.OnClickListener{
 
-    private Address address;
+    private Location address;
     LocationTracker tracker;
     MyActivity context;
     OnAddressSelectedListener addrListener;
@@ -66,18 +64,18 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        LocationSearchDialog dialog = new LocationSearchDialog((Address)getTag(), true);
+        LocationSearchDialog dialog = new LocationSearchDialog((Location)getTag(), true);
 
         dialog.show();
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(Location address) {
         this.address = address;
 
-        setText(MapUtil.stringFromAddress(address));
+        setText(address.shortDescription);
     }
 
-    public Address getAddress() {
+    public Location getAddress() {
         return address;
     }
 
@@ -95,7 +93,7 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
         PlacesAdapter adapter;
         private AsyncTask<String, Integer, List<Address>> searchTask;
 
-        public LocationSearchDialog(Address a, boolean myLocationEnabled) {
+        public LocationSearchDialog(Location a, boolean myLocationEnabled) {
             super(context);
 
             setAddress(a);
@@ -120,7 +118,7 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    setAddress((Address)view.getTag());
+                    setAddress((Location)view.getTag());
 
                     updateSearch();
                 }
@@ -159,7 +157,7 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
         }
 
         private void updateSearch() {
-            searchField.setText(MapUtil.stringFromAddress(address));
+            searchField.setText(address.longDescription);
         }
 
         @Override
@@ -170,21 +168,13 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
                     dismiss();
                     break;
                 case R.id.location_search_dialog_myloc:
-                    address = new Address(Locale.getDefault());
 
-                    Location loc=tracker.getLastKnownLocation();
-
-                    if(loc==null){
+                    if(tracker.getLastKnownLocation()==null){
                         Toast.makeText(context, "Waiting for location...", Toast.LENGTH_LONG).show();
                         break;
                     }
 
-                    address.setLatitude(loc.getLatitude());
-                    address.setLongitude(loc.getLongitude());
-
-                    address.setAddressLine(0,"My Location");
-                    address.setAddressLine(1,"");
-                    address.setAddressLine(2,"");
+                    address=new Location(tracker.getLatitude(),tracker.getLongitude(),"My Location");
 
                     updateSearch();
                     break;
@@ -243,7 +233,7 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
     }
 
     public interface OnAddressSelectedListener{
-        public void onAddressSelected(LocationSearchBar bar, Address a);
+        public void onAddressSelected(LocationSearchBar bar, Location a);
     }
 
 }

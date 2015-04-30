@@ -1,11 +1,9 @@
 package cab.pickup.ui.widget;
 
 import android.content.Context;
-import android.location.Address;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -16,6 +14,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import cab.pickup.R;
+import cab.pickup.api.Location;
 import cab.pickup.ui.activity.MyActivity;
 
 public class LocationPickerView extends LinearLayout implements LocationSearchBar.OnAddressSelectedListener, View.OnClickListener{
@@ -67,14 +66,15 @@ public class LocationPickerView extends LinearLayout implements LocationSearchBa
 
         searchBar=(LocationSearchBar)view.findViewById(R.id.location_picker_search_field);
         searchBar.setOnAddressSelectedListener(this);
-        view.findViewById(R.id.location_picker_set).setOnClickListener(this);
+        view.findViewById(R.id.location_picker_set_home).setOnClickListener(this);
+        view.findViewById(R.id.location_picker_set_office).setOnClickListener(this);
 
         setUpMapIfNeeded();
     }
 
     @Override
-    public void onAddressSelected(LocationSearchBar bar, Address address) {
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(address.getLatitude(), address.getLongitude()), 15));
+    public void onAddressSelected(LocationSearchBar bar, Location address) {
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(address.latitude, address.longitude), 15));
     }
 
     @Override
@@ -86,9 +86,6 @@ public class LocationPickerView extends LinearLayout implements LocationSearchBa
                 home_marker= map.addMarker(new MarkerOptions().position(newPt));
             else
                 home_marker.setPosition(newPt);
-
-            searchBar.setAddress(null);
-            ((Button)findViewById(R.id.location_picker_set)).setText("Set Office");
         } else {
             office=newPt;
             if(office_marker==null)
@@ -96,5 +93,7 @@ public class LocationPickerView extends LinearLayout implements LocationSearchBa
             else
                 office_marker.setPosition(newPt);
         }
+
+        searchBar.setAddress(null);
     }
 }

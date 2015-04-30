@@ -18,7 +18,6 @@ import cab.pickup.api.Journey;
 import cab.pickup.api.SingleJourney;
 import cab.pickup.server.GetTask;
 import cab.pickup.server.Result;
-import cab.pickup.util.MapUtil;
 
 
 public class RideActivity extends MyActivity implements View.OnLongClickListener, View.OnClickListener{
@@ -79,8 +78,8 @@ public class RideActivity extends MyActivity implements View.OnLongClickListener
 
                     for (int i = 0; i < arr.length(); i++) {
                         SingleJourney journey = new SingleJourney((JSONObject) arr.get(i));
-                        String text = "From:" + MapUtil.stringFromAddress(journey.start) + "\n" +
-                                "To:" + MapUtil.stringFromAddress(journey.end) + "\n" +
+                        String text = "From:" + journey.start.shortDescription + "\n" +
+                                "To:" + journey.end.shortDescription + "\n" +
                                 "Time:" + journey.datetime + "\n";
 
                         TextView tv = new TextView(context);

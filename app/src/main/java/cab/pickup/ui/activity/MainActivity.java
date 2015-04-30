@@ -1,7 +1,6 @@
 package cab.pickup.ui.activity;
 
 import android.content.Intent;
-import android.location.Address;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -23,6 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import cab.pickup.R;
+import cab.pickup.api.Location;
 import cab.pickup.api.SingleJourney;
 import cab.pickup.api.User;
 import cab.pickup.ui.widget.LocationSearchBar;
@@ -32,7 +32,7 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
 
     private static final String TAG = "Main";
 
-    Address start, end;
+    Location start, end;
     private static final int MODE_MAP=0, MODE_DETAILS=1,
                             REQUEST_LOGIN=1, REQUEST_JOURNEY=2;
 
@@ -133,11 +133,11 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
     }
 
     @Override
-    public void onAddressSelected(LocationSearchBar bar, Address address){
+    public void onAddressSelected(LocationSearchBar bar, Location address){
 
         if(address == null) return;
 
-        LatLng newPt = new LatLng(address.getLatitude(), address.getLongitude());
+        LatLng newPt = new LatLng(address.latitude, address.longitude);
 
         if(!markers.containsKey(bar.getId())) {
             markers.put(bar.getId(), map.addMarker(new MarkerOptions().position(newPt)));

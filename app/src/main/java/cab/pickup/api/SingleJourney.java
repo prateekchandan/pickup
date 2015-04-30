@@ -1,6 +1,5 @@
 package cab.pickup.api;
 
-import android.location.Address;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -16,7 +15,6 @@ import java.util.List;
 import cab.pickup.server.PostTask;
 import cab.pickup.server.Result;
 import cab.pickup.ui.activity.MyActivity;
-import cab.pickup.util.MapUtil;
 
 public class SingleJourney extends Journey{
     public User user;
@@ -29,8 +27,8 @@ public class SingleJourney extends Journey{
         id=journey.getString("journey_id");
         datetime=journey.getString("journey_time");
 
-        start= MapUtil.addressFrom(journey.getDouble("start_lat"), journey.getDouble("start_long"), journey.getString("start_text"));
-        end=MapUtil.addressFrom(journey.getDouble("end_lat"),journey.getDouble("end_long"),journey.getString("end_text"));
+        start= new Location(journey.getDouble("start_lat"), journey.getDouble("start_long"), journey.getString("start_text"));
+        end=new Location(journey.getDouble("end_lat"),journey.getDouble("end_long"),journey.getString("end_text"));
 
         del_time=journey.getString("margin_before");
         cab_preference=journey.getString("preference");
@@ -57,7 +55,7 @@ public class SingleJourney extends Journey{
         this.user=user;
     }
 
-    public SingleJourney(User user, Address start, Address end, String datetime, String del_time, String cab_preference){
+    public SingleJourney(User user, Location start,Location end, String datetime, String del_time, String cab_preference){
         this.user=user;
         this.start=start;
         this.end=end;
@@ -77,13 +75,13 @@ public class SingleJourney extends Journey{
         json+="\"journey_id\":\""+id+"\",";
         json+="\"journey_time\":\""+datetime+"\",";
 
-        json+="\"start_lat\":\""+start.getLatitude()+"\",";
-        json+="\"start_long\":\""+start.getLongitude()+"\",";
-        json+="\"start_text\":\""+MapUtil.stringFromAddress(start)+"\",";
+        json+="\"start_lat\":\""+start.latitude+"\",";
+        json+="\"start_long\":\""+start.longitude+"\",";
+        json+="\"start_text\":\""+start.longDescription+"\",";
 
-        json+="\"end_lat\":\""+end.getLatitude()+"\",";
-        json+="\"end_long\":\""+end.getLongitude()+"\",";
-        json+="\"end_text\":\""+MapUtil.stringFromAddress(end)+"\",";
+        json+="\"end_lat\":\""+end.latitude+"\",";
+        json+="\"end_long\":\""+end.longitude+"\",";
+        json+="\"end_text\":\""+end.longDescription+"\",";
 
         json+="\"margin_before\":\""+del_time+"\",";
         json+="\"preference\":\""+cab_preference+"\"";
@@ -109,18 +107,18 @@ public class SingleJourney extends Journey{
 
             nameValuePairs.add(new BasicNameValuePair("journey_id", id));
 
-            nameValuePairs.add(new BasicNameValuePair("start_lat", start.getLatitude()+""));
-            nameValuePairs.add(new BasicNameValuePair("start_long", start.getLongitude()+""));
-            nameValuePairs.add(new BasicNameValuePair("end_lat", end.getLatitude()+""));
-            nameValuePairs.add(new BasicNameValuePair("end_long", end.getLongitude()+""));
+            nameValuePairs.add(new BasicNameValuePair("start_lat", start.latitude+""));
+            nameValuePairs.add(new BasicNameValuePair("start_long", start.longitude+""));
+            nameValuePairs.add(new BasicNameValuePair("end_lat", end.latitude+""));
+            nameValuePairs.add(new BasicNameValuePair("end_long", end.longitude+""));
 
             nameValuePairs.add(new BasicNameValuePair("journey_time", datetime));
             nameValuePairs.add(new BasicNameValuePair("margin_before", del_time));
             nameValuePairs.add(new BasicNameValuePair("margin_after", del_time));
             nameValuePairs.add(new BasicNameValuePair("preference","1"));
 
-            nameValuePairs.add(new BasicNameValuePair("start_text",MapUtil.stringFromAddress(start)));
-            nameValuePairs.add(new BasicNameValuePair("end_text",MapUtil.stringFromAddress(end)));
+            nameValuePairs.add(new BasicNameValuePair("start_text",start.longDescription));
+            nameValuePairs.add(new BasicNameValuePair("end_text",end.longDescription));
 
             return nameValuePairs;
         }
