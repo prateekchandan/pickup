@@ -22,7 +22,6 @@ public class LocationPickerView extends LinearLayout implements LocationSearchBa
     MyActivity context;
     public LatLng home, office;
     Marker home_marker, office_marker;
-    boolean setHome=true;
 
     LocationSearchBar searchBar;
     GoogleMap map;
@@ -81,7 +80,7 @@ public class LocationPickerView extends LinearLayout implements LocationSearchBa
     @Override
     public void onClick(View v) {
         LatLng newPt = map.getCameraPosition().target;
-        if(setHome){
+        if(v.getId()==R.id.location_picker_set_home){
             home=newPt;
             if(home_marker==null)
                 home_marker= map.addMarker(new MarkerOptions().position(newPt));
@@ -90,7 +89,6 @@ public class LocationPickerView extends LinearLayout implements LocationSearchBa
 
             searchBar.setAddress(null);
             ((Button)findViewById(R.id.location_picker_set)).setText("Set Office");
-            setHome=false;
         } else {
             office=newPt;
             if(office_marker==null)
