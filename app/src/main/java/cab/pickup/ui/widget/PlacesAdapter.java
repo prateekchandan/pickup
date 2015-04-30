@@ -2,7 +2,6 @@ package cab.pickup.ui.widget;
 
 
 import android.content.Context;
-import android.location.Address;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +11,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import cab.pickup.util.MapUtil;
+import cab.pickup.api.Location;
 
-public class PlacesAdapter  extends ArrayAdapter<Address>{
-    List<Address> addrs = new ArrayList<>();
+public class PlacesAdapter  extends ArrayAdapter<Location> {
+    List<Location> addrs = new ArrayList<>();
     Context context;
 
-    public PlacesAdapter(Context context, List<Address> objects) {
+    public PlacesAdapter(Context context, List<Location> objects) {
         super(context, android.R.layout.simple_list_item_1, objects);
 
         this.context=context;
@@ -32,7 +31,7 @@ public class PlacesAdapter  extends ArrayAdapter<Address>{
     }
 
     @Override
-    public void add(Address a){
+    public void add(Location a){
         addrs.add(a);
     }
 
@@ -52,7 +51,7 @@ public class PlacesAdapter  extends ArrayAdapter<Address>{
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         TextView rowView = (TextView) inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
 
-        rowView.setText(MapUtil.stringFromAddress(addrs.get(position)));
+        rowView.setText(addrs.get(position).longDescription);
         rowView.setTag(addrs.get(position));
 
         rowView.setMinLines(0);

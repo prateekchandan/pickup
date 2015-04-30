@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import cab.pickup.R;
@@ -64,7 +65,7 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        LocationSearchDialog dialog = new LocationSearchDialog((Location)getTag(), true);
+        LocationSearchDialog dialog = new LocationSearchDialog(true);
 
         dialog.show();
     }
@@ -91,12 +92,10 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
                 myLocationEnabled;
 
         PlacesAdapter adapter;
-        private AsyncTask<String, Integer, List<Address>> searchTask;
+        private SearchTask searchTask;
 
-        public LocationSearchDialog(Location a, boolean myLocationEnabled) {
+        public LocationSearchDialog(boolean myLocationEnabled) {
             super(context);
-
-            setAddress(a);
 
             this.myLocationEnabled=myLocationEnabled;
         }
@@ -157,7 +156,7 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
         }
 
         private void updateSearch() {
-            searchField.setText(address.longDescription);
+            if(address!=null) searchField.setText(address.longDescription);
         }
 
         @Override
@@ -187,20 +186,24 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
             super.onStop();
         }
 
-        final class SearchTask extends AsyncTask<String, Integer,  List<Address>>{
+        final class SearchTask extends AsyncTask<String, Integer,  List<Location>>{
             @Override
             protected void onPreExecute(){
                 running = true;
             }
 
             @Override
-            protected List<Address> doInBackground(String... params) {
+            protected List<Location> doInBackground(String... params) {
 
                 Geocoder gc = new Geocoder(context);
 
-                List<Address> results=null;
+                List<Location> results=new ArrayList<Location>();
                 try {
-                    results = gc.getFromLocationName(params[0], 5, lowerLeft.latitude, lowerLeft.longitude, upperRight.latitude, upperRight.longitude);
+                    List<Address> res=gc.getFromLocationName(params[0], 5, lowerLeft.latitude, lowerLeft.longitude, upperRight.latitude, upperRight.longitude);
+
+                    for (Address a :res){
+                        results.add(new Location(a.getLatitude(),a.getLongitude(),a.getAddressLine(0)));
+                    }
 
                 } catch (IOException e) {
                     Log.e(TAG, "Server request timed out");
@@ -209,13 +212,13 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
             }
 
             @Override
-            protected void onPostExecute(List<Address> arr){
+            protected void onPostExecute(List<Location> arr){
                 running = false;
 
                 adapter.clear();
 
                 if(arr!=null) {
-                    for (Address a : arr) {
+                    for (Location a : arr) {
                         adapter.add(a);
                     }
                 } else {

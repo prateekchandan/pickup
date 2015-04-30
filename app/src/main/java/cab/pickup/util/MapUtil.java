@@ -1,13 +1,10 @@
 package cab.pickup.util;
 
 
-import android.location.Address;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class MapUtil {
     private static final String TAG = "MapUtil";
@@ -44,25 +41,5 @@ public class MapUtil {
         }
 
         return poly;
-    }
-
-    public static String stringFromAddress(Address address) {
-        if(address == null) return "";
-
-        String addr = address.getAddressLine(0);
-        if(address.getAddressLine(1)!=null) addr+=", "+address.getAddressLine(1);
-        if(address.getAddressLine(2)!=null) addr+=", "+address.getAddressLine(2);
-
-        return addr;
-    }
-
-    public static Address addressFrom(double lat, double lng, String text){
-        Address a=new Address(Locale.CHINA);
-
-        a.setAddressLine(0,text);
-
-        a.setLatitude(lat); a.setLongitude(lng);
-
-        return a;
     }
 }
