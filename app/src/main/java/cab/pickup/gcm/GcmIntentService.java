@@ -15,7 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cab.pickup.R;
-import cab.pickup.ui.activity.JourneyActivity;
+import cab.pickup.ui.activity.MainActivity;
 
 public class GcmIntentService extends IntentService {
 
@@ -89,9 +89,8 @@ public class GcmIntentService extends IntentService {
         NotificationManager mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        Intent i=new Intent(this, JourneyActivity.class);
-        i.putExtra("journey_id",id);
-
+        // TODO change to some other activity
+        Intent i=new Intent(this, MainActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 i, PendingIntent.FLAG_CANCEL_CURRENT);
 

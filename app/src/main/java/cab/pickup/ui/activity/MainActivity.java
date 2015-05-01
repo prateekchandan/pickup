@@ -32,13 +32,16 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
 
     private static final String TAG = "Main";
 
-    Location start, end;
-    private static final int MODE_MAP=0, MODE_DETAILS=1,
-                            REQUEST_LOGIN=1, REQUEST_JOURNEY=2;
+    private static final int PAGE_MAIN =1;
+    private static final int PAGE_SUMMARY =2;
 
-    private int mode=MODE_MAP;
+    int page=PAGE_MAIN;
+
+    Location start, end;
+    private static final int REQUEST_LOGIN=1, REQUEST_JOURNEY=2;
 
     SingleJourney journey;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,6 +202,17 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
         Log.d(TAG, "Journey time : " +journey.datetime);
 
         journey.addToServer(this);
+    }
+
+    public void next(View v){
+        if(page==PAGE_MAIN){
+            findViewById(R.id.location_select).setVisibility(View.GONE);
+            findViewById(R.id.time_select).setVisibility(View.GONE);
+
+            findViewById(R.id.order_summary).setVisibility(View.VISIBLE);
+
+            page=PAGE_SUMMARY;
+        }
     }
 
     public void showRides(View v){

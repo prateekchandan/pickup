@@ -7,185 +7,151 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.udiboy.commonpath.MainActivity">
 
-
-    <!--<cab.pickup.ui.widget.LocationSearchBar
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter Start"
-        android:id="@+id/field_start"
-        style="@style/LocationSearchBar"/>
-    <cab.pickup.ui.widget.LocationSearchBar
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Destination"
-        android:id="@+id/field_end"
-        style="@style/LocationSearchBar"/>
+        android:id="@+id/location_select"
+        android:visibility="visible">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I&apos;m at :"
+            android:id="@+id/label_start"
+            android:layout_alignParentLeft="true"
+            android:layout_alignBottom="@+id/field_start"
+            android:textSize="20dp" />
 
-        <FrameLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Going to:"
+            android:id="@+id/label_end"
+            android:layout_alignParentLeft="true"
+            android:layout_alignBottom="@+id/field_end"
+            android:textSize="20dp" />
+
+        <cab.pickup.ui.widget.LocationSearchBar
             android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:id="@+id/container">
-            <fragment
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/map"
-                android:name="com.google.android.gms.maps.SupportMapFragment"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/distance_time"/>
-            <ScrollView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:visibility="gone"
-                android:id="@+id/book_details">
-                <LinearLayout android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TimePicker
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/journey_time"/>
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" android:text="+-"/>
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="30"
-                            android:inputType="number"
-                            android:id="@+id/pm_time"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="mins"/>
-                    </LinearLayout>
-
-                    <DatePicker
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/journey_date"/>
-                </LinearLayout>
-            </ScrollView>
-        </FrameLayout>
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-        <Button
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Book ride"
-            android:onClick="bookRide"/>
-        <Button
-            android:layout_width="wrap_content"
+            android:layout_toRightOf="@+id/label_start"
+            android:layout_alignParentTop="true"
+            android:id="@+id/field_start"
+            style="@style/LocationSearchBar"
+            android:layout_alignLeft="@+id/field_end"
+            android:layout_marginLeft="0dp" />
+        <cab.pickup.ui.widget.LocationSearchBar
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Show rides"
-            android:onClick="showRides"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cancel"
-            android:visibility="gone"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="View"
-            android:onClick="showJourneyLog"/>
-        </LinearLayout>-->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="I&apos;m at :"
-        android:id="@+id/label_start"
-        android:layout_alignParentLeft="true"
-        android:layout_alignBottom="@+id/field_start"
-        android:textSize="20dp" />
+            android:layout_below="@id/field_start"
+            android:layout_toRightOf="@id/label_end"
+            android:id="@+id/field_end"
+            style="@style/LocationSearchBar"/>
+    </RelativeLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Going to:"
-        android:id="@+id/label_end"
-        android:layout_alignParentLeft="true"
-        android:layout_alignBottom="@+id/field_end"
-        android:textSize="20dp" />
-
-    <cab.pickup.ui.widget.LocationSearchBar
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/label_start"
-        android:layout_alignParentTop="true"
-        android:id="@+id/field_start"
-        style="@style/LocationSearchBar"
-        android:layout_alignLeft="@+id/field_end"
-        android:layout_marginLeft="0dp" />
-    <cab.pickup.ui.widget.LocationSearchBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/field_start"
-        android:layout_toRightOf="@id/label_end"
-        android:id="@+id/field_end"
-        style="@style/LocationSearchBar"/>
 
     <fragment
         android:layout_width="fill_parent"
         android:layout_height="90dp"
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_below="@+id/field_end"
+        android:layout_below="@+id/location_select"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="false"
         android:layout_marginTop="5dp" />
 
-    <RadioGroup
-        android:layout_width="fill_parent"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/leave_time"
-        android:orientation="horizontal"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/option_time">
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="15 mins"
-            android:id="@+id/time_15"/>
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="30 mins"
-            android:id="@+id/time_30"/>
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="45 mins"
-            android:id="@+id/time_45"/>
-    </RadioGroup>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Leave In:"
-        android:id="@+id/leave_time"
+        android:id="@+id/time_select"
         android:layout_below="@+id/map"
-        android:layout_centerHorizontal="true"
-        android:textSize="20dp"
-        android:layout_marginTop="5dp" />
+        android:visibility="visible">
+        <RadioGroup
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/leave_time"
+            android:orientation="horizontal"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/option_time">
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="15 mins"
+                android:id="@+id/time_15"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="30 mins"
+                android:id="@+id/time_30"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="45 mins"
+                android:id="@+id/time_45"/>
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Leave In:"
+            android:id="@+id/leave_time"
+            android:layout_centerHorizontal="true"
+            android:textSize="20dp"
+            android:layout_marginTop="5dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/order_summary"
+        android:layout_below="@+id/time_select"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/journey_description"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Distance :"
+            android:layout_toLeftOf="@+id/field_distance"
+            android:layout_alignTop="@+id/field_distance"
+            android:layout_alignBottom="@+id/field_distance"
+            android:id="@+id/label_distance"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cost :"
+            android:layout_toLeftOf="@+id/field_cost"
+            android:layout_alignTop="@+id/field_cost"
+            android:layout_alignBottom="@+id/field_cost"
+            android:id="@+id/label_cost"/>
+
+        <EditText
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:id="@+id/field_distance"/>
+
+        <EditText
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:id="@+id/field_cost"
+            android:layout_below="@+id/field_distance"/>
+
+    </RelativeLayout>
 
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/scrollView"
         android:layout_above="@+id/button_register"
-        android:layout_below="@+id/option_time" >
+        android:layout_below="@+id/order_summary" >
 
         <LinearLayout
             android:orientation="vertical"
@@ -199,10 +165,18 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register Ride"
+        android:text="Register"
         android:onClick="addJourney"
         android:id="@+id/button_register"
+        android:layout_alignParentBottom="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next"
+        android:onClick="next"
+        android:id="@+id/button_next"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_toRightOf="@+id/button_register"/>
 
 </RelativeLayout>
