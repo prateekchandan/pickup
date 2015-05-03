@@ -30,6 +30,8 @@ public class ChatActivity extends MyActivity {
     BroadcastReceiver msgReceiver;
 
     LinearLayout msgList;
+
+    LinearLayout.LayoutParams sentMsgLP, rcdMsgLP;
     GoogleCloudMessaging gcm;
 
     String registration_id;
@@ -48,14 +50,15 @@ public class ChatActivity extends MyActivity {
         msgReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                TextView tv = new TextView(getApplicationContext());
-                tv.setText(intent.getStringExtra("message"));
+                LinearLayout rcdMsg = (LinearLayout)getLayoutInflater().inflate(R.layout.received_msg, msgList);
 
-                msgList.addView(tv);
+                ((TextView)rcdMsg.findViewById(R.id.message_body)).setText(intent.getStringExtra("message"));
             }
         };
 
         registerReceiver(msgReceiver, new IntentFilter(GcmIntentService.MSG_REC_INTENT_TAG));
+
+
     }
 
     @Override
@@ -104,18 +107,16 @@ public class ChatActivity extends MyActivity {
     }
 
     public void sendMsg(View v){
-        TextView newmsg = new TextView(this);
         SendMessageTask task = new SendMessageTask();
 
         String msg = ((EditText)findViewById(R.id.msg_input)).getText().toString();
-        task.execute(msg, getUrl("/send.php"),me.device_id, getKey());
+        task.execute(msg, getUrl("/send.php"), me.device_id, getKey());
 
-        newmsg.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        newmsg.setTextColor(0xffffffff);
 
-        newmsg.setText(msg);
+        LinearLayout sentMsg = (LinearLayout)getLayoutInflater().inflate(R.layout.sent_msg, msgList);
 
-        msgList.addView(newmsg);
+        ((TextView)sentMsg.findViewById(R.id.message_body)).setText(msg);
+
 
         ((EditText)findViewById(R.id.msg_input)).setText("");
     }
