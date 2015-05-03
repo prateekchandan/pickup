@@ -128,13 +128,6 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
         displayPath();
     }
 
-    public void openChat(View v){
-        Intent i = new Intent();
-        i.setClass(this, ChatActivity.class);
-
-        startActivity(i);
-    }
-
     @Override
     public void onAddressSelected(LocationSearchBar bar, Location address){
 
@@ -211,12 +204,22 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
 
             findViewById(R.id.order_summary).setVisibility(View.VISIBLE);
 
+            /*findViewById(R.id.list_user_container).setLayoutParams(
+                    new RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.MATCH_PARENT,
+                            getResources().getDimensionPixelSize(R.dimen.user_list_height_expanded)
+                    )
+            );*/
+
             page=PAGE_SUMMARY;
         }
     }
 
-    public void showRides(View v){
-        startActivityForResult(new Intent(this, RideActivity.class), REQUEST_JOURNEY);
+    public void controlMap(View v){
+        if(findViewById(R.id.list_user_container).getVisibility()==View.VISIBLE)
+            findViewById(R.id.list_user_container).setVisibility(View.GONE);
+        else
+            findViewById(R.id.list_user_container).setVisibility(View.VISIBLE);
     }
 
 }
