@@ -27,7 +27,7 @@ import cab.pickup.api.SingleJourney;
 import cab.pickup.api.User;
 import cab.pickup.ui.widget.LocationSearchBar;
 
-public class MainActivity extends MapsActivity implements LocationSearchBar.OnAddressSelectedListener {
+public class MainActivity extends MapsActivity implements LocationSearchBar.OnAddressSelectedListener, RadioGroup.OnCheckedChangeListener, View.OnClickListener {
     HashMap<Integer, Marker> markers = new HashMap<Integer, Marker>();
 
     private static final String TAG = "Main";
@@ -42,6 +42,8 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
 
     SingleJourney journey;
 
+    RadioGroup timeOption;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +55,16 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
         journey = new SingleJourney();
 
         ((LocationSearchBar)findViewById(R.id.field_start)).setOnAddressSelectedListener(this);
+        ((LocationSearchBar)findViewById(R.id.field_start)).setAddress(new Location(me.home.latitude, me.home.longitude, "Home"));
         ((LocationSearchBar)findViewById(R.id.field_end)).setOnAddressSelectedListener(this);
+        ((LocationSearchBar)findViewById(R.id.field_end)).setAddress(new Location(me.office.latitude, me.office.longitude, "Office"));
+
+        timeOption = ((RadioGroup)findViewById(R.id.option_time));
+        timeOption.setOnCheckedChangeListener(this);
 
         Intent i = new Intent();
         i.setClass(this,LoginActivity.class);
-       startActivityForResult(i, REQUEST_LOGIN);
+        startActivityForResult(i, REQUEST_LOGIN);
     }
 
 
@@ -160,43 +167,6 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
         }
     }
 
-    public void addJourney(View v){
-        start = ((LocationSearchBar) findViewById(R.id.field_start)).getAddress();
-        end = ((LocationSearchBar) findViewById(R.id.field_end)).getAddress();
-
-        if (start == null || end == null) {
-            Toast.makeText(this, "Select both start and destination before continuing.", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        Date now = new Date();
-
-        int time_op = ((RadioGroup)findViewById(R.id.option_time)).getCheckedRadioButtonId();
-
-        if(time_op == R.id.time_15)
-            now=new Date(now.getTime()+15*60*1000);
-        else if(time_op == R.id.time_30)
-            now=new Date(now.getTime()+30*60*1000);
-        else if(time_op == R.id.time_45)
-            now=new Date(now.getTime()+45*60*1000);
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-
-        Log.d(TAG, me.getJson());
-
-        journey.user=me;
-        journey.start=start;
-        journey.end=end;
-        journey.datetime=formatter.format(now);
-        journey.del_time="30";
-        journey.cab_preference="1";
-
-        Log.d(TAG, "Journey time : " +journey.datetime);
-
-        journey.addToServer(this);
-    }
-
     public void next(View v){
         if(page==PAGE_MAIN){
             findViewById(R.id.location_select).setVisibility(View.GONE);
@@ -215,11 +185,53 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
         }
     }
 
-    public void controlMap(View v){
-        if(findViewById(R.id.list_user_container).getVisibility()==View.VISIBLE)
-            findViewById(R.id.list_user_container).setVisibility(View.GONE);
-        else
-            findViewById(R.id.list_user_container).setVisibility(View.VISIBLE);
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        start = ((LocationSearchBar) findViewById(R.id.field_start)).getAddress();
+        end = ((LocationSearchBar) findViewById(R.id.field_end)).getAddress();
+
+        if (start == null || end == null) {
+            Toast.makeText(this, "Select both start and destination before continuing.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Date now = new Date();
+
+        if(checkedId == R.id.time_30)
+            now=new Date(now.getTime()+30*60*1000);
+        else if(checkedId == R.id.time_60)
+            now=new Date(now.getTime()+60*60*1000);
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
+        Log.d(TAG, me.getJson());
+
+        journey.user=me;
+        journey.start=start;
+        journey.end=end;
+        journey.datetime=formatter.format(now);
+        journey.del_time="30";
+        journey.cab_preference="1";
+
+        Log.d(TAG, "Journey time : " +journey.datetime);
+
+        journey.addToServer(this);
     }
 
+    @Override
+    public void onClick(View v) {
+        if(findViewById(R.id.list_user_container).getVisibility()==View.VISIBLE) {
+            findViewById(R.id.list_user_container).setVisibility(View.GONE);
+
+            map.getUiSettings().setAllGesturesEnabled(true);
+            mapFrag.getView().setOnClickListener(null);
+        }
+        else {
+            findViewById(R.id.list_user_container).setVisibility(View.VISIBLE);
+
+            map.getUiSettings().setAllGesturesEnabled(false);
+            mapFrag.getView().setOnClickListener(this);
+        }
+    }
 }

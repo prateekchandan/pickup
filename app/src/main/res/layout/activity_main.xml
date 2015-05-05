@@ -64,7 +64,7 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:text="^"
-        android:onClick="controlMap"
+        android:onClick="onClick"
         android:layout_alignBottom="@+id/map"
         android:layout_centerHorizontal="true"/>
 
@@ -82,11 +82,6 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:id="@+id/option_time">
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="15 mins"
-                android:id="@+id/time_15"/>
 
             <RadioButton
                 android:layout_width="wrap_content"
@@ -97,8 +92,9 @@
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="45 mins"
-                android:id="@+id/time_45"/>
+                android:text="60 mins"
+                android:id="@+id/time_60"
+                android:checked="false" />
         </RadioGroup>
 
         <TextView
@@ -159,7 +155,7 @@
         android:layout_width="fill_parent"
         android:layout_height="@dimen/user_list_height_small"
         android:id="@+id/list_user_container"
-        android:layout_above="@+id/button_register"
+        android:layout_above="@+id/button_bar"
         android:visibility="visible">
 
         <LinearLayout
@@ -168,41 +164,26 @@
             android:layout_height="match_parent"
             android:id="@+id/list_user_match">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Text"
-                android:id="@+id/textView" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Text"
-                android:id="@+id/textView2" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Text"
-                android:id="@+id/textView3" />
         </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Register"
-        android:onClick="addJourney"
-        android:id="@+id/button_register"
-        android:layout_alignParentBottom="true"/>
+        android:id="@+id/button_bar"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Next"
-        android:onClick="next"
-        android:id="@+id/button_next"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/button_register"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            android:onClick="next"
+            android:id="@+id/button_next"
+            android:layout_alignParentBottom="true"
+            />
+    </LinearLayout>
+
+
 
 </RelativeLayout>

@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import cab.pickup.server.GetTask;
 import cab.pickup.server.PostTask;
 import cab.pickup.server.Result;
 import cab.pickup.ui.activity.MyActivity;
@@ -68,6 +69,10 @@ public class SingleJourney extends Journey{
         new AddJourneyTask(context).execute(context.getUrl("/add_journey"));
     }
 
+    public void findMates(MyActivity context){
+        new FindMatesTask(context).execute();
+    }
+
     @Override
     public String toString(){
         String json="{";
@@ -100,13 +105,12 @@ public class SingleJourney extends Journey{
 
         @Override
         public List<NameValuePair> getPostData(String[] params, int i) {
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+            List<NameValuePair> nameValuePairs = new ArrayList<>(2);
 
             nameValuePairs.add(new BasicNameValuePair("user_id", user.id));
             nameValuePairs.add(new BasicNameValuePair("key", context.getKey()));
 
             nameValuePairs.add(new BasicNameValuePair("journey_id", id));
-
             nameValuePairs.add(new BasicNameValuePair("start_lat", start.latitude+""));
             nameValuePairs.add(new BasicNameValuePair("start_long", start.longitude+""));
             nameValuePairs.add(new BasicNameValuePair("end_lat", end.latitude+""));
@@ -132,6 +136,28 @@ public class SingleJourney extends Journey{
                 Log.d(TAG, ret.statusMessage);
 
                 Toast.makeText(context, ret.statusMessage, Toast.LENGTH_LONG).show();
+
+                findMates(context);
+            }
+        }
+    }
+
+    class FindMatesTask extends GetTask{
+        public FindMatesTask(MyActivity context) {
+            super(context);
+            url=context.getUrl("/find_mates/"+id+"?margin_after="+del_time+"?key="+context.getKey());
+        }
+
+        @Override
+        public void onPostExecute(Result ret){
+            super.onPostExecute(ret);
+            if(ret.statusCode==200) {
+
+                JSONArray mates = ret.data.optJSONArray("mates");
+
+                if(mates!=null){
+
+                }
             }
         }
     }

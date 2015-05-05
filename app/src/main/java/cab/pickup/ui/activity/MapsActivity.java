@@ -29,8 +29,9 @@ import cab.pickup.R;
 import cab.pickup.api.SingleJourney;
 import cab.pickup.util.IOUtil;
 
-public class MapsActivity extends MyActivity {
+public class MapsActivity extends MyActivity{
     GoogleMap map; // Might be null if Google Play services APK is not available.
+    SupportMapFragment mapFrag;
 
     Polyline currPath;
     HashMap<String, Marker> user_pos=new HashMap<>();
@@ -46,8 +47,8 @@ public class MapsActivity extends MyActivity {
         // Do a null check to confirm that we have not already instantiated the map.
         if (map == null) {
             // Try to obtain the map from the SupportMapFragment.
-            map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-                    .getMap();
+            mapFrag = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
+            map = mapFrag.getMap();
             // Check if we were successful in obtaining the map.
             if (map != null) {
                 setUpMap();
@@ -56,7 +57,7 @@ public class MapsActivity extends MyActivity {
     }
 
     private void setUpMap() {
-        map.setMyLocationEnabled(true);
+        //map.setMyLocationEnabled(true);
         //map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng((start.latitude + end.latitude) / 2, (start.longitude + end.longitude) / 2), 12));
     }
 
