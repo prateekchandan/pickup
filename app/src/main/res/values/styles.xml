@@ -13,5 +13,17 @@
         <item name="android:ellipsize">end</item>
         <item name="android:singleLine">true</item>
         <item name="android:background">#DDDDDD</item>
+        <item name="android:textColor">@color/text_color_dark</item>
+    </style>
+
+    <style name="Button">
+        <item name="android:textColor">@color/text_color_light</item>
+        <item name="android:background">@color/theme_color</item>
+    </style>
+
+    <style name="Label">
+        <item name="android:textColor">@color/text_color_dark</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">20sp</item>
     </style>
 </resources>

@@ -18,6 +18,7 @@
         android:layout_below="@+id/location_picker_search_field"
         android:layout_above="@+id/location_picker_set_home"
         android:layout_alignParentLeft="true"
+        android:layout_marginBottom="5dp"
         android:id="@+id/location_picker_container">
 
         <fragment
@@ -41,7 +42,8 @@
         android:text="Set Home"
         android:id="@+id/location_picker_set_home"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        style="@style/Button"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -49,7 +51,8 @@
         android:text="Set Office"
         android:id="@+id/location_picker_set_office"
         android:layout_toRightOf="@+id/location_picker_set_home"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        style="@style/Button" />
 
 
 </RelativeLayout>

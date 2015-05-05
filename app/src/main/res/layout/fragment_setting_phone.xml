@@ -7,7 +7,8 @@
         android:orientation="vertical">
     <!-- TODO: Update blank fragment layout -->
     <TextView android:text="Mobile number:" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style="@style/Label"/>
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -21,7 +22,7 @@
             android:layout_height="wrap_content"
             android:text="Verify"
             android:id="@+id/verify_fragment4"
-            android:onClick="verifyNumber" />
+            style="@style/Button"/>
 
         </LinearLayout>
 </LinearLayout>

@@ -15,8 +15,9 @@ tools:context="com.udiboy.commonpath.SettingsActivity">
         android:layout_height="0dp"
         android:layout_weight="1"/>
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/Button"
         android:text="Next"
         android:id="@+id/next_fragment"
         android:onClick="nextFragment"/>
