@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Request;
@@ -41,6 +42,9 @@ public class LoginActivity extends MyActivity {
         Session session = Session.getActiveSession();
 
         if(session!=null && session.isOpened()) {
+            findViewById(R.id.fb_login).setVisibility(View.GONE);
+
+            ((TextView)findViewById(R.id.login_message_text)).setText("Loading...");
             if (me.id == null) {
                 addUser();
             } else {
@@ -48,6 +52,9 @@ public class LoginActivity extends MyActivity {
             }
         } else {
             findViewById(R.id.fb_login).setVisibility(View.VISIBLE);
+
+            ((TextView)findViewById(R.id.login_message_text)).setText("Login with Facebook to continue");
+
         }
 
         ((LoginButton)findViewById(R.id.fb_login)).setReadPermissions("email");
