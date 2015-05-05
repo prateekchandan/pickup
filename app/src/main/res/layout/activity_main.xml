@@ -19,7 +19,8 @@
             android:id="@+id/label_start"
             android:layout_alignParentLeft="true"
             android:layout_alignBottom="@+id/field_start"
-            android:textSize="20dp" />
+            style="@style/Label"
+            android:layout_alignTop="@+id/field_start" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,7 +29,8 @@
             android:id="@+id/label_end"
             android:layout_alignParentLeft="true"
             android:layout_alignBottom="@+id/field_end"
-            android:textSize="20dp" />
+            style="@style/Label"
+            android:layout_alignTop="@+id/field_end" />
 
         <cab.pickup.ui.widget.LocationSearchBar
             android:layout_width="fill_parent"
@@ -65,6 +67,7 @@
         android:layout_height="25dp"
         android:text="^"
         android:onClick="onClick"
+        android:background="#55444444"
         android:layout_alignBottom="@+id/map"
         android:layout_centerHorizontal="true"/>
 
@@ -87,6 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="30 mins"
+                android:textColor="@color/text_color_dark"
                 android:id="@+id/time_30"/>
 
             <RadioButton
@@ -94,6 +98,7 @@
                 android:layout_height="wrap_content"
                 android:text="60 mins"
                 android:id="@+id/time_60"
+                android:textColor="@color/text_color_dark"
                 android:checked="false" />
         </RadioGroup>
 
@@ -103,8 +108,8 @@
             android:text="Leave In:"
             android:id="@+id/leave_time"
             android:layout_centerHorizontal="true"
-            android:textSize="20dp"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="5dp"
+            style="@style/Label"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -116,7 +121,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/journey_description"/>
+            android:id="@+id/journey_description" />
 
         <TextView
             android:layout_width="match_parent"
@@ -125,7 +130,8 @@
             android:layout_toLeftOf="@+id/field_distance"
             android:layout_alignTop="@+id/field_distance"
             android:layout_alignBottom="@+id/field_distance"
-            android:id="@+id/label_distance"/>
+            android:id="@+id/label_distance"
+            style="@style/Label"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -134,7 +140,8 @@
             android:layout_toLeftOf="@+id/field_cost"
             android:layout_alignTop="@+id/field_cost"
             android:layout_alignBottom="@+id/field_cost"
-            android:id="@+id/label_cost"/>
+            android:id="@+id/label_cost"
+            style="@style/Label"/>
 
         <EditText
             android:layout_width="200dp"
@@ -175,8 +182,9 @@
         android:layout_alignParentBottom="true">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Button"
             android:text="Next"
             android:onClick="next"
             android:id="@+id/button_next"
