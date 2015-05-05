@@ -74,6 +74,8 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
         this.address = address;
 
         setText(address.shortDescription);
+
+        if(addrListener!=null) addrListener.onAddressSelected(this, address);
     }
 
     public Location getAddress() {
@@ -118,8 +120,7 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     setAddress((Location)view.getTag());
-
-                    updateSearch();
+                    dismiss();
                 }
             });
 
@@ -150,32 +151,29 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
                 }
             });
 
-            updateSearch();
-
             getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        }
-
-        private void updateSearch() {
-            if(address!=null) searchField.setText(address.longDescription);
         }
 
         @Override
         public void onClick(View v) {
             switch(v.getId()){
-                case R.id.location_search_dialog_done:
-                    if(addrListener != null) addrListener.onAddressSelected(LocationSearchBar.this, address);
-                    dismiss();
-                    break;
                 case R.id.location_search_dialog_myloc:
-
                     if(tracker.getLastKnownLocation()==null){
                         Toast.makeText(context, "Waiting for location...", Toast.LENGTH_LONG).show();
                         break;
                     }
 
-                    address=new Location(tracker.getLatitude(),tracker.getLongitude(),"My Location");
+                    setAddress(new Location(tracker.getLatitude(),tracker.getLongitude(),"My Location"));
+                    dismiss();
+                    break;
+                case R.id.location_search_dialog_home:
+                    setAddress(new Location(context.me.home.latitude,context.me.home.longitude,"Home"));
+                    dismiss();
+                    break;
 
-                    updateSearch();
+                case R.id.location_search_dialog_office:
+                    setAddress(new Location(context.me.office.latitude,context.me.office.longitude,"Office"));
+                    dismiss();
                     break;
             }
         }

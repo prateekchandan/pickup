@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import cab.pickup.R;
 import cab.pickup.api.Location;
 
 public class PlacesAdapter  extends ArrayAdapter<Location> {
@@ -53,6 +54,7 @@ public class PlacesAdapter  extends ArrayAdapter<Location> {
 
         rowView.setText(addrs.get(position).longDescription);
         rowView.setTag(addrs.get(position));
+        rowView.setTextColor(context.getResources().getColor(R.color.text_color_dark));
 
         rowView.setMinLines(0);
         rowView.setMaxLines(2);

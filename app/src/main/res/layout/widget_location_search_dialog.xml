@@ -4,29 +4,34 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Home"
+        style="@style/Button"
+        android:id="@+id/location_search_dialog_home" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Office"
+        style="@style/Button"
+        android:id="@+id/location_search_dialog_office" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="My Location"
+        style="@style/Button"
+        android:id="@+id/location_search_dialog_myloc" />
+
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/location_search_dialog_edittext"/>
+        android:id="@+id/location_search_dialog_edittext"
+        android:hint="Enter other location"
+        android:textColor="@color/text_color_dark"/>
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:id="@+id/location_search_dialog_list"/>
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Done"
-            android:id="@+id/location_search_dialog_done"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Set as My Location"
-            android:id="@+id/location_search_dialog_myloc"
-            android:visibility="gone"/>
-        </LinearLayout>
-    </LinearLayout>
+</LinearLayout>
