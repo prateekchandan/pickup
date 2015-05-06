@@ -33,6 +33,7 @@ public class PeerDetector implements WifiP2pManager.PeerListListener {
         this.context = context;
 
         mManager = (WifiP2pManager) context.getSystemService(MyActivity.WIFI_P2P_SERVICE);
+
         mChannel = mManager.initialize(context, context.getMainLooper(), null);
         mReceiver = new WifiBroadcastReceiver(mManager, mChannel);
 

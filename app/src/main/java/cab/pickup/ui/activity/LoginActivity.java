@@ -2,6 +2,7 @@ package cab.pickup.ui.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -161,6 +162,17 @@ public class LoginActivity extends MyActivity {
             nameValuePairs.add(new BasicNameValuePair("name", me.name));
             nameValuePairs.add(new BasicNameValuePair("email", me.email));
             nameValuePairs.add(new BasicNameValuePair("gender", me.gender));
+
+            String mac_addr = ((WifiManager)getSystemService(WIFI_SERVICE)).getConnectionInfo().getMacAddress();
+            nameValuePairs.add(new BasicNameValuePair("mac_addr", mac_addr));
+
+            nameValuePairs.add(new BasicNameValuePair("home_location",me.home.latitude+","+me.home.longitude));
+            nameValuePairs.add(new BasicNameValuePair("home_text","Home"));
+            nameValuePairs.add(new BasicNameValuePair("leaving_home","08:00:00"));
+
+            nameValuePairs.add(new BasicNameValuePair("office_location",me.office.latitude+","+me.office.longitude));
+            nameValuePairs.add(new BasicNameValuePair("office_text","Office"));
+            nameValuePairs.add(new BasicNameValuePair("leaving_office","12:00:00"));
 
             return nameValuePairs;
         }

@@ -55,9 +55,7 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
         journey = new SingleJourney();
 
         ((LocationSearchBar)findViewById(R.id.field_start)).setOnAddressSelectedListener(this);
-        ((LocationSearchBar)findViewById(R.id.field_start)).setAddress(new Location(me.home.latitude, me.home.longitude, "Home"));
         ((LocationSearchBar)findViewById(R.id.field_end)).setOnAddressSelectedListener(this);
-        ((LocationSearchBar)findViewById(R.id.field_end)).setAddress(new Location(me.office.latitude, me.office.longitude, "Office"));
 
         timeOption = ((RadioGroup)findViewById(R.id.option_time));
         timeOption.setOnCheckedChangeListener(this);
@@ -113,8 +111,12 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
         Log.d(TAG, "onActivityResult");
         if(res==RESULT_OK) {
             try {
-                if (req == REQUEST_LOGIN)
+                if (req == REQUEST_LOGIN) {
                     me = new User(new JSONObject(prefs.getString("user_json", "")), true);
+
+                    ((LocationSearchBar)findViewById(R.id.field_start)).setAddress(new Location(me.home.latitude, me.home.longitude, "Home"));
+                    ((LocationSearchBar)findViewById(R.id.field_end)).setAddress(new Location(me.office.latitude, me.office.longitude, "Office"));
+                }
                 else if (req == REQUEST_JOURNEY)
                     setJourney(data.getStringExtra("journey_json"));
             } catch (JSONException e) {
@@ -133,6 +135,10 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
         //0123456789012345678
 
         displayPath();
+    }
+
+    public void displayMate(){
+
     }
 
     @Override
