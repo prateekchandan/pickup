@@ -43,6 +43,7 @@
         android:id="@+id/location_picker_set_home"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginRight="5dp"
         style="@style/Button"/>
 
     <Button

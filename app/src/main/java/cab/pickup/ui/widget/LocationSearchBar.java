@@ -38,6 +38,8 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
     MyActivity context;
     OnAddressSelectedListener addrListener;
 
+    boolean myLocationEnabled=true, homeOfficeEnabled=true;
+
     public LocationSearchBar(Context context) {
         super(context);
 
@@ -63,9 +65,17 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
         addrListener=lstn;
     }
 
+    public void setMyLocationEnabled(boolean myLocationEnabled) {
+        this.myLocationEnabled = myLocationEnabled;
+    }
+
+    public void setHomeOfficeEnabled(boolean homeOfficeEnabled) {
+        this.homeOfficeEnabled = homeOfficeEnabled;
+    }
+
     @Override
     public void onClick(View v) {
-        LocationSearchDialog dialog = new LocationSearchDialog(true);
+        LocationSearchDialog dialog = new LocationSearchDialog();
 
         dialog.show();
     }
@@ -73,9 +83,12 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
     public void setAddress(Location address) {
         this.address = address;
 
-        setText(address.shortDescription);
-
-        if(addrListener!=null) addrListener.onAddressSelected(this, address);
+        if(address!=null){
+            setText(address.shortDescription);
+            if(addrListener!=null) addrListener.onAddressSelected(this, address);
+        } else {
+            setText("");
+        }
     }
 
     public Location getAddress() {
@@ -90,16 +103,13 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
         LatLng upperRight = new LatLng(19.289449, 73.174745); // Temporary jugaad... TODO change to user specific location
         LatLng lowerLeft = new LatLng(18.913122, 72.756578);
 
-        boolean running, doAgain,
-                myLocationEnabled;
+        boolean running, doAgain;
 
         PlacesAdapter adapter;
         private SearchTask searchTask;
 
-        public LocationSearchDialog(boolean myLocationEnabled) {
+        public LocationSearchDialog() {
             super(context);
-
-            this.myLocationEnabled=myLocationEnabled;
         }
 
         @Override
@@ -119,16 +129,28 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    setAddress((Location)view.getTag());
+                    setAddress((Location) view.getTag());
                     dismiss();
                 }
             });
 
-            findViewById(R.id.location_search_dialog_done).setOnClickListener(this);
             findViewById(R.id.location_search_dialog_myloc).setOnClickListener(this);
+            findViewById(R.id.location_search_dialog_home).setOnClickListener(this);
+            findViewById(R.id.location_search_dialog_office).setOnClickListener(this);
 
-            if(myLocationEnabled)
+            if(myLocationEnabled) {
                 findViewById(R.id.location_search_dialog_myloc).setVisibility(View.VISIBLE);
+            } else {
+                findViewById(R.id.location_search_dialog_myloc).setVisibility(View.GONE);
+            }
+
+            if(homeOfficeEnabled){
+                findViewById(R.id.location_search_dialog_home).setVisibility(View.VISIBLE);
+                findViewById(R.id.location_search_dialog_office).setVisibility(View.VISIBLE);
+            } else {
+                findViewById(R.id.location_search_dialog_home).setVisibility(View.GONE);
+                findViewById(R.id.location_search_dialog_office).setVisibility(View.GONE);
+            }
 
 
             searchField.addTextChangedListener(new TextWatcher() {

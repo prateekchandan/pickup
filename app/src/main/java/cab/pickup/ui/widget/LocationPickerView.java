@@ -66,6 +66,8 @@ public class LocationPickerView extends LinearLayout implements LocationSearchBa
 
         searchBar=(LocationSearchBar)view.findViewById(R.id.location_picker_search_field);
         searchBar.setOnAddressSelectedListener(this);
+        searchBar.setHomeOfficeEnabled(false);
+
         view.findViewById(R.id.location_picker_set_home).setOnClickListener(this);
         view.findViewById(R.id.location_picker_set_office).setOnClickListener(this);
 
