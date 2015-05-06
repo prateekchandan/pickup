@@ -6,14 +6,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.widget.ProfilePictureView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,6 +47,7 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
     SingleJourney journey;
 
     RadioGroup timeOption;
+    private LinearLayout list_mates;
 
 
     @Override
@@ -59,6 +64,8 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
 
         timeOption = ((RadioGroup)findViewById(R.id.option_time));
         timeOption.setOnCheckedChangeListener(this);
+
+        list_mates=(LinearLayout)findViewById(R.id.list_mates);
 
         Intent i = new Intent();
         i.setClass(this,LoginActivity.class);
@@ -137,8 +144,29 @@ public class MainActivity extends MapsActivity implements LocationSearchBar.OnAd
         displayPath();
     }
 
-    public void displayMate(){
+    public void displayMates(JSONArray mates){
+        onClick(null);
+        list_mates.removeAllViews();
 
+        for(int i=0; i<mates.length(); i++) {
+            JSONObject mate = mates.optJSONObject(i);
+
+            if(mate==null) continue;
+
+            JSONObject user= mate.optJSONObject("user_data");
+
+            View user_profile = getLayoutInflater().inflate(R.layout.user_profile, list_mates);
+            ((TextView) user_profile.findViewById(R.id.user_profile_name)).setText(user.optString("first_name"));
+            ((ProfilePictureView)findViewById(R.id.user_profile_img)).setProfileId(user.optString("fbid"));
+
+            ((TextView) user_profile.findViewById(R.id.user_profile_journey)).setText(mate.optString("start_text") + " > " + mate.optString("end_text"));
+
+            user_profile.setTag(false);
+        }
+    }
+
+    public void selectUser(View v) {
+        v.setBackgroundColor(0x5502B2AB);
     }
 
     @Override

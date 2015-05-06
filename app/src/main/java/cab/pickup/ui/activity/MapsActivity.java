@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -101,7 +102,7 @@ public class MapsActivity extends MyActivity{
                 Log.d(TAG, json);
                 SingleJourney j = new SingleJourney(new JSONObject(json), me);
 
-                addPath(j.getPath(), j.getLatLngBounds(), "Distance: "+j.distance+", Duration: "+j.duration);
+                addPath(j.getPath(), j.getLatLngBounds(), j.distance);
             } catch (JSONException e) {
                 Log.e(TAG, "JSON error: "+e.getMessage());
 
@@ -111,7 +112,7 @@ public class MapsActivity extends MyActivity{
 
     }
 
-    public void addPath(ArrayList<LatLng> directions, LatLngBounds bnds, String data){
+    public void addPath(ArrayList<LatLng> directions, LatLngBounds bnds, String distance){
         if(currPath!=null) currPath.remove();
 
         PolylineOptions rectLine = new PolylineOptions().width(4).color(Color.BLUE);
@@ -123,6 +124,8 @@ public class MapsActivity extends MyActivity{
         currPath=map.addPolyline(rectLine);
 
         map.animateCamera(CameraUpdateFactory.newLatLngBounds(bnds, 10));
+
+        ((TextView)findViewById(R.id.field_distance)).setText(distance);
 
     }
 

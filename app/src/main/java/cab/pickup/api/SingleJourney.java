@@ -15,6 +15,7 @@ import java.util.List;
 import cab.pickup.server.GetTask;
 import cab.pickup.server.PostTask;
 import cab.pickup.server.Result;
+import cab.pickup.ui.activity.MainActivity;
 import cab.pickup.ui.activity.MyActivity;
 
 public class SingleJourney extends Journey{
@@ -142,10 +143,11 @@ public class SingleJourney extends Journey{
         }
     }
 
+    // TODO this shouldn't be here, should be in MainActivity
     class FindMatesTask extends GetTask{
         public FindMatesTask(MyActivity context) {
             super(context);
-            url=context.getUrl("/find_mates/"+id+"?margin_after="+del_time+"?key="+context.getKey());
+            url=context.getUrl("/find_mates/"+id+"?margin_after="+del_time+"&key="+context.getKey());
         }
 
         @Override
@@ -155,9 +157,9 @@ public class SingleJourney extends Journey{
 
                 JSONArray mates = ret.data.optJSONArray("mates");
 
-                if(mates!=null){
+                Log.d("FindMates",mates.toString());
 
-                }
+                ((MainActivity) context).displayMates(mates);
             }
         }
     }
