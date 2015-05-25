@@ -167,11 +167,11 @@ public class LoginActivity extends MyActivity {
             nameValuePairs.add(new BasicNameValuePair("mac_addr", mac_addr));
 
             nameValuePairs.add(new BasicNameValuePair("home_location",me.home.latitude+","+me.home.longitude));
-            nameValuePairs.add(new BasicNameValuePair("home_text","Home"));
+            nameValuePairs.add(new BasicNameValuePair("home_text",me.home.shortDescription));
             nameValuePairs.add(new BasicNameValuePair("leaving_home","08:00:00"));
 
             nameValuePairs.add(new BasicNameValuePair("office_location",me.office.latitude+","+me.office.longitude));
-            nameValuePairs.add(new BasicNameValuePair("office_text","Office"));
+            nameValuePairs.add(new BasicNameValuePair("office_text",me.office.shortDescription));
             nameValuePairs.add(new BasicNameValuePair("leaving_office","12:00:00"));
 
             return nameValuePairs;

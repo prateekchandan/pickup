@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,7 +20,7 @@ import cab.pickup.ui.activity.MyActivity;
 
 public class LocationPickerView extends LinearLayout implements LocationSearchBar.OnAddressSelectedListener, View.OnClickListener{
     MyActivity context;
-    public LatLng home, office;
+    public Location home, office;
     Marker home_marker, office_marker;
 
     LocationSearchBar searchBar;
@@ -82,14 +83,19 @@ public class LocationPickerView extends LinearLayout implements LocationSearchBa
     @Override
     public void onClick(View v) {
         LatLng newPt = map.getCameraPosition().target;
+        if(searchBar.getAddress()==null){
+            Toast.makeText(context,"Select a Location in the search bar first",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if(v.getId()==R.id.location_picker_set_home){
-            home=newPt;
+            home=new Location(newPt.latitude,newPt.longitude,searchBar.getAddress().shortDescription,searchBar.getAddress().longDescription);
             if(home_marker==null)
                 home_marker= map.addMarker(new MarkerOptions().position(newPt));
             else
                 home_marker.setPosition(newPt);
         } else {
-            office=newPt;
+            office=new Location(newPt.latitude,newPt.longitude,searchBar.getAddress().shortDescription,searchBar.getAddress().longDescription);
             if(office_marker==null)
                 office_marker= map.addMarker(new MarkerOptions().position(newPt));
             else

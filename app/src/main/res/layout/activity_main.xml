@@ -141,7 +141,8 @@
             android:layout_alignTop="@+id/field_cost"
             android:layout_alignBottom="@+id/field_cost"
             android:id="@+id/label_cost"
-            style="@style/Label"/>
+            style="@style/Label"
+            android:visibility="gone"/>
 
         <EditText
             android:layout_width="200dp"
@@ -154,7 +155,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:id="@+id/field_cost"
-            android:layout_below="@+id/field_distance"/>
+            android:layout_below="@+id/field_distance"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 

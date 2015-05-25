@@ -8,7 +8,7 @@ import org.json.JSONObject;
 public class User{
     public String id, fbid, device_id, name, email, gender,company,mobile,age,company_email;
     public LatLng position;
-    public LatLng home, office;
+    public Location home, office;
 
 
     public User(JSONObject user, boolean hasAddress) throws JSONException{
@@ -24,8 +24,12 @@ public class User{
         company_email=user.optString("company_email");
 
         if(hasAddress){
-            home = new LatLng(user.getJSONObject("home").getDouble("lat"),user.getJSONObject("home").getDouble("lng"));
-            office = new LatLng(user.getJSONObject("office").getDouble("lat"),user.getJSONObject("office").getDouble("lng"));
+            home = new Location(user.getJSONObject("home").getDouble("lat"),
+                            user.getJSONObject("home").getDouble("lng"),
+                            user.getJSONObject("home").getString("text"));
+            office = new Location(user.getJSONObject("office").getDouble("lat"),
+                            user.getJSONObject("office").getDouble("lng"),
+                            user.getJSONObject("office").getString("text"));
         }
     }
 
@@ -46,8 +50,8 @@ public class User{
         json+=",\"mobile\":\""+mobile+"\"";
         json+=",\"age\":\""+age+"\"";
         json+=",\"company_email\":\""+company_email+"\"";
-        if(home!=null) json+=",\"home\":{\"lat\":"+home.latitude+",\"lng\":"+home.longitude+"}";
-        if(office!=null) json+=",\"office\":{\"lat\":"+office.latitude+",\"lng\":"+office.longitude+"}";
+        if(home!=null) json+=",\"home\":{\"lat\":"+home.latitude+",\"lng\":"+home.longitude+",\"text\":\""+home.shortDescription+"\"}";
+        if(office!=null) json+=",\"office\":{\"lat\":"+office.latitude+",\"lng\":"+office.longitude+",\"text\":\""+office.shortDescription+"\"}";
         json+="}";
 
         return json;

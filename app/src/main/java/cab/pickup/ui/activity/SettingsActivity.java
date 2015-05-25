@@ -37,7 +37,10 @@ public class SettingsActivity extends MyActivity {
     {
         switch(current_fragment_id){
             case R.layout.fragment_setting_basic:
-                loadFragment(R.layout.fragment_setting_company);
+                loadFragment(R.layout.fragment_setting_phone); // TODO change to company
+
+                me.company="PickUp";
+                me.company_email="arbit";
                 break;
             case R.layout.fragment_setting_company:
                 loadFragment(R.layout.fragment_setting_phone);
