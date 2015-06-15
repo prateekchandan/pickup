@@ -19,6 +19,8 @@ public class GetTask extends AsyncTask<String, Integer, Result> {
     public MyActivity context;
     public String url;
 
+    public GetTask(){}
+
     public GetTask(MyActivity context) {
         this.context=context;
     }
@@ -51,7 +53,7 @@ public class GetTask extends AsyncTask<String, Integer, Result> {
     @Override
     public void onPostExecute(Result res){
         if(res.statusCode !=200){
-            Toast.makeText(context, res.statusMessage, Toast.LENGTH_LONG).show();
+            if(context!=null) Toast.makeText(context, res.statusMessage, Toast.LENGTH_LONG).show();
         }
     }
 }

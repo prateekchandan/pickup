@@ -16,14 +16,17 @@ import org.json.JSONObject;
 
 import cab.pickup.R;
 import cab.pickup.ui.activity.MainActivity;
+import cab.pickup.ui.activity.RideActivity;
 
 public class GcmIntentService extends IntentService {
 
-    public static final int TYPE_NO_JOURNEY=0,
-                            TYPE_COMMON_JOURNEY=1;
+    public static final int TYPE_USER_ADDED=10,
+                            TYPE_DRIVER_ADDED=11;
 
     static final String TAG = "Intent Service";
     public static final String MSG_REC_INTENT_TAG = "MESSAGE_RECIEVED";
+    public static final String JOURNEY_ADD_USER_INTENT_TAG = "JOURNEY_ADD_USER";
+    public static final String JOURNEY_ADD_DRIVER_INTENT_TAG = "JOURNEY_ADD_USER";
 
     public GcmIntentService() {
         super("GcmIntentService");
@@ -62,14 +65,15 @@ public class GcmIntentService extends IntentService {
                     msg = new JSONObject(extras.getString("message"));
 
                     int msg_type = msg.getInt("type");
+                    JSONObject data = msg.getJSONObject("data");
 
-                    if(msg_type==TYPE_COMMON_JOURNEY){
-                        sendNotification(msg.getString("name") + " sent request", msg.get("journey_id").toString());
-                    } else if(msg_type==TYPE_NO_JOURNEY){
-                        sendNotification("No common journey :(", msg.get("journey_id").toString());
+                    if(msg_type==TYPE_USER_ADDED){
+                        sendJourneyUpdate(JOURNEY_ADD_USER_INTENT_TAG, data.getString("user_id"));
+                    } else if(msg_type==TYPE_DRIVER_ADDED){
+                        sendJourneyUpdate(JOURNEY_ADD_DRIVER_INTENT_TAG, data.getString("user_id"));
                     }
 
-                    Log.i(TAG, msg.getString("name"));
+                    Log.i(TAG, msg.getString("user_name"));
                     Log.i(TAG, msg.get("journey_id").toString());
                     Log.i(TAG, msg.get("type").toString());
                 } catch (JSONException e) {
@@ -112,5 +116,30 @@ public class GcmIntentService extends IntentService {
         i.putExtra("message", msg);
 
         sendBroadcast(i);
+    }
+
+    private void sendJourneyUpdate(String intent_tag, String user_id){
+        NotificationManager mNotificationManager = (NotificationManager)
+                this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Intent i=new Intent(this, RideActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                i, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("Journey matched")
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("Journey updated. Please check"));
+
+        mBuilder.setContentIntent(contentIntent);
+        mNotificationManager.notify(user_id.hashCode(), mBuilder.build());
+
+        Intent broadcast = new Intent(intent_tag);
+        broadcast.putExtra("id",user_id);
+        broadcast.putExtra("notif_id",user_id.hashCode());
+
+        sendBroadcast(broadcast);
     }
 }

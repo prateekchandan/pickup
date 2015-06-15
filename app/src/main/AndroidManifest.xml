@@ -19,13 +19,6 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
-    <!--
-    <permission
-        android:name="com.example.gcm.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-
-    <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
-    -->
 
     <permission
         android:name="cab.pickup.permission.C2D_MESSAGE"
@@ -43,7 +36,7 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
 
-        <!--
+
         <receiver
             android:name=".gcm.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
@@ -55,7 +48,6 @@
         </receiver>
 
         <service android:name=".gcm.GcmIntentService" />
-        -->
 
         <service android:name=".util.LocationTracker" />
 
@@ -95,7 +87,7 @@
             android:label="@string/title_activity_ride" >
         </activity>
 
-        <service android:name="com.parse.PushService" />
+        <!--<service android:name="com.parse.PushService" />
 
         <receiver android:name="com.parse.ParseBroadcastReceiver" >
             <intent-filter>
@@ -121,7 +113,8 @@
                 <action android:name="com.parse.push.intent.DELETE" />
                 <action android:name="com.parse.push.intent.OPEN" />
             </intent-filter>
-        </receiver>
+        </receiver>-->
+
 
     </application>
 

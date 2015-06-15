@@ -2,8 +2,17 @@ package cab.pickup.api;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cab.pickup.server.GetTask;
+import cab.pickup.server.PostTask;
+import cab.pickup.server.Result;
 
 public class User{
     public String id, fbid, device_id, name, email, gender,company,mobile,age,company_email;
@@ -12,6 +21,31 @@ public class User{
 
 
     public User(JSONObject user, boolean hasAddress) throws JSONException{
+        loadJSONdata(user,hasAddress);
+    }
+
+    public User(String id){
+        GetTask getUserDetails=new GetTask(){
+            @Override
+            public void onPostExecute(Result res){
+                if(res.statusCode==200){
+                    try {
+                        loadJSONdata(res.data, true);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+
+        getUserDetails.execute("http://pickup.prateekchandan.me/user/"+id);
+    }
+
+    public User(){
+
+    }
+
+    public void loadJSONdata(JSONObject user, boolean hasAddress) throws JSONException{
         id=user.optString("id");
         fbid=user.optString("fbid");
         device_id=user.optString("device_id");
@@ -25,16 +59,12 @@ public class User{
 
         if(hasAddress){
             home = new Location(user.getJSONObject("home").getDouble("lat"),
-                            user.getJSONObject("home").getDouble("lng"),
-                            user.getJSONObject("home").getString("text"));
+                    user.getJSONObject("home").getDouble("lng"),
+                    user.getJSONObject("home").getString("text"));
             office = new Location(user.getJSONObject("office").getDouble("lat"),
-                            user.getJSONObject("office").getDouble("lng"),
-                            user.getJSONObject("office").getString("text"));
+                    user.getJSONObject("office").getDouble("lng"),
+                    user.getJSONObject("office").getString("text"));
         }
-    }
-
-    public User(){
-
     }
 
     public String getJson(){

@@ -70,10 +70,6 @@ public class SingleJourney extends Journey{
         new AddJourneyTask(context).execute(context.getUrl("/add_journey"));
     }
 
-    public void findMates(MyActivity context){
-        new FindMatesTask(context).execute();
-    }
-
     @Override
     public String toString(){
         String json="{";
@@ -137,29 +133,6 @@ public class SingleJourney extends Journey{
                 Log.d(TAG, ret.statusMessage);
 
                 Toast.makeText(context, ret.statusMessage, Toast.LENGTH_LONG).show();
-
-                findMates(context);
-            }
-        }
-    }
-
-    // TODO this shouldn't be here, should be in MainActivity
-    class FindMatesTask extends GetTask{
-        public FindMatesTask(MyActivity context) {
-            super(context);
-            url=context.getUrl("/find_mates/"+id+"?margin_after="+del_time+"&key="+context.getKey());
-        }
-
-        @Override
-        public void onPostExecute(Result ret){
-            super.onPostExecute(ret);
-            if(ret.statusCode==200) {
-
-                JSONArray mates = ret.data.optJSONArray("mates");
-
-                Log.d("FindMates",mates.toString());
-
-                ((MainActivity) context).displayMates(mates);
             }
         }
     }

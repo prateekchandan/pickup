@@ -1,102 +1,121 @@
 package cab.pickup.ui.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import org.json.JSONArray;
+import com.facebook.widget.ProfilePictureView;
+
 import org.json.JSONException;
-import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import cab.pickup.R;
-import cab.pickup.api.Journey;
-import cab.pickup.api.SingleJourney;
-import cab.pickup.server.GetTask;
-import cab.pickup.server.Result;
+import cab.pickup.api.User;
+import cab.pickup.gcm.GcmIntentService;
 
 
-public class RideActivity extends MyActivity implements View.OnLongClickListener, View.OnClickListener{
+public class RideActivity extends MyActivity{
+    ListView user_list_view;
+    UserListAdapter user_adapter;
+    BroadcastReceiver mUpdateReceiver;
+
+    ArrayList<User> user_list = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ride);
 
-        new GetRidesTask(this).execute(getUrl("/user/"+me.id+"/all_journey?key="+getKey()));
+        user_list_view=(ListView)findViewById(R.id.summary_list_user);
+        user_adapter=new UserListAdapter(this);
+        user_list_view.setAdapter(user_adapter);
+
+        mUpdateReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                NotificationManager mNotificationManager = (NotificationManager)
+                        RideActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+                mNotificationManager.cancel(intent.getIntExtra("notif_id",0));
+
+                if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG)){
+                    Toast.makeText(RideActivity.this, "User added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
+
+                    user_adapter.add(new User(intent.getStringExtra("id")));
+
+                } else if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG)){
+                    Toast.makeText(RideActivity.this, "Driver added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+
+        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG));
+        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG));
     }
 
     @Override
-    public boolean onLongClick(final View v) {
-        final String id = ((Journey)v.getTag()).id;
+    public void onDestroy(){
+        unregisterReceiver(mUpdateReceiver);
 
-        new AlertDialog.Builder(this)
-                .setTitle("Confirm delete")
-                .setMessage("Do you really want to delete journey?")
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        new GetTask(RideActivity.this).execute(getUrl("/delete_journey/"+id+"?key="+getKey()));
-
-                        v.setVisibility(View.GONE);
-                    }})
-                .setNegativeButton(android.R.string.no, null).show();
-        return true;
+        super.onDestroy();
     }
 
-    @Override
-    public void onClick(View v) {
-        SingleJourney j= (SingleJourney)v.getTag();
+    class UserListAdapter extends ArrayAdapter<User> {
+        List<User> users = new ArrayList<>();
+        Context context;
 
-        Intent i=new Intent();
+        public UserListAdapter(Context context, List<User> objects) {
+            super(context, android.R.layout.simple_list_item_1, objects);
 
-        i.putExtra("journey_json", j.toString());
+            this.context=context;
+            users = objects;
+        }
 
-        setResult(RESULT_OK, i);
+        public UserListAdapter(Context context) {
+            super(context, android.R.layout.simple_list_item_1);
 
-        finish();
-    }
-
-    class GetRidesTask extends GetTask {
-        private static final String TAG = "GetRides";
-
-        public GetRidesTask(MyActivity context){
-            super(context);
+            this.context=context;
         }
 
         @Override
-        public void onPostExecute(Result ret) {
-            super.onPostExecute(ret);
-            if (ret.statusCode == 200) {
-                Log.d(TAG, ret.data.toString());
-                try {
-                    JSONArray arr = new JSONArray(ret.data.toString());
+        public void add(User u){
+            users.add(u);
+        }
 
-                    for (int i = 0; i < arr.length(); i++) {
-                        SingleJourney journey = new SingleJourney((JSONObject) arr.get(i));
-                        String text = "From:" + journey.start.shortDescription + "\n" +
-                                "To:" + journey.end.shortDescription + "\n" +
-                                "Time:" + journey.datetime + "\n";
+        @Override
+        public void clear(){
+            users.clear();
+        }
 
-                        TextView tv = new TextView(context);
+        @Override
+        public int getCount(){
+            return users.size();
+        }
 
-                        tv.setText(text);
-                        tv.setTag(journey);
-                        tv.setOnLongClickListener(RideActivity.this);
-                        tv.setOnClickListener(RideActivity.this);
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent){
+            LayoutInflater inflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            RelativeLayout user_layout = (RelativeLayout)inflater.inflate(R.layout.user_profile, parent, false);
 
-                        Log.d(TAG, text);
-                        ((LinearLayout) context.findViewById(R.id.ride_list)).addView(tv);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
+            ((ProfilePictureView)user_layout.findViewById(R.id.user_profile_img)).setProfileId(users.get(position).fbid);
+            ((TextView)user_layout.findViewById(R.id.user_profile_name)).setText(users.get(position).name);
+
+            return user_layout;
         }
     }
-
 }

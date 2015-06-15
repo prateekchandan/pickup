@@ -117,7 +117,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/order_summary"
         android:visibility="gone"
-        android:layout_above="@+id/list_user_container">
+        android:layout_above="@+id/button_bar">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -159,22 +159,6 @@
             android:visibility="gone"/>
 
     </RelativeLayout>
-
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/user_list_height_small"
-        android:id="@+id/list_user_container"
-        android:layout_above="@+id/button_bar"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/list_mates">
-
-        </LinearLayout>
-    </ScrollView>
 
     <LinearLayout
          android:layout_width="match_parent"
