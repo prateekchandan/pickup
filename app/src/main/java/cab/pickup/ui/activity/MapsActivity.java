@@ -26,8 +26,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cab.pickup.R;
+import cab.pickup.api.Journey;
 import cab.pickup.api.Location;
-import cab.pickup.api.SingleJourney;
 import cab.pickup.util.IOUtil;
 
 public class MapsActivity extends MyActivity{
@@ -109,9 +109,9 @@ public class MapsActivity extends MyActivity{
         public void onPostExecute(String json) {
             try {
                 Log.d(TAG, json);
-                SingleJourney j = new SingleJourney(new JSONObject(json), me);
+                JSONObject path = new JSONObject(json);
 
-                addPath(j.getPath(), j.getLatLngBounds(), j.distance);
+                addPath(Journey.getPath(path), Journey.getLatLngBounds(path), "0");
             } catch (JSONException e) {
                 Log.e(TAG, "JSON error: "+e.getMessage());
 
@@ -131,8 +131,10 @@ public class MapsActivity extends MyActivity{
         }
 
         currPath=map.addPolyline(rectLine);
+        currPath.setColor(0xFF4433FF);
+        currPath.setGeodesic(true);
 
-        map.animateCamera(CameraUpdateFactory.newLatLngBounds(bnds, 10));
+        map.animateCamera(CameraUpdateFactory.newLatLngBounds(bnds, 300, 300, 10));
 
         //((TextView)findViewById(R.id.field_distance)).setText(distance);
     }

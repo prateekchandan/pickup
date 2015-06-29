@@ -7,21 +7,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.widget.ProfilePictureView;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -29,21 +22,17 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 import cab.pickup.R;
+import cab.pickup.api.Journey;
 import cab.pickup.api.Location;
-import cab.pickup.api.SingleJourney;
 import cab.pickup.api.User;
 import cab.pickup.gcm.GcmIntentService;
 import cab.pickup.server.OnTaskCompletedListener;
-import cab.pickup.server.PostTask;
 import cab.pickup.server.Result;
 import cab.pickup.ui.widget.LocationSearchBar;
 import cab.pickup.ui.widget.UserListAdapter;
@@ -64,13 +53,14 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     Location start, end;
     private static final int REQUEST_LOGIN=1, REQUEST_JOURNEY=2;
 
-    SingleJourney journey;
+    Journey journey;
 
     RadioGroup timeOption;
 
     ListView user_list_view;
     UserListAdapter user_adapter;
     BroadcastReceiver mUpdateReceiver;
+    LocationSearchBar field_start, field_end;
 
 
     @Override
@@ -80,10 +70,11 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
         setUpMapIfNeeded();
 
-        journey = new SingleJourney();
+        field_start = ((LocationSearchBar)findViewById(R.id.field_start));
+        field_end = ((LocationSearchBar)findViewById(R.id.field_end));
 
-        ((LocationSearchBar)findViewById(R.id.field_start)).setOnAddressSelectedListener(this);
-        ((LocationSearchBar)findViewById(R.id.field_end)).setOnAddressSelectedListener(this);
+        field_start.setOnAddressSelectedListener(this);
+        field_end.setOnAddressSelectedListener(this);
 
         timeOption = ((RadioGroup)findViewById(R.id.option_time));
         timeOption.setOnCheckedChangeListener(this);
@@ -116,8 +107,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
         registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG));
         registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG));
-
-        loadPage(PAGE_MAIN);
 
         Intent i = new Intent();
         i.setClass(this, LoginActivity.class);
@@ -160,12 +149,37 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     public void onStart() {
         super.onStart();
         tracker.connect();
+
+        if(prefs.contains("journey")){
+            try {
+                JSONObject journey_data = new JSONObject(prefs.getString("journey", ""));
+                journey=new Journey(journey_data);
+
+                field_start.setAddress(journey.start);
+                field_end.setAddress(journey.end);
+
+                if(journey.del_time.equals("30"))
+                    timeOption.check(R.id.time_30);
+                else
+                    timeOption.check(R.id.time_60);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            page=PAGE_SUMMARY;
+        } else {
+            journey = new Journey();
+        }
+
+        loadPage(page);
     }
 
     @Override
     public void onStop() {
         tracker.stopLocationUpdates();
         tracker.disconnect();
+
+        if(journey.id!=null) prefs.edit().putString("journey", journey.toString()).apply();
         super.onStop();
     }
 
@@ -191,7 +205,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     }
 
     private void setJourney(String journey_json) throws JSONException{
-        journey = new SingleJourney(new JSONObject(journey_json));
+        journey = new Journey(new JSONObject(journey_json));
 
         ((LocationSearchBar)findViewById(R.id.field_start)).setAddress(journey.start);
         ((LocationSearchBar)findViewById(R.id.field_end)).setAddress(journey.end);
@@ -201,7 +215,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
     @Override
     public void onAddressSelected(LocationSearchBar bar, Location address){
-
         if(address == null) return;
 
         LatLng newPt = new LatLng(address.latitude, address.longitude);
@@ -212,10 +225,12 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             markers.get(bar.getId()).setPosition(newPt);
         }
 
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(newPt, 10));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
 
         displayPath();
     }
+
+
 
     private void displayPath() {
         try {
@@ -237,11 +252,18 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             findViewById(R.id.time_select).setVisibility(View.VISIBLE);
 
             findViewById(R.id.order_summary).setVisibility(View.GONE);
+
+            field_start.setAddress(me.home);
+            field_end.setAddress(me.office);
         } else {
             findViewById(R.id.location_select).setVisibility(View.GONE);
             findViewById(R.id.time_select).setVisibility(View.GONE);
 
             findViewById(R.id.order_summary).setVisibility(View.VISIBLE);
+
+            user_adapter.addAll(journey.mates_id);
+
+            displayPath();
         }
     }
 
@@ -261,8 +283,8 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        start = ((LocationSearchBar) findViewById(R.id.field_start)).getAddress();
-        end = ((LocationSearchBar) findViewById(R.id.field_end)).getAddress();
+        start = field_start.getAddress();
+        end = field_end.getAddress();
 
         if (start == null || end == null) {
             Toast.makeText(this, "Select both start and destination before continuing.", Toast.LENGTH_LONG).show();
@@ -281,7 +303,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
         Log.d(TAG, me.getJson());
 
-        journey.user=me;
+        journey.user_id=me.id;
         journey.start=start;
         journey.end=end;
         journey.datetime=formatter.format(now);
