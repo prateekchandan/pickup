@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -38,6 +37,8 @@ public class MapsActivity extends MyActivity{
     Polyline currPath;
     HashMap<String, Marker> user_pos=new HashMap<>();
 
+    static final LatLng defaultLoc = new LatLng(19.0822508,72.8812041);
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -65,6 +66,8 @@ public class MapsActivity extends MyActivity{
         {
             Location location = new Location(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude(),"");
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.latitude, location.longitude), 17));
+        } else {
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(defaultLoc, 11));
         }
     }
 
