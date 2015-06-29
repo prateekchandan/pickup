@@ -19,6 +19,7 @@ import cab.pickup.util.IOUtil;
 public abstract class PostTask extends AsyncTask<String, Integer, Result> {
     private static final String TAG = "PostTask";
     public MyActivity context;
+    private OnTaskCompletedListener listener;
 
     public PostTask(MyActivity context){
         this.context=context;
@@ -63,6 +64,14 @@ public abstract class PostTask extends AsyncTask<String, Integer, Result> {
     public void onPostExecute(Result res) {
         if(res.statusCode !=200){
             Toast.makeText(context, res.statusMessage, Toast.LENGTH_LONG).show();
+        } else {
+            if(listener!=null){
+                listener.onTaskCompleted(res);
+            }
         }
+    }
+
+    public void setOnTaskCompletedListener(OnTaskCompletedListener listener) {
+        this.listener = listener;
     }
 }

@@ -3,4 +3,7 @@
     <color name="theme_color">#02B2AB</color>
     <color name="text_color_light">#FBFBFB</color>
     <color name="text_color_dark">#02B2AB</color>
+
+    <color name="button_bg_enabled">#02B2AB</color>
+    <color name="button_bg_disabled">#BBB4B4</color>
 </resources>

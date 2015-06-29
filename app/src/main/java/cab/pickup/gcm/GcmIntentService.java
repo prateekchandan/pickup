@@ -70,11 +70,10 @@ public class GcmIntentService extends IntentService {
                     if(msg_type==TYPE_USER_ADDED){
                         sendJourneyUpdate(JOURNEY_ADD_USER_INTENT_TAG, data.getString("user_id"));
                     } else if(msg_type==TYPE_DRIVER_ADDED){
-                        sendJourneyUpdate(JOURNEY_ADD_DRIVER_INTENT_TAG, data.getString("user_id"));
+                        sendJourneyUpdate(JOURNEY_ADD_DRIVER_INTENT_TAG, data.getString("driver_id"));
                     }
 
                     Log.i(TAG, msg.getString("user_name"));
-                    Log.i(TAG, msg.get("journey_id").toString());
                     Log.i(TAG, msg.get("type").toString());
                 } catch (JSONException e) {
                     e.printStackTrace();

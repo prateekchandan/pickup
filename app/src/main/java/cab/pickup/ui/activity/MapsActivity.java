@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cab.pickup.R;
+import cab.pickup.api.Location;
 import cab.pickup.api.SingleJourney;
 import cab.pickup.util.IOUtil;
 
@@ -58,8 +59,13 @@ public class MapsActivity extends MyActivity{
     }
 
     private void setUpMap() {
-        //map.setMyLocationEnabled(true);
-        //map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng((start.latitude + end.latitude) / 2, (start.longitude + end.longitude) / 2), 12));
+        map.setMyLocationEnabled(true);
+
+        if(map.getMyLocation() != null)
+        {
+            Location location = new Location(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude(),"");
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.latitude, location.longitude), 17));
+        }
     }
 
     class MapDirectionsTask extends AsyncTask<String, Integer, String> {
@@ -125,8 +131,7 @@ public class MapsActivity extends MyActivity{
 
         map.animateCamera(CameraUpdateFactory.newLatLngBounds(bnds, 10));
 
-        ((TextView)findViewById(R.id.field_distance)).setText(distance);
-
+        //((TextView)findViewById(R.id.field_distance)).setText(distance);
     }
 
     public void updatePoint(String user_id, double lat, double lng){

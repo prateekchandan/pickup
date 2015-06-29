@@ -18,7 +18,7 @@
 
     <style name="Button">
         <item name="android:textColor">@color/text_color_light</item>
-        <item name="android:background">@color/theme_color</item>
+        <item name="android:background">@drawable/button_back</item>
         <item name="android:layout_marginTop">5dp</item>
         <item name="android:layout_marginBottom">5dp</item>
     </style>

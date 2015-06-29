@@ -1,5 +1,6 @@
 package cab.pickup.ui.activity;
 
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,15 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.widget.ProfilePictureView;
-
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +26,7 @@ import cab.pickup.api.User;
 import cab.pickup.gcm.GcmIntentService;
 
 
-public class RideActivity extends MyActivity{
+public class RideActivity extends Activity {
     ListView user_list_view;
     UserListAdapter user_adapter;
     BroadcastReceiver mUpdateReceiver;
@@ -55,7 +53,7 @@ public class RideActivity extends MyActivity{
                 if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG)){
                     Toast.makeText(RideActivity.this, "User added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
 
-                    user_adapter.add(new User(intent.getStringExtra("id")));
+                    user_adapter.add(new User(intent.getStringExtra("id"),null));
 
                 } else if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG)){
                     Toast.makeText(RideActivity.this, "Driver added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
@@ -110,7 +108,7 @@ public class RideActivity extends MyActivity{
         public View getView(int position, View convertView, ViewGroup parent){
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            RelativeLayout user_layout = (RelativeLayout)inflater.inflate(R.layout.user_profile, parent, false);
+            RelativeLayout user_layout = (RelativeLayout)inflater.inflate(R.layout.widget_user_profile, parent, false);
 
             ((ProfilePictureView)user_layout.findViewById(R.id.user_profile_img)).setProfileId(users.get(position).fbid);
             ((TextView)user_layout.findViewById(R.id.user_profile_name)).setText(users.get(position).name);

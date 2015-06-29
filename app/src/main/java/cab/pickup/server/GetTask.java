@@ -18,6 +18,7 @@ public class GetTask extends AsyncTask<String, Integer, Result> {
     private static final String TAG = "GetTask";
     public MyActivity context;
     public String url;
+    private OnTaskCompletedListener listener;
 
     public GetTask(){}
 
@@ -36,9 +37,9 @@ public class GetTask extends AsyncTask<String, Integer, Result> {
         try {
             HttpResponse response = httpclient.execute(httpget);
 
-            Log.d(TAG, ret.statusCode + " : " + response.getStatusLine().getReasonPhrase());
-
             ret = new Result(IOUtil.buildStringFromIS(response.getEntity().getContent()));
+
+            Log.d(TAG, ret.statusCode + " : " + response.getStatusLine().getReasonPhrase());
         } catch (ClientProtocolException e) {
             Log.e(TAG, e.getMessage());
         } catch (IOException e) {
@@ -54,6 +55,18 @@ public class GetTask extends AsyncTask<String, Integer, Result> {
     public void onPostExecute(Result res){
         if(res.statusCode !=200){
             if(context!=null) Toast.makeText(context, res.statusMessage, Toast.LENGTH_LONG).show();
+            Log.e(TAG, "Error: "+res.statusMessage);
+        } else {
+            if(listener!=null){
+                Log.d(TAG, "Listener called");
+                listener.onTaskCompleted(res);
+            } else {
+                Log.d(TAG, "Listener is null");
+            }
         }
+    }
+
+    public void setOnTaskCompletedListener(OnTaskCompletedListener listener) {
+        this.listener = listener;
     }
 }

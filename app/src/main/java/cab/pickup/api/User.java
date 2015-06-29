@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cab.pickup.server.GetTask;
+import cab.pickup.server.OnTaskCompletedListener;
 import cab.pickup.server.PostTask;
 import cab.pickup.server.Result;
 
@@ -24,21 +25,23 @@ public class User{
         loadJSONdata(user,hasAddress);
     }
 
-    public User(String id){
+    public User(String id, OnTaskCompletedListener listener){
         GetTask getUserDetails=new GetTask(){
             @Override
             public void onPostExecute(Result res){
                 if(res.statusCode==200){
                     try {
-                        loadJSONdata(res.data, true);
+                        loadJSONdata(res.data, false);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
+                super.onPostExecute(res);
             }
         };
 
-        getUserDetails.execute("http://pickup.prateekchandan.me/user/"+id);
+        getUserDetails.setOnTaskCompletedListener(listener);
+        getUserDetails.execute("http://pickup.prateekchandan.me/user/"+id+"?key=9f83c32cf3c9d529e");
     }
 
     public User(){

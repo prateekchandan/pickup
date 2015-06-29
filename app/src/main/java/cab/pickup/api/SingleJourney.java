@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cab.pickup.server.GetTask;
+import cab.pickup.server.OnTaskCompletedListener;
 import cab.pickup.server.PostTask;
 import cab.pickup.server.Result;
 import cab.pickup.ui.activity.MainActivity;
@@ -66,8 +67,10 @@ public class SingleJourney extends Journey{
         this.cab_preference=cab_preference;
     }
 
-    public void addToServer(MyActivity context){
-        new AddJourneyTask(context).execute(context.getUrl("/add_journey"));
+    public void addToServer(MyActivity context, OnTaskCompletedListener listener){
+        AddJourneyTask task = new AddJourneyTask(context);
+        task.setOnTaskCompletedListener(listener);
+        task.execute(context.getUrl("/add_journey"));
     }
 
     @Override
