@@ -162,6 +162,24 @@
                     android:id="@+id/summary_list_user">
                 </ListView>
 
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Edit"
+                    android:layout_above="@+id/summary_confirm"
+                    android:id="@+id/summary_edit"
+                    android:onClick="edit"
+                    style="@style/Button"/>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Confirm"
+                    android:id="@+id/summary_confirm"
+                    android:layout_alignParentBottom="true"
+                    android:onClick="confirm"
+                    style="@style/Button"/>
+
         </RelativeLayout>
     </RelativeLayout>
 

@@ -39,7 +39,6 @@ import cab.pickup.ui.widget.UserListAdapter;
 
 public class MainActivity extends MapsActivity implements   LocationSearchBar.OnAddressSelectedListener,
                                                             RadioGroup.OnCheckedChangeListener,
-                                                            View.OnClickListener,
                                                             OnTaskCompletedListener {
     HashMap<Integer, Marker> markers = new HashMap<Integer, Marker>();
 
@@ -316,14 +315,17 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     }
 
     @Override
-    public void onClick(View v) {
-
-    }
-
-    @Override
     public void onTaskCompleted(Result res) {
         if(res.statusCode == 200) {
             loadPage(PAGE_SUMMARY);
         }
+    }
+
+    public void confirm(View v){
+
+    }
+
+    public void edit(View v){
+        loadPage(PAGE_MAIN);
     }
 }

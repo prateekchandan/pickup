@@ -6,44 +6,16 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context="cab.pickup.ui.activity.RideActivity">
-
-
-    <EditText
-        android:layout_width="170dp"
+    <fragment
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.google.android.gms.maps.SupportMapFragment" />
+    <Button
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/summary_driver"
-        style="@style/LocationSearchBar"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:editable="false"
-        android:hint="Not Allocated"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Driver:"
-        style="@style/Label"
-        android:layout_alignTop="@+id/summary_driver"
-        android:layout_toLeftOf="@+id/summary_driver"
-        android:layout_alignBottom="@+id/summary_driver"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="User List"
-        style="@style/Label"
-        android:id="@+id/summary_label_user"
-        android:layout_below="@+id/summary_driver"
-        android:layout_centerHorizontal="true"
-        android:textSize="25sp"
-        android:textStyle="bold" />
-    <ListView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/summary_label_user"
-        android:id="@+id/summary_list_user">
-    </ListView>
+        android:layout_alignParentBottom="true"
+        style="@style/Button"
+        android:onClick="cancel"
+        android:text="Cancel"/>
 </RelativeLayout>
