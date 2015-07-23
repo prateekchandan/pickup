@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.http.AndroidHttpClient;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -20,9 +22,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,10 +41,12 @@ import cab.pickup.api.Journey;
 import cab.pickup.api.Location;
 import cab.pickup.api.User;
 import cab.pickup.gcm.GcmIntentService;
+import cab.pickup.server.GetTask;
 import cab.pickup.server.OnTaskCompletedListener;
 import cab.pickup.server.Result;
 import cab.pickup.ui.widget.LocationSearchBar;
 import cab.pickup.ui.widget.UserListAdapter;
+import cab.pickup.util.IOUtil;
 
 public class MainActivity extends MapsActivity implements   LocationSearchBar.OnAddressSelectedListener,
                                                             RadioGroup.OnCheckedChangeListener,
@@ -213,18 +224,68 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     }
 
     @Override
-    public void onAddressSelected(LocationSearchBar bar, Location address){
+    public void onAddressSelected(final LocationSearchBar bar, Location address){
         if(address == null) return;
 
-        LatLng newPt = new LatLng(address.latitude, address.longitude);
+        if(!address.locUpdated){
+            AsyncTask<String, Void, String> locFetch = new AsyncTask<String,Void,String>(){
+                @Override
+                protected String doInBackground(String... params){
+                    String ret="", url=params[0];
 
-        if(!markers.containsKey(bar.getId())) {
-            markers.put(bar.getId(), map.addMarker(new MarkerOptions().position(newPt)));
+                    AndroidHttpClient httpclient = AndroidHttpClient.newInstance(TAG);
+                    HttpGet httpget = new HttpGet(url);
+                    try {
+                        HttpResponse response = httpclient.execute(httpget);
+
+                        ret= IOUtil.buildStringFromIS(response.getEntity().getContent());
+
+                    } catch (ClientProtocolException e) {
+                        Log.e(TAG, e.getMessage());
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+
+                    httpclient.close();
+                    return ret;
+                }
+
+                @Override
+                public void onPostExecute(String res){
+                    try {
+                        JSONObject loc = new JSONObject(res).getJSONObject("result").getJSONObject("geometry").getJSONObject("location");
+                        LatLng newPt = new LatLng(loc.getDouble("lat"), loc.getDouble("lng"));
+
+                        if(!markers.containsKey(bar.getId())) {
+                            markers.put(bar.getId(), map.addMarker(new MarkerOptions().position(newPt)));
+                        } else {
+                            markers.get(bar.getId()).setPosition(newPt);
+                        }
+
+                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/details/json");
+            sb.append("?key=AIzaSyChiVpPeOyYNFGq7_aR6-zpHnv6HsnwXQo"); // TODO Seperate constants like these
+            sb.append("&placeid=" + address.placeId);
+            sb.append("&components=country:in");
+
+            locFetch.execute(sb.toString());
         } else {
-            markers.get(bar.getId()).setPosition(newPt);
-        }
+            LatLng newPt = new LatLng(address.latitude, address.longitude);
 
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
+            if(!markers.containsKey(bar.getId())) {
+                markers.put(bar.getId(), map.addMarker(new MarkerOptions().position(newPt)));
+            } else {
+                markers.get(bar.getId()).setPosition(newPt);
+            }
+
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
+        }
 
         displayPath();
     }

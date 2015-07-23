@@ -1,7 +1,10 @@
 package cab.pickup.ui.widget;
 
 import android.content.Context;
+import android.net.http.AndroidHttpClient;
+import android.os.AsyncTask;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -14,11 +17,23 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
 import cab.pickup.R;
 import cab.pickup.api.Location;
+import cab.pickup.server.GetTask;
+import cab.pickup.server.Result;
 import cab.pickup.ui.activity.MyActivity;
+import cab.pickup.util.IOUtil;
 
 public class LocationPickerView extends LinearLayout implements LocationSearchBar.OnAddressSelectedListener, View.OnClickListener{
+    private static final String TAG = "LocationPickerView";
     MyActivity context;
     public Location home, office;
     Marker home_marker, office_marker;
@@ -77,7 +92,59 @@ public class LocationPickerView extends LinearLayout implements LocationSearchBa
 
     @Override
     public void onAddressSelected(LocationSearchBar bar, Location address) {
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(address.latitude, address.longitude), 15));
+        if(address == null) return;
+
+        if(!address.locUpdated){
+            AsyncTask<String,Void,String> locFetch = new AsyncTask<String,Void,String>(){
+                @Override
+                protected String doInBackground(String... params){
+                    String ret="", url=params[0];
+
+                    AndroidHttpClient httpclient = AndroidHttpClient.newInstance(TAG);
+                    HttpGet httpget = new HttpGet(url);
+                    try {
+                        HttpResponse response = httpclient.execute(httpget);
+
+                        ret=IOUtil.buildStringFromIS(response.getEntity().getContent());
+
+                    } catch (ClientProtocolException e) {
+                        Log.e(TAG, e.getMessage());
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+
+                    httpclient.close();
+                    return ret;
+                }
+
+                @Override
+                public void onPostExecute(String res){
+                    try {
+                        JSONObject loc = new JSONObject(res).getJSONObject("result").getJSONObject("geometry").getJSONObject("location");
+                        LatLng newPt = new LatLng(loc.getDouble("lat"), loc.getDouble("lng"));
+
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
+
+                        Log.d(TAG,"Downloaded: " +newPt.latitude+","+newPt.longitude);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/details/json");
+            sb.append("?key=AIzaSyChiVpPeOyYNFGq7_aR6-zpHnv6HsnwXQo"); // TODO Seperate constants like these
+            sb.append("&placeid=" + address.placeId);
+            sb.append("&components=country:in");
+
+            Log.d(TAG, sb.toString());
+
+            locFetch.execute(sb.toString());
+        } else {
+            LatLng newPt = new LatLng(address.latitude, address.longitude);
+
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
+        }
     }
 
     @Override

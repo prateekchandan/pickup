@@ -253,12 +253,7 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
             @Override
             protected List<Location> doInBackground(String... params) {
 
-
-                List<Location> results=new ArrayList<Location>();
-
-                    PendingResult result = Places.GeoDataApi.getAutocompletePredictions(mGoogleApiClient,params[0],mumbaiBounds,null);
-                    return searchFromString(params[0]);
-
+                return searchFromString(params[0]);
             }
 
             @Override
@@ -326,9 +321,7 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
             // Extract the Place descriptions from the results
             resultList = new ArrayList(predsJsonArray.length());
             for (int i = 0; i < predsJsonArray.length(); i++) {
-                System.out.println(predsJsonArray.getJSONObject(i).getString("description"));
-                System.out.println("============================================================");
-                resultList.add(new Location(0,0,predsJsonArray.getJSONObject(i).getString("description")));
+                resultList.add(new Location(predsJsonArray.getJSONObject(i).getString("place_id"), predsJsonArray.getJSONObject(i).getString("description")));
             }
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Cannot process JSON results", e);
