@@ -2,6 +2,7 @@ package cab.pickup.ui.widget;
 
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
@@ -20,18 +21,45 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.actions.ReserveIntents;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.AutocompletePrediction;
+import com.google.android.gms.location.places.AutocompletePredictionBuffer;
+import com.google.android.gms.location.places.GeoDataApi;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import cab.pickup.R;
 import cab.pickup.api.Location;
 import cab.pickup.ui.activity.MyActivity;
 import cab.pickup.util.LocationTracker;
 
+
 public class LocationSearchBar extends TextView implements View.OnClickListener{
+
+    private final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
+    private final String TYPE_AUTOCOMPLETE = "/autocomplete";
+    private final String OUT_JSON = "/json";
+    private final String API_KEY = "AIzaSyChiVpPeOyYNFGq7_aR6-zpHnv6HsnwXQo";
+    private final String LOG_TAG = "PICKUP_LOCATION";
 
     private Location address;
     LocationTracker tracker;
@@ -39,6 +67,7 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
     OnAddressSelectedListener addrListener;
 
     boolean myLocationEnabled=true, homeOfficeEnabled=true;
+    private GoogleApiClient mGoogleApiClient;
 
     public LocationSearchBar(Context context) {
         super(context);
@@ -59,6 +88,11 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
             this.context = (MyActivity) context;
             tracker = this.context.getLocationTracker();
         }
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this.context)
+                //.enableAutoManage(this.context, 0 /* clientId */, null)
+                .addApi(Places.GEO_DATA_API)
+                .build();
     }
 
     public void setOnAddressSelectedListener(OnAddressSelectedListener lstn){
@@ -102,6 +136,8 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
 
         LatLng upperRight = new LatLng(19.289449, 73.174745); // Temporary jugaad... TODO change to user specific location
         LatLng lowerLeft = new LatLng(18.913122, 72.756578);
+
+        LatLngBounds mumbaiBounds = new LatLngBounds(lowerLeft,upperRight);
 
         boolean running, doAgain;
 
@@ -200,8 +236,9 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
             }
         }
 
+
         @Override
-        public void onStop(){
+        public void onStop()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        {
             if (searchTask!=null) searchTask.cancel(true);
             super.onStop();
         }
@@ -210,25 +247,18 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
             @Override
             protected void onPreExecute(){
                 running = true;
+                mGoogleApiClient.connect();
             }
 
             @Override
             protected List<Location> doInBackground(String... params) {
 
-                Geocoder gc = new Geocoder(context);
 
                 List<Location> results=new ArrayList<Location>();
-                try {
-                    List<Address> res=gc.getFromLocationName(params[0], 5, lowerLeft.latitude, lowerLeft.longitude, upperRight.latitude, upperRight.longitude);
 
-                    for (Address a :res){
-                        results.add(new Location(a.getLatitude(),a.getLongitude(),a.getAddressLine(0)));
-                    }
+                    PendingResult result = Places.GeoDataApi.getAutocompletePredictions(mGoogleApiClient,params[0],mumbaiBounds,null);
+                    return searchFromString(params[0]);
 
-                } catch (IOException e) {
-                    Log.e(TAG, "Server request timed out");
-                }
-                return results;
             }
 
             @Override
@@ -251,6 +281,7 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
                     //searchTask.execute(getText().toString());
                     doAgain=false;
                 }
+                mGoogleApiClient.disconnect();
             }
         }
     }
@@ -259,4 +290,52 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
         public void onAddressSelected(LocationSearchBar bar, Location a);
     }
 
-}
+    List<Location> searchFromString(String input){
+        List<Location> resultList = null;
+        HttpURLConnection conn = null;
+        StringBuilder jsonResults = new StringBuilder();
+        try {
+            StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_AUTOCOMPLETE + OUT_JSON);
+            sb.append("?key=" + API_KEY);
+            sb.append("&components=country:in");
+            sb.append("&input=" + URLEncoder.encode(input, "utf8"));
+            URL url = new URL(sb.toString());
+            conn = (HttpURLConnection) url.openConnection();
+            InputStreamReader in = new InputStreamReader(conn.getInputStream());
+            // Load the results into a StringBuilder
+            int read;
+            char[] buff = new char[1024];
+            while ((read = in.read(buff)) != -1) {
+                jsonResults.append(buff, 0, read);
+            }
+        } catch (MalformedURLException e) {
+            Log.e(LOG_TAG, "Error processing Places API URL", e);
+            return resultList;
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Error connecting to Places API", e);
+            return resultList;
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+        try {
+            // Create a JSON object hierarchy from the results
+            JSONObject jsonObj = new JSONObject(jsonResults.toString());
+            JSONArray predsJsonArray = jsonObj.getJSONArray("predictions");
+            // Extract the Place descriptions from the results
+            resultList = new ArrayList(predsJsonArray.length());
+            for (int i = 0; i < predsJsonArray.length(); i++) {
+                System.out.println(predsJsonArray.getJSONObject(i).getString("description"));
+                System.out.println("============================================================");
+                resultList.add(new Location(0,0,predsJsonArray.getJSONObject(i).getString("description")));
+            }
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Cannot process JSON results", e);
+        }
+
+        return resultList;
+
+    }
+
+};
