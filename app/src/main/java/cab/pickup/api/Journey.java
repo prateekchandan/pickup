@@ -32,6 +32,7 @@ public class Journey {
     public String user_id;
     public ArrayList<String> mates_id=new ArrayList<>();
     public String datetime, del_time, cab_preference;
+    public String group_id;
 
 
     public Journey(){
@@ -46,6 +47,8 @@ public class Journey {
 
         del_time=journey.getString("margin_before");
         cab_preference=journey.getString("preference");
+
+        group_id=journey.getString("group_id");
     }
 
     public Journey(User user, Location start, Location end, String datetime, String del_time, String cab_preference){
@@ -119,6 +122,8 @@ public class Journey {
             journey.put("preference", cab_preference);
 
             journey.put("mates", mates_id);
+
+            journey.put("group_id",group_id);
 
         } catch (JSONException e) {
             e.printStackTrace();

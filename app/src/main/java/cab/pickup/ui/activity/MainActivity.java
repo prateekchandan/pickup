@@ -61,7 +61,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     int page=PAGE_MAIN;
 
     Location start, end;
-    private static final int REQUEST_LOGIN=1, REQUEST_JOURNEY=2;
 
     Journey journey;
 
@@ -118,9 +117,9 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG));
         registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG));
 
-        Intent i = new Intent();
+        /*Intent i = new Intent();
         i.setClass(this, LoginActivity.class);
-        startActivityForResult(i, REQUEST_LOGIN);
+        startActivityForResult(i, REQUEST_LOGIN);*/
     }
 
     @Override
@@ -193,7 +192,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         super.onStop();
     }
 
-    @Override
+    /*@Override
     public void onActivityResult(int req, int res, Intent data){
         super.onActivityResult(req, res, data);
 
@@ -212,7 +211,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 
     private void setJourney(String journey_json) throws JSONException{
         journey = new Journey(new JSONObject(journey_json));
@@ -374,7 +373,9 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             public void onPostExecute(Result res) {
                 super.onPostExecute(res);
                 if(res.statusCode==200){
-                    int groupId = res.data.optInt("group_id");
+                    String groupId = res.data.optString("group_id");
+
+                    journey.group_id=groupId;
 
                     Intent i = new Intent(MainActivity.this,RideActivity.class);
                     i.putExtra("group_id",groupId);
@@ -386,6 +387,9 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         };
 
         confirmTask.execute(getUrl("/confirm/"+journey.id+"?key="+getKey()));
+
+        Toast.makeText(this,"Confirming your Journey...",Toast.LENGTH_LONG);
+
     }
 
     public void edit(View v){

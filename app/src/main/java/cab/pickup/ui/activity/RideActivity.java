@@ -12,14 +12,14 @@ import cab.pickup.server.Result;
 
 
 public class RideActivity extends MapsActivity {
-    int group_id;
+    String group_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ride);
 
-        group_id = getIntent().getIntExtra("group_id",-1);
+        group_id = getIntent().getStringExtra("group_id");
 
         GetTask commonJourneyTask = new GetTask(this){
             @Override
@@ -40,12 +40,16 @@ public class RideActivity extends MapsActivity {
 
                         String waypoints="";
                         for(int i=1; i<start_pts.length(); i++){
-                            waypoints+=start_pts.getJSONArray(i).getDouble(0)+",";
+                            waypoints+=start_pts.getJSONArray(i).getDouble(0)+","+start_pts.getJSONArray(i).getDouble(1)+"|";
+                        }
+
+                        for(int i=0; i<end_pts.length()-1; i++){
+                            waypoints+=end_pts.getJSONArray(i).getDouble(0)+","+end_pts.getJSONArray(i).getDouble(1)+"|";
                         }
 
                         String url="http://maps.googleapis.com/maps/api/directions/json?origin="
                                 + start_lat + "," + start_lng + "&destination="
-                                + end_lat + "," + end_lng;
+                                + end_lat + "," + end_lng+"&waypoints="+waypoints.substring(0,waypoints.length()-1);
                         new MapDirectionsTask().execute(url);
                     } catch (JSONException e) {
                         e.printStackTrace();

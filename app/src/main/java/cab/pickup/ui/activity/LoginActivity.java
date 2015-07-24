@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cab.pickup.R;
+import cab.pickup.api.Journey;
 import cab.pickup.api.User;
 import cab.pickup.server.PostTask;
 import cab.pickup.server.Result;
@@ -53,24 +54,25 @@ public class LoginActivity extends MyActivity {
             if (me.id == null) {
                 addUser();
             } else {
-                finish();
+                startNextActivity();
             }
         } else {
             findViewById(R.id.fb_login).setVisibility(View.VISIBLE);
 
             ((TextView)findViewById(R.id.login_message_text)).setText("");
-
         }
 
         ((LoginButton)findViewById(R.id.fb_login)).setReadPermissions("email");
-        Log.d("loginhere", "yoman!!");
+        //Log.d("loginhere", "yoman!!");
     }
+
+
 
     @Override
     protected void onResume(){
         super.onResume();
         checkGPS();
-        Log.d("loginhere","yoman212112113!!");
+        //Log.d("loginhere","yoman212112113!!");
     }
 
     @Override
@@ -139,13 +141,13 @@ public class LoginActivity extends MyActivity {
     public void checkGPS(){
         Context context = this;
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        if( !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ) {
+        if( !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle(R.string.gps_not_found_title);  // GPS not found
             builder.setMessage(R.string.gps_not_found_message); // Want to enable?
             builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), 1);
                 }
             });
             builder.setNegativeButton(R.string.no, null);
@@ -216,7 +218,27 @@ public class LoginActivity extends MyActivity {
 
                 Toast.makeText(context, ret.statusMessage, Toast.LENGTH_LONG).show();
 
-                context.finish();
+                startNextActivity();
+            }
+        }
+    }
+
+    private void startNextActivity() {
+        if(prefs.contains("journey")) {
+            try {
+                JSONObject journey_data = new JSONObject(prefs.getString("journey", ""));
+                Journey journey = new Journey(journey_data);
+
+                if (journey.group_id == null) {
+                    Intent i  = new Intent(this, MainActivity.class);
+                    startActivity(i);
+                } else {
+                    Intent i = new Intent(this, RideActivity.class);
+                    i.putExtra("group_id",journey.group_id);
+                    startActivity(i);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }
     }
