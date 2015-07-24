@@ -58,7 +58,7 @@ public class LoginActivity extends MyActivity {
         } else {
             findViewById(R.id.fb_login).setVisibility(View.VISIBLE);
 
-            ((TextView)findViewById(R.id.login_message_text)).setText("Login with Facebook to continue");
+            ((TextView)findViewById(R.id.login_message_text)).setText("");
 
         }
 
