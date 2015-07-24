@@ -51,9 +51,11 @@ public class LoginActivity extends MyActivity {
 
             ((TextView)findViewById(R.id.login_message_text)).setText("Loading...");
             if (me.id == null) {
+                ((TextView)findViewById(R.id.login_message_text)).setText("Loading...");
                 addUser();
             } else {
-                finish();
+                startNextActivity();
+                return;
             }
         } else {
             findViewById(R.id.fb_login).setVisibility(View.VISIBLE);
@@ -63,14 +65,12 @@ public class LoginActivity extends MyActivity {
         }
 
         ((LoginButton)findViewById(R.id.fb_login)).setReadPermissions("email");
-        Log.d("loginhere", "yoman!!");
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-        checkGPS();
-        Log.d("loginhere","yoman212112113!!");
+        //checkGPS();
     }
 
     @Override
@@ -80,13 +80,19 @@ public class LoginActivity extends MyActivity {
 
         if(!prefs.contains("user_json")) {
             findViewById(R.id.fb_login).setVisibility(View.GONE);
-            ((TextView)findViewById(R.id.login_message_text)).setText("Loading...");
+            ((TextView)findViewById(R.id.login_message_text)).setText("Adding user..");
             getBiodata();
         } else {
             addUser();
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void startNextActivity(){
+        Intent i = new Intent(this,MainActivity.class);
+        startActivity(i);
+        finish();
     }
 
     public void getBiodata(){
@@ -113,8 +119,13 @@ public class LoginActivity extends MyActivity {
         Log.d(TAG, "add user");
         setResult(RESULT_OK);
 
+        if(!prefs.contains("user_json")) {
+            getBiodata();
+            return;
+        }
         try {
-            me=new User(new JSONObject(prefs.getString("user_json","")), true);
+            me=new User(new JSONObject(prefs.getString("user_json","")), false);
+            Log.d("user_data",prefs.getString("user_json",""));
         } catch (JSONException e) {
             e.printStackTrace();
             me=new User();
@@ -132,7 +143,6 @@ public class LoginActivity extends MyActivity {
         spe.putString("user_json", me.getJson());
         spe.putString("gcm_id", gcm_id);
         spe.putInt("app_version", getAppVersion());
-
         spe.commit();
     }
 
@@ -196,13 +206,13 @@ public class LoginActivity extends MyActivity {
             String mac_addr = ((WifiManager)getSystemService(WIFI_SERVICE)).getConnectionInfo().getMacAddress();
             nameValuePairs.add(new BasicNameValuePair("mac_addr", mac_addr));
 
-            nameValuePairs.add(new BasicNameValuePair("home_location",me.home.latitude+","+me.home.longitude));
+           /* nameValuePairs.add(new BasicNameValuePair("home_location",me.home.latitude+","+me.home.longitude));
             nameValuePairs.add(new BasicNameValuePair("home_text",me.home.shortDescription));
             nameValuePairs.add(new BasicNameValuePair("leaving_home","08:00:00"));
 
             nameValuePairs.add(new BasicNameValuePair("office_location",me.office.latitude+","+me.office.longitude));
             nameValuePairs.add(new BasicNameValuePair("office_text",me.office.shortDescription));
-            nameValuePairs.add(new BasicNameValuePair("leaving_office","12:00:00"));
+            nameValuePairs.add(new BasicNameValuePair("leaving_office","12:00:00"));*/
 
             return nameValuePairs;
         }
@@ -215,8 +225,7 @@ public class LoginActivity extends MyActivity {
                 ((LoginActivity) context).addDataToPrefs(ret.data.optString("user_id"), gcm_id);
 
                 Toast.makeText(context, ret.statusMessage, Toast.LENGTH_LONG).show();
-
-                context.finish();
+                ((LoginActivity) context).startNextActivity();
             }
         }
     }

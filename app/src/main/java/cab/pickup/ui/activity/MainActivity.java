@@ -118,9 +118,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG));
         registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG));
 
-        Intent i = new Intent();
-        i.setClass(this, LoginActivity.class);
-        startActivityForResult(i, REQUEST_LOGIN);
     }
 
     @Override
@@ -158,7 +155,8 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     @Override
     public void onStart() {
         super.onStart();
-        tracker.connect();
+        //if(tracker!=null)
+        //    tracker.connect();
 
         if(prefs.contains("journey")){
             try {
@@ -186,8 +184,8 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
     @Override
     public void onStop() {
-        tracker.stopLocationUpdates();
-        tracker.disconnect();
+        //tracker.stopLocationUpdates();
+        //tracker.disconnect();
 
         if(journey.id!=null) prefs.edit().putString("journey", journey.toString()).apply();
         super.onStop();

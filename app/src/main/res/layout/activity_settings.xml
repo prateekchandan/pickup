@@ -1,32 +1,112 @@
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-
-tools:context="com.udiboy.commonpath.SettingsActivity">
-    <TextView android:text="Enter your Personal Info"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="50dp"
-        android:paddingBottom="20dp"
-        android:gravity="center"
-        android:id="@+id/personal_info"
-        android:layout_alignParentTop="true"
-        android:textSize="25sp"
-        style="@style/Button"
-        />
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/fragment_container"
+    android:padding="0dp"
+    android:layout_margin="0dp">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="0dp">
+
+        <TextView android:text="@string/edit_page_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="30dp"
+            android:paddingBottom="20dp"
+            android:gravity="center"
+            android:id="@+id/personal_info"
+            android:textSize="25sp"
+            android:background="@drawable/button_back"
+            android:textColor="@color/text_color_light"
+            />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_name"
+                    android:inputType="textPersonName"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:hint="Name"/>
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_age"
+                    android:inputType="number"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:hint="Age"
+                    />
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_gender"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:hint="Gender"/>
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_email"
+                    android:inputType="textEmailAddress"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:hint="Email"/>
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_number"
+                    android:inputType="phone"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:hint="Phone"
+                    />
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_company"
+                    android:inputType="text"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:hint="Company"
+                    />
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="25dp"
+                    android:hint="Company Email"
+                    android:inputType="textEmailAddress"
+                    android:id="@+id/profile_company_email"
+                    />
+
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Button"
-        android:text="CONTINUE"
-        android:id="@+id/next_fragment"
-        android:onClick="nextFragment"/>
-</LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:text="Continue"
+        android:onClick="save"
+        android:layout_margin="0dp"
+        android:id="@+id/done_btn"
+        android:backgroundTint="@color/theme_color"
+        android:textColor="@color/text_color_light"/>
+
+</RelativeLayout>

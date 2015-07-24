@@ -46,7 +46,6 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle state){
         super.onActivityCreated(state);
-        ((SettingsActivity)getActivity()).onSectionAttached(fragment_id);
     }
     /*@Override
     public void onAttach(Activity activity) {

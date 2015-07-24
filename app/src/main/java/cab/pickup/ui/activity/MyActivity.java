@@ -33,7 +33,7 @@ public class MyActivity extends FragmentActivity implements ServiceConnection{
         prefs=getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
 
         try {
-            me=new User(new JSONObject(prefs.getString("user_json","")), true);
+            me=new User(new JSONObject(prefs.getString("user_json","")), false);
             Log.d("MyAct", me.getJson());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -43,7 +43,7 @@ public class MyActivity extends FragmentActivity implements ServiceConnection{
         me.device_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
         Intent i = new Intent(this, LocationTracker.class);
-        bindService(i,this,BIND_AUTO_CREATE);
+        //bindService(i,this,BIND_AUTO_CREATE);
 
         Log.d("MyActivity", me.id==null?"user_id null":me.id);
     }
