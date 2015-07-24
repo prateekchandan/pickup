@@ -5,13 +5,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -53,6 +57,11 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                                                             OnTaskCompletedListener {
     HashMap<Integer, Marker> markers = new HashMap<Integer, Marker>();
 
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+    private String mActivityTitle;
+
+
     private static final String TAG = "Main";
 
     private static final int PAGE_MAIN =1;
@@ -75,11 +84,17 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
         setContentView(R.layout.activity_main);
 
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mActivityTitle = getTitle().toString();
+
+        setupDrawer();
         setUpMapIfNeeded();
 
-        field_start = ((LocationSearchBar)findViewById(R.id.field_start));
+        /*field_start = ((LocationSearchBar)findViewById(R.id.field_start));
         field_end = ((LocationSearchBar)findViewById(R.id.field_end));
 
         field_start.setOnAddressSelectedListener(this);
@@ -115,8 +130,42 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         };
 
         registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG));
-        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG));
+        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG));*/
 
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    private void setupDrawer() {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.string.drawer_open, R.string.drawer_close) {
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getSupportActionBar().setTitle("Navigation!");
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                getSupportActionBar().setTitle(mActivityTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
     @Override
@@ -130,7 +179,8 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
+
     }
 
     @Override
@@ -148,6 +198,10 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             return true;
         }
 
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -156,7 +210,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         super.onStart();
         //if(tracker!=null)
         //    tracker.connect();
-
+        /*
         if(prefs.contains("journey")){
             try {
                 JSONObject journey_data = new JSONObject(prefs.getString("journey", ""));
@@ -178,7 +232,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             journey = new Journey();
         }
 
-        loadPage(page);
+        loadPage(page);*/
     }
 
     @Override
@@ -186,31 +240,11 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         //tracker.stopLocationUpdates();
         //tracker.disconnect();
 
-        if(journey.id!=null) prefs.edit().putString("journey", journey.toString()).apply();
+        /*if(journey.id!=null) prefs.edit().putString("journey", journey.toString()).apply();*/
         super.onStop();
     }
 
-    /*@Override
-    public void onActivityResult(int req, int res, Intent data){
-        super.onActivityResult(req, res, data);
-
-        Log.d(TAG, "onActivityResult");
-        if(res==RESULT_OK) {
-            try {
-                if (req == REQUEST_LOGIN) {
-                    me = new User(new JSONObject(prefs.getString("user_json", "")), true);
-
-                    ((LocationSearchBar)findViewById(R.id.field_start)).setAddress(new Location(me.home.latitude, me.home.longitude, "Home"));
-                    ((LocationSearchBar)findViewById(R.id.field_end)).setAddress(new Location(me.office.latitude, me.office.longitude, "Office"));
-                }
-                else if (req == REQUEST_JOURNEY)
-                    setJourney(data.getStringExtra("journey_json"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
-
+   /*
     private void setJourney(String journey_json) throws JSONException{
         journey = new Journey(new JSONObject(journey_json));
 
@@ -219,7 +253,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
         displayPath();
     }
-
+*/
     @Override
     public void onAddressSelected(final LocationSearchBar bar, Location address){
         if(address == null) return;
@@ -284,10 +318,10 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
         }
 
-        displayPath();
+        /*displayPath();*/
     }
 
-
+/*
 
     private void displayPath() {
         try {
@@ -323,10 +357,10 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             displayPath();
         }
     }
-
+*/
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        start = field_start.getAddress();
+      /*  start = field_start.getAddress();
         end = field_end.getAddress();
 
         if (start == null || end == null) {
@@ -355,16 +389,16 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
         Log.d(TAG, "Journey time : " +journey.datetime);
 
-        journey.addToServer(this, this);
+        journey.addToServer(this, this);*/
     }
 
     @Override
     public void onTaskCompleted(Result res) {
         if(res.statusCode == 200) {
-            loadPage(PAGE_SUMMARY);
+          /*  loadPage(PAGE_SUMMARY);*/
         }
     }
-
+/*
     public void confirm(View v){
         GetTask confirmTask = new GetTask(this){
             @Override
@@ -386,11 +420,11 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
         confirmTask.execute(getUrl("/confirm/"+journey.id+"?key="+getKey()));
 
-        Toast.makeText(this,"Confirming your Journey...",Toast.LENGTH_LONG);
+        Toast.makeText(this, "Confirming your Journey...",Toast.LENGTH_LONG);
 
     }
 
     public void edit(View v){
         loadPage(PAGE_MAIN);
-    }
+    }*/
 }

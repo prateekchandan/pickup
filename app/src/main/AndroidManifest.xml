@@ -64,7 +64,7 @@
         </activity>
         <activity
             android:name=".ui.activity.MainActivity"
-            android:label="@string/app_name"
+            android:label="@string/title_activity_ride"
             android:screenOrientation="portrait">
 
         </activity>

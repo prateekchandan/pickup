@@ -30,11 +30,13 @@
     <string name="profile_tag_email">email</string>
     <string name="title_activity_book">Book A Ride</string>
     <string name="title_activity_journey">JourneyActivity</string>
-    <string name="title_activity_ride">RideActivity</string>
+    <string name="title_activity_ride">Ride Page</string>
     <string name="title_activity_journey_log">JourneyLogActivity</string>
     <string name="title_activity_location_picker">LocationPickerActivity</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_order_summary">OrderSummaryActivity</string>
+
+    <string name="settings_btn_text">Save</string>
 
     <!-- Other Strings used in App -->
     <string name="yes">Yes</string>
@@ -47,5 +49,9 @@
 
     <!-- Error message -->
     <string name="empty_error">This field can\'t be empty</string>
+
+    <!-- Drawere messages -->
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 
 </resources>

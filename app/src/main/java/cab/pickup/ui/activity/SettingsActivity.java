@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,20 +24,34 @@ public class SettingsActivity extends MyActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_settings);
 
 
-        me.name=getData(getString(R.string.profile_tag_name));
-        me.email=getData(getString(R.string.profile_tag_email));
-        me.gender=getData(getString(R.string.profile_tag_gender));
-        me.fbid=getData(getString(R.string.profile_tag_fbid));
+        if(me.id==null) {
+            me.name = getData(getString(R.string.profile_tag_name));
+            me.email = getData(getString(R.string.profile_tag_email));
+            me.gender = getData(getString(R.string.profile_tag_gender));
+            me.fbid = getData(getString(R.string.profile_tag_fbid));
 
-        setEditText(getData(getString(R.string.profile_tag_name)), R.id.profile_name);
-        setEditText(getData(getString(R.string.profile_tag_email)), R.id.profile_email);
-        setEditText(getData(getString(R.string.profile_tag_age)), R.id.profile_age);
-        setEditText(getData(getString(R.string.profile_tag_gender)), R.id.profile_gender);
-        setEditText(getData(getString(R.string.profile_tag_company)), R.id.profile_company);
-        setEditText(getData(getString(R.string.profile_tag_number)), R.id.profile_number);
+            setEditText(getData(getString(R.string.profile_tag_name)), R.id.profile_name);
+            setEditText(getData(getString(R.string.profile_tag_email)), R.id.profile_email);
+            setEditText(getData(getString(R.string.profile_tag_age)), R.id.profile_age);
+            setEditText(getData(getString(R.string.profile_tag_gender)), R.id.profile_gender);
+            setEditText(getData(getString(R.string.profile_tag_company)), R.id.profile_company);
+            setEditText(getData(getString(R.string.profile_tag_number)), R.id.profile_number);
+        }
+        else
+        {
+            ((TextView)findViewById(R.id.profile_name)).setText(me.name);
+            ((TextView)findViewById(R.id.profile_age)).setText(me.age);
+            ((TextView)findViewById(R.id.profile_gender)).setText(me.gender);
+            ((TextView)findViewById(R.id.profile_email)).setText(me.email);
+            ((TextView)findViewById(R.id.profile_company)).setText(me.company);
+            ((TextView)findViewById(R.id.profile_number)).setText(me.mobile);
+            ((TextView)findViewById(R.id.profile_company_email)).setText(me.company_email);
+
+        }
 
         Button mDoneButton = (Button) findViewById(R.id.done_btn);
         mDoneButton.getBackground().setColorFilter(getResources().getColor(R.color.theme_color), PorterDuff.Mode.MULTIPLY);

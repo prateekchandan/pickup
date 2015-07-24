@@ -102,7 +102,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="Continue"
+        android:text="@string/settings_btn_text"
         android:onClick="save"
         android:layout_margin="0dp"
         android:id="@+id/done_btn"
