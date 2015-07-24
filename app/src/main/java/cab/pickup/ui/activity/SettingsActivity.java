@@ -37,16 +37,7 @@ public class SettingsActivity extends MyActivity {
     {
         switch(current_fragment_id){
             case R.layout.fragment_setting_basic:
-                loadFragment(R.layout.fragment_setting_phone); // TODO change to company
-
-                me.company="PickUp";
-                me.company_email="arbit";
-                break;
-            case R.layout.fragment_setting_company:
-                loadFragment(R.layout.fragment_setting_phone);
-                break;
-            case R.layout.fragment_setting_phone:
-                loadFragment(R.layout.fragment_setting_address);
+                loadFragment(R.layout.fragment_setting_address); // TODO change to company
                 break;
             case R.layout.fragment_setting_address:
                 homeOfficePicker=(LocationPickerView)findViewById(R.id.home_office_picker);
@@ -137,12 +128,7 @@ public class SettingsActivity extends MyActivity {
                 setEditText(getData(getString(R.string.profile_tag_email)), R.id.profile_email);
                 setEditText(getData(getString(R.string.profile_tag_age)), R.id.profile_age);
                 setEditText(getData(getString(R.string.profile_tag_gender)), R.id.profile_gender);
-                break;
-            case R.layout.fragment_setting_company:
                 setEditText(getData(getString(R.string.profile_tag_company)), R.id.profile_company);
-
-                break;
-            case R.layout.fragment_setting_phone:
                 setEditText(getData(getString(R.string.profile_tag_number)), R.id.profile_number);
                 break;
 
@@ -173,10 +159,7 @@ public class SettingsActivity extends MyActivity {
                 Toast.makeText(this,"Gender field musn't be empty!",Toast.LENGTH_LONG).show();
                 return false;
             }
-        }
-        else if (fragment_id==R.layout.fragment_setting_company)
-        {
-            if (getEditText(R.id.profile_company).equals(""))
+            else if (getEditText(R.id.profile_company).equals(""))
             {
                 Toast.makeText(this,"Company field musn't be empty!",Toast.LENGTH_LONG).show();
                 return false;
@@ -186,7 +169,8 @@ public class SettingsActivity extends MyActivity {
                 Toast.makeText(this,"Company Email Address musn't be empty!",Toast.LENGTH_LONG).show();
                 return false;
             }
-        } else if (fragment_id == R.layout.fragment_setting_address){
+        }
+        else if (fragment_id == R.layout.fragment_setting_address){
             if(homeOfficePicker.home==null){
                 Toast.makeText(this,"You should pick a location for home before proceeding!",Toast.LENGTH_LONG).show();
                 return false;
@@ -206,17 +190,10 @@ public class SettingsActivity extends MyActivity {
             me.email = getEditText(R.id.profile_email);
             me.gender = getEditText(R.id.profile_gender);
             me.age=getEditText(R.id.profile_age);
-        }
-        else if (fragment_id==R.layout.fragment_setting_company)
-        {
+            me.mobile=getEditText(R.id.profile_number);
             me.company=getEditText(R.id.profile_company);
             me.company_email=getEditText(R.id.profile_company_email);
         }
-        else if (fragment_id==R.layout.fragment_setting_phone)
-        {
-            me.mobile=getEditText(R.id.profile_number);
-        }
-
         else if (fragment_id==R.layout.fragment_setting_address) {
             me.home=homeOfficePicker.home;
             me.office=homeOfficePicker.office;
