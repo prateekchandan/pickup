@@ -4,6 +4,7 @@ package cab.pickup.util;
 import android.app.Service;
 import android.content.Intent;
 import android.location.Location;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -36,6 +37,8 @@ public class LocationTracker extends Service implements LocationListener,
     Location location;
     MyActivity context;
     String lastUpdateTime;
+
+    private final IBinder mBinder = new LocalBinder();
 
     public LocationTracker(MyActivity context){
         this.context = context;
@@ -151,7 +154,7 @@ public class LocationTracker extends Service implements LocationListener,
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return mBinder;
     }
 
     @Override
@@ -173,4 +176,12 @@ public class LocationTracker extends Service implements LocationListener,
 
         super.onDestroy();
     }
+
+    public class LocalBinder extends Binder {
+        public LocationTracker getService() {
+            // Return this instance of LocalService so clients can call public methods
+            return LocationTracker.this;
+        }
+    }
+
 }
