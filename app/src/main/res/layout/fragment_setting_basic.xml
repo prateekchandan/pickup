@@ -2,79 +2,154 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_weight="1">
-
-    <TextView android:text="Name:" android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/profile_name"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/profile_name"
-        android:layout_alignBottom="@+id/profile_name"
-        style="@style/Label" />
-    <EditText
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/profile_name"
-        android:inputType="textPersonName"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp" />
-    <TextView android:text="Email:" android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/profile_email"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/textView"
-        android:layout_alignBottom="@+id/profile_email"
-        android:layout_alignTop="@+id/profile_email"
-        style="@style/Label" />
-    <EditText
+    <TextView android:text="Enter your Personal Info"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/profile_email"
-        android:inputType="textEmailAddress"
-        android:layout_alignLeft="@+id/profile_gender"
-        android:layout_alignStart="@+id/profile_gender"
-        android:layout_below="@+id/profile_name"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp" />
-    <TextView android:text="Gender:" android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/profile_gender"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/profile_gender"
-        android:layout_alignBottom="@+id/profile_gender"
-        style="@style/Label"/>
-    <EditText
+        android:paddingTop="50dp"
+        android:paddingBottom="20dp"
+        android:gravity="center"
+        android:id="@+id/personal_info"
+        android:layout_alignParentTop="true"
+        android:textSize="25sp"
+        style="@style/Button"
+        />
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/profile_gender"
-        android:layout_below="@+id/profile_email"
-        android:layout_alignLeft="@+id/profile_name"
-        android:layout_alignStart="@+id/profile_name"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp" />
-        <TextView android:text="Age:" android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/profile_age"
-            android:layout_toLeftOf="@+id/profile_age"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignTop="@+id/profile_age"
-            style="@style/Label"/>
-        <EditText
+        android:padding="20dp"
+        android:layout_below="@+id/personal_info"
+        >
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/profile_age"
-            android:inputType="number"
-            android:layout_below="@+id/profile_gender"
-            android:layout_alignLeft="@+id/profile_email"
-            android:layout_alignStart="@+id/profile_email"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp" />
+            android:orientation="vertical">
+            <!--
+   <TextView android:text="Name:" android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_toLeftOf="@+id/profile_name"
+       android:layout_alignParentTop="true"
+       android:layout_alignParentLeft="true"
+       android:layout_alignParentStart="true"
+       android:layout_alignTop="@+id/profile_name"
+       android:layout_alignBottom="@+id/profile_name"
 
+       style="@style/Label" />-->
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_name"
+                android:inputType="textPersonName"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:hint="Name"/>
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_age"
+                android:inputType="number"
+                android:layout_below="@+id/profile_name"
+                android:layout_alignLeft="@+id/profile_email"
+                android:layout_alignStart="@+id/profile_email"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:hint="Age"
+                />
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_gender"
+                android:layout_below="@+id/profile_age"
+                android:layout_alignLeft="@+id/profile_name"
+                android:layout_alignStart="@+id/profile_name"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:hint="Gender"/>
+            <!--<TextView android:text="Email:" android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/profile_email"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/textView"
+                android:layout_alignBottom="@+id/profile_email"
+                android:layout_alignTop="@+id/profile_email"
+                style="@style/Label" />-->
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_email"
+                android:inputType="textEmailAddress"
+                android:layout_alignLeft="@+id/profile_gender"
+                android:layout_alignStart="@+id/profile_gender"
+                android:layout_below="@+id/profile_gender"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:hint="Email"/>
+            <!--<TextView android:text="Gender:" android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/profile_gender"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/profile_gender"
+                android:layout_alignBottom="@+id/profile_gender"
+                style="@style/Label"/>-->
+
+            <!--<TextView android:text="Age:" android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/profile_age"
+                android:layout_toLeftOf="@+id/profile_age"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/profile_age"
+                style="@style/Label"/>-->
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_number"
+                android:inputType="phone"
+                android:layout_below="@+id/profile_email"
+                android:layout_alignLeft="@+id/profile_email"
+                android:layout_alignStart="@+id/profile_email"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:hint="Phone"
+                />
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_company"
+                android:inputType="text"
+                android:layout_below="@+id/profile_number"
+                android:layout_alignLeft="@+id/profile_email"
+                android:layout_alignStart="@+id/profile_email"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:hint="Company"
+                />
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_company_email"
+                android:inputType="text"
+                android:layout_below="@+id/profile_company"
+                android:layout_alignLeft="@+id/profile_email"
+                android:layout_alignStart="@+id/profile_email"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:hint="Company Email"
+                />
+        </LinearLayout>
+
+
+
+    </ScrollView>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        style="@style/Button"
+        android:onClick="cancel"
+        android:text="CONTINUE"/>
 </RelativeLayout>
