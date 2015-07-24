@@ -251,6 +251,6 @@ public class LoginActivity extends MyActivity {
             Intent i  = new Intent(this, MainActivity.class);
             startActivity(i);
         }
-        finish();+
+        finish();
     }
 }
