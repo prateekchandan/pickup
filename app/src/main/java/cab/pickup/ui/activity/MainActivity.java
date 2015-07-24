@@ -327,20 +327,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         }
     }
 
-    public void proceed(View v){
-        if(page==PAGE_MAIN){
-            findViewById(R.id.location_select).setVisibility(View.GONE);
-            findViewById(R.id.time_select).setVisibility(View.GONE);
-
-            findViewById(R.id.order_summary).setVisibility(View.VISIBLE);
-
-            page=PAGE_SUMMARY;
-        }
-
-        Intent i = new Intent(this, RideActivity.class);
-        startActivity(i);
-    }
-
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         start = field_start.getAddress();
@@ -383,7 +369,23 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     }
 
     public void confirm(View v){
+        GetTask confirmTask = new GetTask(this){
+            @Override
+            public void onPostExecute(Result res) {
+                super.onPostExecute(res);
+                if(res.statusCode==200){
+                    int groupId = res.data.optInt("group_id");
 
+                    Intent i = new Intent(MainActivity.this,RideActivity.class);
+                    i.putExtra("group_id",groupId);
+
+                    startActivity(i);
+                    finish();
+                }
+            }
+        };
+
+        confirmTask.execute(getUrl("/confirm/"+journey.id+"?key="+getKey()));
     }
 
     public void edit(View v){
