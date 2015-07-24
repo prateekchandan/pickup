@@ -2,17 +2,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_weight="1">
-    <TextView android:text="Enter your Personal Info"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="50dp"
-        android:paddingBottom="20dp"
-        android:gravity="center"
-        android:id="@+id/personal_info"
-        android:layout_alignParentTop="true"
-        android:textSize="25sp"
-        style="@style/Button"
-        />
+
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -145,11 +135,11 @@
 
 
     </ScrollView>
-    <Button
+    <!--Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         style="@style/Button"
         android:onClick="cancel"
-        android:text="CONTINUE"/>
+        android:text="CONTINUE"/-->
 </RelativeLayout>
