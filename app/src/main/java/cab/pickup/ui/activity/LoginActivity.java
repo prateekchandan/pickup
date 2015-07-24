@@ -1,7 +1,11 @@
 package cab.pickup.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -59,7 +63,14 @@ public class LoginActivity extends MyActivity {
         }
 
         ((LoginButton)findViewById(R.id.fb_login)).setReadPermissions("email");
+        Log.d("loginhere", "yoman!!");
+    }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+        checkGPS();
+        Log.d("loginhere","yoman212112113!!");
     }
 
     @Override
@@ -68,12 +79,14 @@ public class LoginActivity extends MyActivity {
                 resultCode, data);
 
         if(!prefs.contains("user_json")) {
+            findViewById(R.id.fb_login).setVisibility(View.GONE);
+            ((TextView)findViewById(R.id.login_message_text)).setText("Loading...");
             getBiodata();
         } else {
             addUser();
         }
 
-        super.onActivityResult(requestCode,resultCode,data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void getBiodata(){
@@ -85,12 +98,12 @@ public class LoginActivity extends MyActivity {
                 i.putExtra(getString(R.string.profile_tag_name), graphUser.getName());
                 i.putExtra(getString(R.string.profile_tag_fbid), graphUser.getId());
 
-                me.fbid=graphUser.getId();
+                me.fbid = graphUser.getId();
 
                 Log.i(TAG, "fbid : " + graphUser.getId());
 
                 i.putExtra(getString(R.string.profile_tag_email), (String) graphUser.getProperty(getString(R.string.profile_tag_email)));
-                i.putExtra(getString(R.string.profile_tag_gender), (String)graphUser.getProperty(getString(R.string.profile_tag_gender)));
+                i.putExtra(getString(R.string.profile_tag_gender), (String) graphUser.getProperty(getString(R.string.profile_tag_gender)));
                 startActivityForResult(i, 1);
             }
         });
@@ -116,13 +129,30 @@ public class LoginActivity extends MyActivity {
         SharedPreferences.Editor spe = prefs.edit();
 
         me.id=user_id;
-        spe.putString("user_json",me.getJson());
+        spe.putString("user_json", me.getJson());
         spe.putString("gcm_id", gcm_id);
         spe.putInt("app_version", getAppVersion());
 
         spe.commit();
     }
 
+    public void checkGPS(){
+        Context context = this;
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        if( !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle(R.string.gps_not_found_title);  // GPS not found
+            builder.setMessage(R.string.gps_not_found_message); // Want to enable?
+            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                }
+            });
+            builder.setNegativeButton(R.string.no, null);
+            builder.create().show();
+            return;
+        }
+    }
     class AddUserTask extends PostTask {
         private static final String TAG = "AddUserTask";
 

@@ -28,4 +28,12 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:textSize">20sp</item>
     </style>
+
+    <style name="FacebookLoginButton">
+        <item name="android:background">@color/theme_color</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:text">Login Using Facebook</item>
+    </style>
 </resources>

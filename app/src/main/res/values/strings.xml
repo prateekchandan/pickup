@@ -36,4 +36,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_order_summary">OrderSummaryActivity</string>
 
+    <!-- Other Strings used in App -->
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="gps_not_found_message">Do you want to enable Location Services</string>
+    <string name="gps_not_found_title">GPS Disabled</string>
+
 </resources>
