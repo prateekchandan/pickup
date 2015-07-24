@@ -12,26 +12,92 @@
     >
 
 
-    <fragment
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="false"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="5dp"
-        />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/theme_color">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/circle"/>
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"/>
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/balloon"/>
 
-    <Button
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:text="^"
-        android:onClick="onClick"
-        android:background="#55444444"
-        android:layout_alignBottom="@+id/map"
-        android:layout_centerHorizontal="true"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="15"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/pickup_location"
+                        android:background="@color/theme_color"
+                        android:textAllCaps="false"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="10dp"
+                        android:gravity="start|center_vertical"
+                        android:textColor="@color/text_color_light"
 
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/text_color_light"/>
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/drop_location"
+                        android:textAllCaps="false"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="10dp"
+                        android:gravity="start|center_vertical"
+                        android:background="@color/theme_color"
+                        android:textColor="@color/text_color_light"/>
+                </LinearLayout>
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="38dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/exchange"/>
+            </LinearLayout>
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="20dp"
+                />
+        </LinearLayout>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ride_now"
+            android:background="@color/theme_color"
+            android:textColor="@color/text_color_light"
+            android:textSize="16sp"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
     <!--RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -188,7 +254,7 @@
         </RelativeLayout>
     </RelativeLayout-->
 
-    </RelativeLayout>
+
 
     <ListView
         android:id="@+id/navList"

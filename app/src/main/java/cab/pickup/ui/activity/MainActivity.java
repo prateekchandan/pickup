@@ -170,7 +170,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
     @Override
     public void onDestroy(){
-        unregisterReceiver(mUpdateReceiver);
+//        unregisterReceiver(mUpdateReceiver);
 
         super.onDestroy();
     }
