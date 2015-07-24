@@ -40,7 +40,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="gps_not_found_message">Do you want to enable Location Services</string>
-    <string name="gps_not_found_title">GPS Disabled</string>
+    <string name="gps_not_found_title">Location Services Disabled</string>
 
     <string name="edit_page_title">Enter your Personal Info</string>
 
