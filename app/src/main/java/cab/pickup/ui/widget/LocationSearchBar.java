@@ -166,21 +166,11 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
             });
 
             findViewById(R.id.location_search_dialog_myloc).setOnClickListener(this);
-            findViewById(R.id.location_search_dialog_home).setOnClickListener(this);
-            findViewById(R.id.location_search_dialog_office).setOnClickListener(this);
 
             if(myLocationEnabled) {
                 findViewById(R.id.location_search_dialog_myloc).setVisibility(View.VISIBLE);
             } else {
                 findViewById(R.id.location_search_dialog_myloc).setVisibility(View.GONE);
-            }
-
-            if(homeOfficeEnabled){
-                findViewById(R.id.location_search_dialog_home).setVisibility(View.VISIBLE);
-                findViewById(R.id.location_search_dialog_office).setVisibility(View.VISIBLE);
-            } else {
-                findViewById(R.id.location_search_dialog_home).setVisibility(View.GONE);
-                findViewById(R.id.location_search_dialog_office).setVisibility(View.GONE);
             }
 
 
