@@ -177,7 +177,7 @@ public class Journey {
 
             nameValuePairs.add(new BasicNameValuePair("start_text",start.longDescription));
             nameValuePairs.add(new BasicNameValuePair("end_text",end.longDescription));
-
+            Log.d("post_Data",nameValuePairs.toString());
             return nameValuePairs;
         }
 

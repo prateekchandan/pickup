@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -290,8 +291,13 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
                         map.moveCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
                         displayPath();
-
-                        findViewById(R.id.time_picker_card).setVisibility(View.VISIBLE);
+                        bar.getAddress().setLatLong(loc.getDouble("lat"), loc.getDouble("lng"));
+                        try {
+                             LatLng start = markers.get(R.id.field_start).getPosition();
+                             LatLng end = markers.get(R.id.field_end).getPosition();
+                            findViewById(R.id.time_picker_card).setVisibility(View.VISIBLE);
+                        }
+                        catch (Exception E){E.printStackTrace();}
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -356,6 +362,11 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     }
 */
     public void selectTime(View v) {
+
+        if(!((CompoundButton)v).isChecked()){
+            ((CompoundButton)v).setChecked(true);
+        }
+
         v.setSelected(true);
         start = field_start.getAddress();
         end = field_end.getAddress();
@@ -380,6 +391,8 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
         Log.d(TAG, me.getJson());
 
+        if(journey==null)
+            journey = new Journey();
         journey.user_id=me.id;
         journey.start=start;
         journey.end=end;
@@ -390,6 +403,13 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         Log.d(TAG, "Journey time : " +journey.datetime);
 
         journey.addToServer(this, this);
+    }
+
+    public void switchTabs(View v){
+        ((ToggleButton)findViewById(R.id.tab_fares)).setChecked(false);
+        ((ToggleButton)findViewById(R.id.tab_mates)).setChecked(false);
+
+        ((ToggleButton)v).setChecked(true);
     }
 
     @Override

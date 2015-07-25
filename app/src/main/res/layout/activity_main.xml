@@ -98,11 +98,12 @@
             android:textSize="16sp"
             android:layout_alignParentBottom="true"
             android:id="@+id/button_confirm"
-            android:visibility="gone" />
+            android:visibility="visible" />
         <android.support.v7.widget.CardView
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/button_material_light"
             card_view:cardElevation="10dp"
             android:id="@+id/time_picker_card"
             android:layout_above="@+id/fare_and_mates_card"
@@ -133,7 +134,8 @@
                     android:background="@drawable/radio_button"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:text="30 mins"
+                    android:textOff="30 mins"
+                    android:textOn="30 mins"
                     android:layout_below="@+id/time_horizontal_div"
                     android:id="@+id/time_30"
                     android:onClick="selectTime"/>
@@ -149,7 +151,8 @@
                     android:background="@drawable/radio_button"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:text="60 mins"
+                    android:textOff="60 mins"
+                    android:textOn="60 mins"
                     android:layout_toRightOf="@+id/time_vertical_div"
                     android:id="@+id/time_60"
                     android:layout_alignTop="@+id/time_30"
@@ -165,7 +168,8 @@
             android:id="@+id/fare_and_mates_card"
             android:layout_above="@+id/button_confirm"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="20dp"
+            android:visibility="visible">
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">

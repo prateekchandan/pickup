@@ -34,4 +34,9 @@ public class Location {
         shortDescription=shDes;
         longDescription=shDes;
     }
+
+    public void setLatLong(double lat,double lng){
+        latitude = lat;
+        longitude = lng;
+    }
 }
