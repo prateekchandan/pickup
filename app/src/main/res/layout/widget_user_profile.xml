@@ -5,13 +5,12 @@
     android:onClick="selectUser">
 
     <com.facebook.widget.ProfilePictureView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
         android:id="@+id/user_profile_img"
         android:layout_alignParentLeft="true"
-        android:layout_marginRight="10dp"
         android:layout_alignParentTop="true" />
 
     <TextView
