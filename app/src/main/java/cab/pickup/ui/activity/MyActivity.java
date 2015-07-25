@@ -49,6 +49,12 @@ public class MyActivity extends ActionBarActivity implements ServiceConnection{
         Log.d("MyActivity", me.id==null?"user_id null":me.id);
     }
 
+    @Override
+    public void onDestroy(){
+        unbindService(this);
+        super.onDestroy();
+    }
+
     public int getAppVersion(){
         return IOUtil.getAppVersion(getApplicationContext());
     }

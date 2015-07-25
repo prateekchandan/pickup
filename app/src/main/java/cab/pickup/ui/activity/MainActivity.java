@@ -171,7 +171,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     @Override
     public void onDestroy(){
         unregisterReceiver(mUpdateReceiver);
-
         super.onDestroy();
     }
 
@@ -239,8 +238,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
     @Override
     public void onStop() {
-        unbindService(this);
-
         if(journey.id!=null) prefs.edit().putString("journey", journey.toString()).apply();
         super.onStop();
     }
@@ -334,7 +331,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                     + end.latitude + "," + end.longitude;
             new MapDirectionsTask().execute(url);
         } catch (NullPointerException E){
-            Log.d("PathDisplay",E.getLocalizedMessage());
+            E.printStackTrace();
         }
     }
 

@@ -1,37 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Home"
-        style="@style/Button"
-        android:id="@+id/location_search_dialog_home" />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Office"
-        style="@style/Button"
-        android:id="@+id/location_search_dialog_office" />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="My Location"
-        style="@style/Button"
-        android:id="@+id/location_search_dialog_myloc" />
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/location_search_dialog_myloc"
+        android:src="@drawable/balloon"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:layout_alignParentRight="true" />
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/location_search_dialog_edittext"
         android:hint="Enter other location"
-        android:textColor="@color/text_color_dark"/>
+        android:textColor="@color/text_color_dark"
+        android:layout_toLeftOf="@+id/location_search_dialog_myloc"
+        android:layout_alignBottom="@+id/location_search_dialog_myloc"
+        android:layout_alignParentTop="true" />
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:id="@+id/location_search_dialog_list"/>
-</LinearLayout>
+        android:id="@+id/location_search_dialog_list"
+        android:layout_below="@+id/location_search_dialog_edittext" />
+</RelativeLayout>
