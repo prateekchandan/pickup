@@ -49,4 +49,5 @@
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:textColor">@color/text_color_light</item>
     </style>
+
 </resources>

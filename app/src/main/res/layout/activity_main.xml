@@ -1,5 +1,6 @@
 <android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
@@ -86,9 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/map"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
-                android:layout_marginBottom="20dp"
-                />
+                android:name="com.google.android.gms.maps.SupportMapFragment" />
         </LinearLayout>
         <Button
             android:layout_width="match_parent"
@@ -97,8 +96,98 @@
             android:background="@color/theme_color"
             android:textColor="@color/text_color_light"
             android:textSize="16sp"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true"
+            android:id="@+id/button_confirm"
+            android:visibility="gone" />
+        <android.support.v7.widget.CardView
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            card_view:cardElevation="10dp"
+            android:id="@+id/time_picker_card"
+            android:layout_above="@+id/fare_and_mates_card"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:visibility="gone">
 
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    style="@style/Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="I want a cab in"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/time_label"/>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="2dp"
+                    android:background="#444444"
+                    android:layout_alignRight="@+id/time_60"
+                    android:id="@+id/time_horizontal_div"
+                    android:layout_below="@+id/time_label"/>
+
+                <ToggleButton
+                    android:background="@drawable/radio_button"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="30 mins"
+                    android:layout_below="@+id/time_horizontal_div"
+                    android:id="@+id/time_30"
+                    android:onClick="selectTime"/>
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="wrap_content"
+                    android:background="#444444"
+                    android:layout_alignTop="@+id/time_30"
+                    android:layout_alignBottom="@+id/time_30"
+                    android:layout_toRightOf="@+id/time_30"
+                    android:id="@+id/time_vertical_div"/>
+                <ToggleButton
+                    android:background="@drawable/radio_button"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="60 mins"
+                    android:layout_toRightOf="@+id/time_vertical_div"
+                    android:id="@+id/time_60"
+                    android:layout_alignTop="@+id/time_30"
+                    android:onClick="selectTime" />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            card_view:cardElevation="10dp"
+            android:id="@+id/fare_and_mates_card"
+            android:layout_above="@+id/button_confirm"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ToggleButton
+                    android:background="@drawable/tab_button"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="Fare"
+                    android:id="@+id/tab_fares"
+                    android:onClick="switchTabs"
+                    android:checked="true"/>
+                <ToggleButton
+                    android:background="@drawable/tab_button"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="Mates"
+                    android:layout_toRightOf="@+id/tab_fares"
+                    android:id="@+id/tab_mates"
+                    android:onClick="switchTabs" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
     </RelativeLayout>
     <!--RelativeLayout
         android:layout_width="fill_parent"
@@ -264,5 +353,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="left|start"
         android:background="#ffeeeeee"/>
+
+
 
 </android.support.v4.widget.DrawerLayout>

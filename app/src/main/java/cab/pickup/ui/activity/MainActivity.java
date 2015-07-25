@@ -1,5 +1,6 @@
 package cab.pickup.ui.activity;
 
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -20,6 +21,7 @@ import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -53,7 +55,6 @@ import cab.pickup.ui.widget.UserListAdapter;
 import cab.pickup.util.IOUtil;
 
 public class MainActivity extends MapsActivity implements   LocationSearchBar.OnAddressSelectedListener,
-                                                            RadioGroup.OnCheckedChangeListener,
                                                             OnTaskCompletedListener {
     HashMap<Integer, Marker> markers = new HashMap<>();
 
@@ -92,7 +93,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         mActivityTitle = getTitle().toString();
 
         setupDrawer();
-        setUpMapIfNeeded();
 
         field_start = ((LocationSearchBar)findViewById(R.id.field_start));
         field_end = ((LocationSearchBar)findViewById(R.id.field_end));
@@ -100,10 +100,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         field_start.setOnAddressSelectedListener(this);
         field_end.setOnAddressSelectedListener(this);
 
-        /*timeOption = ((RadioGroup)findViewById(R.id.option_time));
-        timeOption.setOnCheckedChangeListener(this);
-
-        user_list_view=(ListView)findViewById(R.id.summary_list_user);
+        /*user_list_view=(ListView)findViewById(R.id.summary_list_user);
         user_adapter=new UserListAdapter(this);
         user_list_view.setAdapter(user_adapter);
 */
@@ -293,6 +290,8 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
                         map.moveCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
                         displayPath();
+
+                        findViewById(R.id.time_picker_card).setVisibility(View.VISIBLE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -356,9 +355,9 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         }
     }
 */
-    @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-      /*  start = field_start.getAddress();
+    public void selectTime(View v) {
+        v.setSelected(true);
+        start = field_start.getAddress();
         end = field_end.getAddress();
 
         if (start == null || end == null) {
@@ -368,10 +367,13 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
         Date now = new Date();
 
-        if(checkedId == R.id.time_30)
-            now=new Date(now.getTime()+30*60*1000);
-        else if(checkedId == R.id.time_60)
-            now=new Date(now.getTime()+60*60*1000);
+        if(v.getId() == R.id.time_30) {
+            now = new Date(now.getTime() + 30 * 60 * 1000);
+            ((ToggleButton)findViewById(R.id.time_60)).setChecked(false);
+        } else if(v.getId() == R.id.time_60) {
+            now = new Date(now.getTime() + 60 * 60 * 1000);
+            ((ToggleButton)findViewById(R.id.time_30)).setChecked(false);
+        }
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -387,13 +389,14 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
         Log.d(TAG, "Journey time : " +journey.datetime);
 
-        journey.addToServer(this, this);*/
+        journey.addToServer(this, this);
     }
 
     @Override
     public void onTaskCompleted(Result res) {
         if(res.statusCode == 200) {
-          /*  loadPage(PAGE_SUMMARY);*/
+            findViewById(R.id.fare_and_mates_card).setVisibility(View.VISIBLE);
+            findViewById(R.id.button_confirm).setVisibility(View.VISIBLE);
         }
     }
 /*
