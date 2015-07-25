@@ -55,7 +55,7 @@ import cab.pickup.util.IOUtil;
 public class MainActivity extends MapsActivity implements   LocationSearchBar.OnAddressSelectedListener,
                                                             RadioGroup.OnCheckedChangeListener,
                                                             OnTaskCompletedListener {
-    HashMap<Integer, Marker> markers = new HashMap<Integer, Marker>();
+    HashMap<Integer, Marker> markers = new HashMap<>();
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
@@ -94,19 +94,19 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         setupDrawer();
         setUpMapIfNeeded();
 
-        /*field_start = ((LocationSearchBar)findViewById(R.id.field_start));
+        field_start = ((LocationSearchBar)findViewById(R.id.field_start));
         field_end = ((LocationSearchBar)findViewById(R.id.field_end));
 
         field_start.setOnAddressSelectedListener(this);
         field_end.setOnAddressSelectedListener(this);
 
-        timeOption = ((RadioGroup)findViewById(R.id.option_time));
+        /*timeOption = ((RadioGroup)findViewById(R.id.option_time));
         timeOption.setOnCheckedChangeListener(this);
 
         user_list_view=(ListView)findViewById(R.id.summary_list_user);
         user_adapter=new UserListAdapter(this);
         user_list_view.setAdapter(user_adapter);
-
+*/
         mUpdateReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -124,13 +124,13 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                 } else if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG)){
                     Toast.makeText(MainActivity.this, "Driver added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
 
-                    ((TextView)findViewById(R.id.summary_driver)).setText(intent.getStringExtra("id"));
+                    //((TextView)findViewById(R.id.summary_driver)).setText(intent.getStringExtra("id"));
                 }
             }
         };
 
         registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG));
-        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG));*/
+        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG));
 
     }
 
@@ -170,7 +170,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
     @Override
     public void onDestroy(){
-//        unregisterReceiver(mUpdateReceiver);
+        unregisterReceiver(mUpdateReceiver);
 
         super.onDestroy();
     }
@@ -210,9 +210,9 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     @Override
     public void onStart() {
         super.onStart();
-        //if(tracker!=null)
-        //    tracker.connect();
-        /*
+        if(tracker!=null)
+            tracker.connect();
+
         if(prefs.contains("journey")){
             try {
                 JSONObject journey_data = new JSONObject(prefs.getString("journey", ""));
@@ -221,10 +221,10 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                 field_start.setAddress(journey.start);
                 field_end.setAddress(journey.end);
 
-                if(journey.del_time.equals("30"))
+                /*if(journey.del_time.equals("30"))
                     timeOption.check(R.id.time_30);
                 else
-                    timeOption.check(R.id.time_60);
+                    timeOption.check(R.id.time_60);*/
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -234,19 +234,18 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             journey = new Journey();
         }
 
-        loadPage(page);*/
+        //loadPage(page);
     }
 
     @Override
     public void onStop() {
-        //tracker.stopLocationUpdates();
-        //tracker.disconnect();
+        unbindService(this);
 
-        /*if(journey.id!=null) prefs.edit().putString("journey", journey.toString()).apply();*/
+        if(journey.id!=null) prefs.edit().putString("journey", journey.toString()).apply();
         super.onStop();
     }
 
-   /*
+
     private void setJourney(String journey_json) throws JSONException{
         journey = new Journey(new JSONObject(journey_json));
 
@@ -255,7 +254,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
         displayPath();
     }
-*/
+
     @Override
     public void onAddressSelected(final LocationSearchBar bar, Location address){
         if(address == null) return;
@@ -296,6 +295,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                         }
 
                         map.moveCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
+                        displayPath();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -318,12 +318,11 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             }
 
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
+            displayPath();
         }
-
-        /*displayPath();*/
     }
 
-/*
+
 
     private void displayPath() {
         try {
@@ -334,12 +333,12 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                     + start.latitude + "," + start.longitude + "&destination="
                     + end.latitude + "," + end.longitude;
             new MapDirectionsTask().execute(url);
-        } catch (NullPointerException e){
-            return;
+        } catch (NullPointerException E){
+            Log.d("PathDisplay",E.getLocalizedMessage());
         }
     }
 
-    public void loadPage(int page){
+/*    public void loadPage(int page){
         if(page==PAGE_MAIN){
             findViewById(R.id.location_select).setVisibility(View.VISIBLE);
             findViewById(R.id.time_select).setVisibility(View.VISIBLE);
