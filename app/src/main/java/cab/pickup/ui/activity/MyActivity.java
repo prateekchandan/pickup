@@ -44,7 +44,7 @@ public class MyActivity extends ActionBarActivity implements ServiceConnection{
         me.device_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
         Intent i = new Intent(this, LocationTracker.class);
-        //bindService(i,this,BIND_AUTO_CREATE);
+        bindService(i,this,BIND_AUTO_CREATE);
 
         Log.d("MyActivity", me.id==null?"user_id null":me.id);
     }

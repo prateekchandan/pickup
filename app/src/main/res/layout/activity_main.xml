@@ -76,8 +76,8 @@
                         android:textColorHint="@color/text_color_light"/>
                 </LinearLayout>
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="38dp"
+                    android:layout_width="24dp"
+                    android:layout_height="30dp"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/exchange"/>

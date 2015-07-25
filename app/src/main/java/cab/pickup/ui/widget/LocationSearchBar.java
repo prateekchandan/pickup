@@ -134,11 +134,6 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
         EditText searchField;
         ListView list;
 
-        LatLng upperRight = new LatLng(19.289449, 73.174745); // Temporary jugaad... TODO change to user specific location
-        LatLng lowerLeft = new LatLng(18.913122, 72.756578);
-
-        LatLngBounds mumbaiBounds = new LatLngBounds(lowerLeft,upperRight);
-
         boolean running, doAgain;
 
         PlacesAdapter adapter;
