@@ -45,32 +45,35 @@
                     android:layout_weight="15"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-                    <Button
+                    <cab.pickup.ui.widget.LocationSearchBar
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/pickup_location"
+                        android:id="@+id/field_start"
                         android:background="@color/theme_color"
-                        android:textAllCaps="false"
-                        android:paddingRight="10dp"
-                        android:paddingLeft="10dp"
+                        android:hint="@string/pickup_location"
+                        android:padding="12dp"
+                        android:textSize="14sp"
+                        android:singleLine="true"
                         android:gravity="start|center_vertical"
                         android:textColor="@color/text_color_light"
+                        android:textColorHint="@color/text_color_light"/>
 
-                        />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1px"
                         android:background="@color/text_color_light"/>
-                    <Button
+                    <cab.pickup.ui.widget.LocationSearchBar
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/drop_location"
-                        android:textAllCaps="false"
-                        android:paddingRight="10dp"
-                        android:paddingLeft="10dp"
-                        android:gravity="start|center_vertical"
+                        android:id="@+id/field_end"
                         android:background="@color/theme_color"
-                        android:textColor="@color/text_color_light"/>
+                        android:hint="@string/drop_location"
+                        android:padding="12dp"
+                        android:textSize="14sp"
+                        android:singleLine="true"
+                        android:gravity="start|center_vertical"
+                        android:textColor="@color/text_color_light"
+                        android:textColorHint="@color/text_color_light"/>
                 </LinearLayout>
                 <ImageView
                     android:layout_width="30dp"
@@ -84,7 +87,6 @@
                 android:layout_height="match_parent"
                 android:id="@+id/map"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
-                android:layout_marginTop="5dp"
                 android:layout_marginBottom="20dp"
                 />
         </LinearLayout>

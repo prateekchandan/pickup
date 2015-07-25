@@ -191,10 +191,12 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            Intent i = new Intent();
-            i.setClass(this, SettingsActivity.class);
-            startActivity(i);
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
 
+        if(id== R.id.action_profile){
+            startActivity(new Intent(this,ProfileActivity.class));
             return true;
         }
 
