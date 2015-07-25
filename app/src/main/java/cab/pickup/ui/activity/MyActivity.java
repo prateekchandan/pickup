@@ -32,7 +32,6 @@ public class MyActivity extends ActionBarActivity implements ServiceConnection{
         super.onCreate(icicle);
 
         prefs=getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
-
         try {
             me=new User(new JSONObject(prefs.getString("user_json","")), false);
             Log.d("MyAct", me.getJson());
@@ -40,13 +39,22 @@ public class MyActivity extends ActionBarActivity implements ServiceConnection{
             e.printStackTrace();
             me=new User();
         }
-
         me.device_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-
         Intent i = new Intent(this, LocationTracker.class);
         bindService(i,this,BIND_AUTO_CREATE);
 
-        Log.d("MyActivity", me.id==null?"user_id null":me.id);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        try {
+            me=new User(new JSONObject(prefs.getString("user_json","")), false);
+            Log.d("MyAct", me.getJson());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            me=new User();
+        }
     }
 
     @Override

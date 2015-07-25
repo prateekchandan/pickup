@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -68,6 +69,22 @@ public class SettingsActivity extends MyActivity {
             if (getEditText(id).equals("")) {
                 ((EditText)findViewById(id)).setError(emptyErrorMsg);
                 check = false;
+            }
+        }
+        if(check){
+            if(!Patterns.EMAIL_ADDRESS.matcher(((EditText)findViewById(R.id.profile_email)).getText()).matches()){
+                ((EditText)findViewById(R.id.profile_email)).setError("Invalid email");
+                check= false;
+            }
+            if(!Patterns.EMAIL_ADDRESS.matcher(((EditText)findViewById(R.id.profile_company_email)).getText()).matches()){
+                ((EditText)findViewById(R.id.profile_company_email)).setError("Invalid email");
+                check= false;
+            }
+            String phone = ((EditText)findViewById(R.id.profile_number)).getText().toString();
+            String phoneregex = "^[7-9][0-9]{9}$";
+            if(!phone.matches(phoneregex)){
+                ((EditText)findViewById(R.id.profile_number)).setError("Please type 10 digit phone number");
+                check= false;
             }
         }
 

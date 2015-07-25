@@ -20,15 +20,15 @@
 
     <!-- profile tags -->
 
-    <string name="profile_tag_name">name</string>
-    <string name="profile_tag_company">company</string>
-    <string name="profile_tag_number">number</string>
-    <string name="profile_tag_age">age</string>
-    <string name="profile_tag_gender">gender</string>
-    <string name="profile_tag_home">home</string>
-    <string name="profile_tag_office">office</string>
+    <string name="profile_tag_name">Name</string>
+    <string name="profile_tag_company">Company</string>
+    <string name="profile_tag_number">Number</string>
+    <string name="profile_tag_age">Age</string>
+    <string name="profile_tag_gender">Gender</string>
+    <string name="profile_tag_home">Home</string>
+    <string name="profile_tag_office">Office</string>
     <string name="profile_tag_fbid">fbid</string>
-    <string name="profile_tag_email">email</string>
+    <string name="profile_tag_email">Email</string>
     <string name="title_activity_book">Book A Ride</string>
     <string name="title_activity_journey">JourneyActivity</string>
     <string name="title_activity_ride">Ride Page</string>

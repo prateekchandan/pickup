@@ -44,7 +44,10 @@ public class LoginActivity extends MyActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+        try{
+            getSupportActionBar().hide();
+        }
+        catch (NullPointerException E){E.printStackTrace();}
         setContentView(R.layout.activity_login);
 
         Session session = Session.getActiveSession();
