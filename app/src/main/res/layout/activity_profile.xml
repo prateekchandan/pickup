@@ -7,20 +7,41 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/viewA"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.6"
             android:orientation="horizontal">
-         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/kalpesh"
-            android:id="@+id/profile_picture"
-            />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                 android:background="@color/theme_color_light"
+                android:id="@+id/profile_picture"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="80dp"
+                android:paddingTop="5dp"
+                android:background="@drawable/white_to_black_gradient"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_name_1"
+                    android:textSize="15sp"
+                    android:textColor="@color/text_color_light"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_age_gender"
+                    android:textSize="15sp"
+                    android:textColor="@color/text_color_light"/>
             </LinearLayout>
+            </RelativeLayout>
         <LinearLayout
             android:id="@+id/viewB"
             android:layout_width="match_parent"
@@ -41,90 +62,176 @@
                     android:orientation="vertical"
                     >
                     <android.support.v7.widget.CardView
-                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/card_view"
                         android:layout_gravity="center"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        card_view:cardCornerRadius="4dp">
+                        android:layout_height="50dp">
                         <LinearLayout
                             android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             >
-                            <ImageView
-                                android:layout_width="70dp"
-                                android:layout_height="match_parent"
 
-                                android:src="@drawable/ic_action_person"/>
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="24dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_gravity="center_vertical"
+                                android:src="@drawable/user"/>
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-
                                 android:orientation="vertical"
-                                android:weightSum="2">
+                                android:layout_gravity="center_vertical"
+                                android:gravity="center_vertical">
                                 <TextView
                                     android:layout_width="match_parent"
-                                    android:layout_height="0dp"
+                                    android:layout_height="wrap_content"
                                     android:textStyle="bold"
-                                    android:textSize="20sp"
-                                    android:layout_weight="1"
-                                    android:text="Kalpesh Krishna"/>
+                                    android:textSize="18sp"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:id="@+id/profile_name"
+                                    android:text="@string/profile_tag_name"/>
                                 <TextView
                                     android:layout_width="match_parent"
-                                    android:layout_height="0dp"
-                                    android:layout_weight="1"
-                                    android:text="Name"/>
+                                    android:layout_height="wrap_content"
+                                    android:textSize="10sp"
+                                    android:text="@string/profile_tag_name"/>
                             </LinearLayout>
 
                         </LinearLayout>
-                        <TextView
-                            android:id="@+id/info_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
                     </android.support.v7.widget.CardView>
+
                     <android.support.v7.widget.CardView
-                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/card_view2"
                         android:layout_gravity="center"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="10dp"
-                        card_view:cardCornerRadius="4dp">
-
-                        <TextView
-                            android:id="@+id/info_text2"
+                        android:layout_marginTop="15dp"
+                        android:layout_height="50dp">
+                        <LinearLayout
+                            android:orientation="horizontal"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
+                            android:layout_height="match_parent"
+                            >
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="24dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_gravity="center_vertical"
+                                android:src="@drawable/mail"/>
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:layout_gravity="center_vertical"
+                                android:gravity="center_vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textStyle="bold"
+                                    android:textSize="18sp"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:id="@+id/profile_email"
+                                    android:text="@string/profile_tag_email"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="10sp"
+                                    android:text="@string/profile_tag_email"/>
+                            </LinearLayout>
+
+                        </LinearLayout>
                     </android.support.v7.widget.CardView>
+
                     <android.support.v7.widget.CardView
-                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/card_view3"
                         android:layout_gravity="center"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="10dp"
-                        card_view:cardCornerRadius="4dp">
-
-                        <TextView
-                            android:id="@+id/info_text3"
+                        android:layout_marginTop="15dp"
+                        android:layout_height="50dp">
+                        <LinearLayout
+                            android:orientation="horizontal"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
+                            android:layout_height="match_parent"
+                            >
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="24dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_gravity="center_vertical"
+                                android:src="@drawable/phone"/>
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:layout_gravity="center_vertical"
+                                android:gravity="center_vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textStyle="bold"
+                                    android:textSize="18sp"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:id="@+id/profile_phone"
+                                    android:text="@string/profile_tag_number"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="10sp"
+                                    android:text="@string/profile_tag_number"/>
+                            </LinearLayout>
+
+                        </LinearLayout>
                     </android.support.v7.widget.CardView>
+
                     <android.support.v7.widget.CardView
-                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/card_view4"
                         android:layout_gravity="center"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="10dp"
-                        card_view:cardCornerRadius="4dp">
-
-                        <TextView
-                            android:id="@+id/info_text4"
+                        android:layout_marginTop="15dp"
+                        android:layout_height="50dp">
+                        <LinearLayout
+                            android:orientation="horizontal"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
+                            android:layout_height="match_parent"
+                            >
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="24dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_gravity="center_vertical"
+                                android:src="@drawable/phone"/>
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:layout_gravity="center_vertical"
+                                android:gravity="center_vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textStyle="bold"
+                                    android:textSize="18sp"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:id="@+id/profile_gender"
+                                    android:text="@string/profile_tag_gender"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="10sp"
+                                    android:text="@string/profile_tag_gender"/>
+                            </LinearLayout>
+
+                        </LinearLayout>
                     </android.support.v7.widget.CardView>
+
                 </LinearLayout>
             </ScrollView>
             </LinearLayout>
@@ -137,8 +244,10 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:clickable="true"
-        android:src="@drawable/abc_edit_text_material"
+        android:src="@drawable/ic_create"
         app:layout_anchor="@id/viewA"
+        android:onClick="editProfile"
+        app:backgroundTint="@color/theme_color_dark"
         app:layout_anchorGravity="bottom|right|end"/>
 
 </android.support.design.widget.CoordinatorLayout>
