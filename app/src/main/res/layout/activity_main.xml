@@ -124,7 +124,7 @@
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="2dp"
-                    android:background="#444444"
+                    android:background="#999999"
                     android:layout_alignRight="@+id/time_60"
                     android:id="@+id/time_horizontal_div"
                     android:layout_below="@+id/time_label"/>
@@ -141,7 +141,7 @@
                 <View
                     android:layout_width="2dp"
                     android:layout_height="wrap_content"
-                    android:background="#444444"
+                    android:background="#999999"
                     android:layout_alignTop="@+id/time_30"
                     android:layout_alignBottom="@+id/time_30"
                     android:layout_toRightOf="@+id/time_30"
