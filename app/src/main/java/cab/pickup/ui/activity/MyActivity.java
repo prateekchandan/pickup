@@ -89,6 +89,7 @@ public class MyActivity extends ActionBarActivity implements ServiceConnection{
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
         tracker = ((LocationTracker.LocalBinder) service).getService();
+        Log.d("tracker connected","yo");
     }
 
     @Override
