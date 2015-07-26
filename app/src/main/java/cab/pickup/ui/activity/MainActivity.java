@@ -32,6 +32,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -295,8 +296,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                         displayPath();
                         bar.getAddress().setLatLong(loc.getDouble("lat"), loc.getDouble("lng"));
                         try {
-                             LatLng start = markers.get(R.id.field_start).getPosition();
-                             LatLng end = markers.get(R.id.field_end).getPosition();
                             findViewById(R.id.time_picker_card).setVisibility(View.VISIBLE);
                         }
                         catch (Exception E){E.printStackTrace();}
@@ -418,7 +417,23 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             findViewById(R.id.fare_and_mates_card).setVisibility(View.VISIBLE);
             findViewById(R.id.button_confirm).setVisibility(View.VISIBLE);
 
+            new GetTask(this){
+                @Override
+                public void onPostExecute(Result res) {
+                    super.onPostExecute(res);
+                    if(res.statusCode==200){
+                        try {
+                            JSONArray users = res.data.getJSONObject("best_match").getJSONArray("user_ids");
 
+                            for(int i =0; i<users.length(); i++){
+                                user_adapter.add(users.getString(i));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }.execute(getUrl("/get_best_match/"+journey.id+"?key="+getKey()));
         }
     }
 /*
