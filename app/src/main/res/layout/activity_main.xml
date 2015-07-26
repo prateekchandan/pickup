@@ -104,11 +104,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/button_material_light"
-            card_view:cardElevation="10dp"
+            card_view:cardElevation="4dp"
             android:id="@+id/time_picker_card"
             android:layout_above="@+id/fare_and_mates_card"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="5dp"
             android:visibility="invisible">
 
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -164,7 +163,7 @@
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            card_view:cardElevation="10dp"
+            card_view:cardElevation="4dp"
             android:id="@+id/fare_and_mates_card"
             android:layout_above="@+id/button_confirm"
             android:layout_centerHorizontal="true"
@@ -191,6 +190,12 @@
                     android:layout_toRightOf="@+id/tab_fares"
                     android:id="@+id/tab_mates"
                     android:onClick="switchTabs" />
+
+                <ListView
+                    android:layout_width="240dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/summary_user_list"
+                    android:layout_below="@+id/tab_fares"/>
 
             </RelativeLayout>
         </android.support.v7.widget.CardView>

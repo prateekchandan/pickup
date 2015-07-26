@@ -76,6 +76,7 @@ public class LoginActivity extends MyActivity {
     @Override
     protected void onResume(){
         super.onResume();
+        checkGPS();
     }
 
     @Override
