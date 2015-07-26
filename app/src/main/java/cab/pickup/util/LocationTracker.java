@@ -128,7 +128,7 @@ public class LocationTracker extends Service implements LocationListener,
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Log.d(TAG, "Connection suspended: ");
     }
 
     @Override

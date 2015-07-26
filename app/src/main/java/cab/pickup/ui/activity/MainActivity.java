@@ -224,6 +224,8 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                     timeOption.check(R.id.time_60);*/
             } catch (JSONException e) {
                 e.printStackTrace();
+                Log.d("journeyError", e.getMessage());
+                journey = new Journey();
             }
 
             page=PAGE_SUMMARY;
@@ -289,7 +291,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                             markers.get(bar.getId()).setPosition(newPt);
                         }
 
-                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
                         displayPath();
                         bar.getAddress().setLatLong(loc.getDouble("lat"), loc.getDouble("lng"));
                         try {
@@ -319,7 +321,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                 markers.get(bar.getId()).setPosition(newPt);
             }
 
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
             displayPath();
         }
     }
@@ -391,8 +393,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
         Log.d(TAG, me.getJson());
 
-        if(journey==null)
-            journey = new Journey();
         journey.user_id=me.id;
         journey.start=start;
         journey.end=end;

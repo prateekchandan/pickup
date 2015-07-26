@@ -67,7 +67,6 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
     OnAddressSelectedListener addrListener;
 
     boolean myLocationEnabled=true, homeOfficeEnabled=true;
-    private GoogleApiClient mGoogleApiClient;
 
     public LocationSearchBar(Context context) {
         super(context);
@@ -88,11 +87,6 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
             this.context = (MyActivity) context;
             tracker = this.context.getLocationTracker();
         }
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this.context)
-                //.enableAutoManage(this.context, 0 /* clientId */, null)
-                .addApi(Places.GEO_DATA_API)
-                .build();
     }
 
     public void setOnAddressSelectedListener(OnAddressSelectedListener lstn){
@@ -199,6 +193,12 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
 
         @Override
         public void onClick(View v) {
+
+            tracker = context.getLocationTracker();
+
+            if(tracker==null)
+                return;
+
             switch(v.getId()){
                 case R.id.location_search_dialog_myloc:
                     if(tracker.getLastKnownLocation()==null){
@@ -232,7 +232,6 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
             @Override
             protected void onPreExecute(){
                 running = true;
-                mGoogleApiClient.connect();
             }
 
             @Override
@@ -261,7 +260,6 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
                     //searchTask.execute(getText().toString());
                     doAgain=false;
                 }
-                mGoogleApiClient.disconnect();
             }
         }
     }
