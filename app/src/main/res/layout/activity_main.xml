@@ -98,7 +98,7 @@
             android:textSize="16sp"
             android:layout_alignParentBottom="true"
             android:id="@+id/button_confirm"
-            android:visibility="visible" />
+            android:visibility="invisible" />
         <android.support.v7.widget.CardView
             android:layout_gravity="center"
             android:layout_width="wrap_content"
@@ -108,8 +108,8 @@
             android:id="@+id/time_picker_card"
             android:layout_above="@+id/fare_and_mates_card"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            android:visibility="gone">
+            android:layout_marginBottom="5dp"
+            android:visibility="invisible">
 
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
@@ -168,8 +168,8 @@
             android:id="@+id/fare_and_mates_card"
             android:layout_above="@+id/button_confirm"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            android:visibility="visible">
+            android:layout_marginBottom="5dp"
+            android:visibility="invisible">
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -177,7 +177,8 @@
                     android:background="@drawable/tab_button"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:text="Fare"
+                    android:textOn="Fare"
+                    android:textOff="Fare"
                     android:id="@+id/tab_fares"
                     android:onClick="switchTabs"
                     android:checked="true"/>
@@ -185,7 +186,8 @@
                     android:background="@drawable/tab_button"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:text="Mates"
+                    android:textOn="Mates"
+                    android:textOff="Mates"
                     android:layout_toRightOf="@+id/tab_fares"
                     android:id="@+id/tab_mates"
                     android:onClick="switchTabs" />
