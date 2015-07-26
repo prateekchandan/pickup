@@ -101,10 +101,10 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         field_start.setOnAddressSelectedListener(this);
         field_end.setOnAddressSelectedListener(this);
 
-        /*user_list_view=(ListView)findViewById(R.id.summary_list_user);
+        user_list_view=(ListView)findViewById(R.id.summary_user_list);
         user_adapter=new UserListAdapter(this);
         user_list_view.setAdapter(user_adapter);
-*/
+
         mUpdateReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -127,7 +127,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             }
         };
 
-        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG));
+        //registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG));
         registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG));
 
     }
@@ -417,6 +417,8 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         if(res.statusCode == 200) {
             findViewById(R.id.fare_and_mates_card).setVisibility(View.VISIBLE);
             findViewById(R.id.button_confirm).setVisibility(View.VISIBLE);
+
+
         }
     }
 /*
