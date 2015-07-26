@@ -106,6 +106,7 @@ public class SettingsActivity extends MyActivity {
             SharedPreferences.Editor spe = prefs.edit();
 
             spe.putString("user_json", me.getJson());
+            Log.d("Settings",me.getJson());
             spe.commit();
 
             setResult(RESULT_OK);

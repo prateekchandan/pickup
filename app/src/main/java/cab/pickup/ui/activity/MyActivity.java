@@ -11,6 +11,7 @@ import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,7 +40,7 @@ public class MyActivity extends ActionBarActivity implements ServiceConnection{
             e.printStackTrace();
             me=new User();
         }
-        me.device_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        me.device_id = Settings.Secure.getString(this.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
         Intent i = new Intent(this, LocationTracker.class);
         bindService(i,this,BIND_AUTO_CREATE);
 
@@ -55,6 +56,7 @@ public class MyActivity extends ActionBarActivity implements ServiceConnection{
             e.printStackTrace();
             me=new User();
         }
+        me.device_id = Settings.Secure.getString(this.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
     }
 
     @Override
