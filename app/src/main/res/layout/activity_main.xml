@@ -98,7 +98,8 @@
             android:textSize="16sp"
             android:layout_alignParentBottom="true"
             android:id="@+id/button_confirm"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            android:onClick="confirmRide"/>
         <android.support.v7.widget.CardView
             android:layout_gravity="center"
             android:layout_width="wrap_content"
@@ -192,12 +193,18 @@
                     android:id="@+id/tab_mates"
                     android:onClick="switchTabs" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Label"
+                    android:text="No Mates Found!"
+                    android:id="@+id/mates_empty_notif"/>
+
                 <ListView
                     android:layout_width="240dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/summary_user_list"
                     android:layout_below="@+id/tab_fares"/>
-
             </RelativeLayout>
         </android.support.v7.widget.CardView>
     </RelativeLayout>

@@ -145,12 +145,4 @@ public class MapsActivity extends MyActivity implements GoogleMap.OnMapLoadedCal
 
         //((TextView)findViewById(R.id.field_distance)).setText(distance);
     }
-
-    public void updatePoint(String user_id, double lat, double lng){
-        if(user_pos.containsKey(user_id)){
-            user_pos.get(user_id).setPosition(new LatLng(lat, lng));
-        } else {
-            user_pos.put(user_id, map.addMarker(new MarkerOptions().position(new LatLng(lat,lng))));
-        }
-    }
 }

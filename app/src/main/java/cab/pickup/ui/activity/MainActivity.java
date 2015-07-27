@@ -103,8 +103,11 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         field_end.setOnAddressSelectedListener(this);
 
         user_list_view=(ListView)findViewById(R.id.summary_user_list);
+        //user_list_view.setEmptyView(findViewById(R.id.mates_empty_notif));
+
         user_adapter=new UserListAdapter(this);
         user_list_view.setAdapter(user_adapter);
+
 
         mUpdateReceiver = new BroadcastReceiver() {
             @Override
@@ -449,8 +452,8 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             }.execute(getUrl("/get_best_match/"+journey.id+"?key="+getKey()));
         }
     }
-/*
-    public void confirm(View v){
+
+    public void confirmRide(View v){
         GetTask confirmTask = new GetTask(this){
             @Override
             public void onPostExecute(Result res) {
@@ -471,11 +474,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
         confirmTask.execute(getUrl("/confirm/"+journey.id+"?key="+getKey()));
 
-        Toast.makeText(this, "Confirming your Journey...",Toast.LENGTH_LONG);
+        Toast.makeText(this, "Confirming your Journey...",Toast.LENGTH_LONG).show();
 
     }
-
-    public void edit(View v){
-        loadPage(PAGE_MAIN);
-    }*/
 }
