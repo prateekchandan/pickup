@@ -1,6 +1,8 @@
 package cab.pickup.server;
 
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,6 +26,7 @@ public class Result {
         } catch (JSONException e) {
             statusCode=412;
             statusMessage="Bad reply from server!";
+            Log.e("ResultError",e.getMessage());
         }
     }
 

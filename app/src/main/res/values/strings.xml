@@ -50,6 +50,7 @@
 
     <!-- Error message -->
     <string name="empty_error">This field can\'t be empty</string>
+    <string name="map_error">Map is not setup</string>
 
     <!-- Drawere messages -->
     <string name="drawer_open">Open navigation drawer</string>

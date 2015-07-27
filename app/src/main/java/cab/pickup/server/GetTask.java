@@ -39,7 +39,7 @@ public class GetTask extends AsyncTask<String, Integer, Result> {
 
             ret = new Result(IOUtil.buildStringFromIS(response.getEntity().getContent()));
 
-            Log.d(TAG, ret.statusCode + " : " + response.getStatusLine().getReasonPhrase());
+            Log.d(TAG, ret.statusCode + " : " + url + " : "+ response.getStatusLine().getReasonPhrase());
         } catch (ClientProtocolException e) {
             Log.e(TAG, e.getMessage());
         } catch (IOException e) {
@@ -55,7 +55,8 @@ public class GetTask extends AsyncTask<String, Integer, Result> {
     public void onPostExecute(Result res){
         if(res.statusCode !=200){
             if(context!=null) Toast.makeText(context, res.statusMessage, Toast.LENGTH_LONG).show();
-            Log.e(TAG, "Error: "+res.statusMessage);
+            Log.e(TAG, "Error "+String.valueOf(res.statusCode
+            )+": "+res.statusMessage);
         } else {
             if(listener!=null){
                 Log.d(TAG, "Listener called");

@@ -48,7 +48,6 @@ public class Journey {
         del_time=journey.getString("margin_before");
         cab_preference=journey.getString("preference");
 
-        group_id=journey.getString("group_id");
     }
 
     public Journey(User user, Location start, Location end, String datetime, String del_time, String cab_preference){

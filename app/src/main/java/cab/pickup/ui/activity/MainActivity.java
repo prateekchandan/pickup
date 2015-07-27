@@ -257,6 +257,11 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     public void onAddressSelected(final LocationSearchBar bar, Location address){
         if(address == null) return;
 
+        if(map==null){
+            Toast.makeText(this,getResources().getString(R.string.map_error),Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if(!address.locUpdated){
             AsyncTask<String, Void, String> locFetch = new AsyncTask<String,Void,String>(){
                 @Override
@@ -424,11 +429,13 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                     super.onPostExecute(res);
                     if(res.statusCode==200){
                         try {
-                            JSONArray users = res.data.getJSONObject("best_match").getJSONArray("user_ids");
+                            JSONObject usersJson = res.data.getJSONObject("best_match");
+                            JSONArray users =  usersJson.getJSONArray("user_ids");
 
-                            for(int i =0; i<users.length(); i++){
+                            for (int i = 0; i < users.length(); i++) {
                                 user_adapter.add(users.getString(i));
                             }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
