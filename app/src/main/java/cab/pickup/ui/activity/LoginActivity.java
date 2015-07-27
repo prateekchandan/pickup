@@ -33,11 +33,12 @@ import java.util.List;
 import cab.pickup.R;
 import cab.pickup.api.Journey;
 import cab.pickup.api.User;
+import cab.pickup.server.GetTask;
 import cab.pickup.server.PostTask;
 import cab.pickup.server.Result;
 
 
-public class LoginActivity extends MyActivity {
+public class    LoginActivity extends MyActivity {
 
     private static final String TAG = "LoginActivity";
 
@@ -87,9 +88,12 @@ public class LoginActivity extends MyActivity {
         if(!prefs.contains("user_json")) {
             findViewById(R.id.fb_login).setVisibility(View.GONE);
             ((TextView)findViewById(R.id.login_message_text)).setText("Adding user..");
-            getBiodata();
-        } else {
+            checkFromFBID();
+        } else if(me.id==null){
             addUser();
+        }
+        else{
+            updateUser();
         }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -207,14 +211,6 @@ public class LoginActivity extends MyActivity {
             String mac_addr = ((WifiManager)getSystemService(WIFI_SERVICE)).getConnectionInfo().getMacAddress();
             nameValuePairs.add(new BasicNameValuePair("mac_addr", mac_addr));
 
-           /* nameValuePairs.add(new BasicNameValuePair("home_location",me.home.latitude+","+me.home.longitude));
-            nameValuePairs.add(new BasicNameValuePair("home_text",me.home.shortDescription));
-            nameValuePairs.add(new BasicNameValuePair("leaving_home","08:00:00"));
-
-            nameValuePairs.add(new BasicNameValuePair("office_location",me.office.latitude+","+me.office.longitude));
-            nameValuePairs.add(new BasicNameValuePair("office_text",me.office.shortDescription));
-            nameValuePairs.add(new BasicNameValuePair("leaving_office","12:00:00"));*/
-
             return nameValuePairs;
         }
 
@@ -259,4 +255,67 @@ public class LoginActivity extends MyActivity {
         }
         finish();
     }
+
+    public void updateUser(){
+        GetTask getTask = new GetTask(this) {
+            @Override
+            public void onPostExecute(Result ret){
+                super.onPostExecute(ret);
+                if(ret.statusCode==200){
+                    Toast.makeText(getApplicationContext(),ret.data.toString(),Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+        getTask.execute(getUrl("/user/" + String.valueOf(me.id) + "?key=" + getKey()));
+    }
+
+    public void checkFromFBID(){
+        Request.executeMeRequestAsync(Session.getActiveSession(), new Request.GraphUserCallback() {
+            @Override
+            public void onCompleted(GraphUser graphUser, Response response) {
+                String fbid = graphUser.getId();
+                GetTask getTask = new GetTask(LoginActivity.this) {
+                    @Override
+                    public void onPostExecute(Result ret){
+                        super.onPostExecute(ret);
+                        if(ret.statusCode==200){
+                            int userPresent;
+                            try{
+                                userPresent = ret.data.getInt("user_present");
+                            }
+                            catch (Exception E){
+                                userPresent = 0;
+                            }
+                            if(userPresent==1){
+                                try {
+                                    JSONObject userdata= ret.data.getJSONObject("user_data");
+                                    me.id = userdata.getString("id");
+                                    me.email = userdata.getString("email");
+                                    me.name = userdata.getString("first_name");
+                                    me.gender=userdata.getString("gender");
+                                    //me.mobile=
+                                    SharedPreferences.Editor spe = prefs.edit();
+                                    spe.putString("user_json", me.getJson());
+                                    spe.commit();
+                                    startNextActivity();
+                                    Toast.makeText(getApplicationContext(),getString(R.string.login_successful),Toast.LENGTH_LONG).show();
+                                }catch (Exception E){
+                                    Log.e(TAG,E.getMessage());
+                                    getBiodata();
+                                }
+                            }
+                            else{
+                                getBiodata();
+                            }
+
+                        }
+                    }
+                };
+                getTask.execute(getUrl("/user_exists?" + "key=" + getKey()+"&fbid="+fbid));
+            }
+        });
+
+    }
+
+
 }

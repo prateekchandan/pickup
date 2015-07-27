@@ -61,4 +61,6 @@
     <string name="ride_now">Ride Now</string>
     <string name="title_activity_profile">Profile Page</string>
 
+    <string name="login_successful">Successfully logged in!!</string>
+
 </resources>
