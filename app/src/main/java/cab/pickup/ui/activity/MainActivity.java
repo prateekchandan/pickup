@@ -295,11 +295,11 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                         map.animateCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
                         displayPath();
                         bar.getAddress().setLatLong(loc.getDouble("lat"), loc.getDouble("lng"));
-                        try {
-                            if(markers.containsKey(R.id.field_start)&&markers.containsKey(R.id.field_end))
-                                findViewById(R.id.time_picker_card).setVisibility(View.VISIBLE);
-                        }
-                        catch (Exception E){E.printStackTrace();}
+
+                        if(markers.containsKey(R.id.field_start)&&markers.containsKey(R.id.field_end))
+                            findViewById(R.id.time_picker_card).setVisibility(View.VISIBLE);
+
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
