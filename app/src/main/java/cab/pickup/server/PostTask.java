@@ -9,6 +9,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.List;
@@ -42,9 +43,10 @@ public abstract class PostTask extends AsyncTask<String, Integer, Result> {
 
             HttpResponse response = httpclient.execute(httppost);
 
-            Log.d(TAG, res.statusCode + " : " + response.getStatusLine().getReasonPhrase());
-
             res = new Result(IOUtil.buildStringFromIS(response.getEntity().getContent()));
+
+            Log.d(TAG, res.statusCode + " : " + response.getStatusLine().getReasonPhrase()+"\n"+res.data.toString());
+
         } catch (IOException e) {
             onFail(e.getMessage());
         }

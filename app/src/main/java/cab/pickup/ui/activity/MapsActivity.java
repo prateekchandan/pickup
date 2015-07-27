@@ -30,7 +30,7 @@ import cab.pickup.api.Journey;
 import cab.pickup.api.Location;
 import cab.pickup.util.IOUtil;
 
-public class MapsActivity extends MyActivity{
+public class MapsActivity extends MyActivity implements GoogleMap.OnMapLoadedCallback{
     GoogleMap map; // Might be null if Google Play services APK is not available.
     SupportMapFragment mapFrag;
 
@@ -69,6 +69,13 @@ public class MapsActivity extends MyActivity{
         } else {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(defaultLoc, 11));
         }
+
+        map.setOnMapLoadedCallback(this);
+    }
+
+    @Override
+    public void onMapLoaded() {
+        //do nothing
     }
 
     class MapDirectionsTask extends AsyncTask<String, Integer, String> {

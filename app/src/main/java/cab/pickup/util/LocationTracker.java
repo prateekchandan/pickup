@@ -83,8 +83,10 @@ public class LocationTracker extends Service implements LocationListener,
     }
 
     public void stopLocationUpdates() {
-        locApi.removeLocationUpdates(
-                apiClient, this);
+        if(apiClient.isConnected()) {
+            locApi.removeLocationUpdates(
+                    apiClient, this);
+        }
         Log.d(TAG, "Location update stopped .......................");
     }
 

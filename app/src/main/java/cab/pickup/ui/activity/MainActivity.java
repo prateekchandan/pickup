@@ -216,9 +216,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                 JSONObject journey_data = new JSONObject(prefs.getString("journey", ""));
                 journey=new Journey(journey_data);
 
-                field_start.setAddress(journey.start);
-                field_end.setAddress(journey.end);
-
                 /*if(journey.del_time.equals("30"))
                     timeOption.check(R.id.time_30);
                 else
@@ -331,7 +328,15 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         }
     }
 
+    @Override
+    public void onMapLoaded() {
+        field_start.setAddress(journey.start);
+        field_end.setAddress(journey.end);
 
+        displayPath();
+
+        findViewById(R.id.time_picker_card).setVisibility(View.VISIBLE);
+    }
 
     private void displayPath() {
         try {
