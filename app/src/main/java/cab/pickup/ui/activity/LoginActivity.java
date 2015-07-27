@@ -109,8 +109,8 @@ public class LoginActivity extends MyActivity {
 
                 Log.i(TAG, "fbid : " + graphUser.getId());
 
-                i.putExtra(getString(R.string.profile_tag_email), (String) graphUser.getProperty(getString(R.string.profile_tag_email)));
-                i.putExtra(getString(R.string.profile_tag_gender), (String) graphUser.getProperty(getString(R.string.profile_tag_gender)));
+                i.putExtra(getString(R.string.profile_tag_email), (String) graphUser.getProperty("email"));
+                i.putExtra(getString(R.string.profile_tag_gender), (String) graphUser.getProperty("gender"));
                 startActivityForResult(i, 1);
             }
         });

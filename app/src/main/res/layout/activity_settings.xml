@@ -37,6 +37,8 @@
                     android:id="@+id/profile_name"
                     android:inputType="textPersonName"
                     android:layout_marginTop="5dp"
+                    android:clickable="false"
+                    android:focusable="false"
                     android:layout_marginBottom="5dp"
                     android:hint="Name"/>
                 <EditText
@@ -53,12 +55,16 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/profile_gender"
                     android:layout_marginTop="5dp"
+                    android:clickable="false"
+                    android:focusable="false"
                     android:layout_marginBottom="5dp"
                     android:hint="Gender"/>
                 <EditText
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/profile_email"
+                    android:clickable="false"
+                    android:focusable="false"
                     android:inputType="textEmailAddress"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"

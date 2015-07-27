@@ -105,6 +105,7 @@
             android:layout_height="wrap_content"
             android:background="@color/button_material_light"
             card_view:cardElevation="4dp"
+            android:layout_marginBottom="15dp"
             android:id="@+id/time_picker_card"
             android:layout_above="@+id/fare_and_mates_card"
             android:layout_centerHorizontal="true"
@@ -167,7 +168,7 @@
             android:id="@+id/fare_and_mates_card"
             android:layout_above="@+id/button_confirm"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="15dp"
             android:visibility="invisible">
             <RelativeLayout
                 android:layout_width="wrap_content"

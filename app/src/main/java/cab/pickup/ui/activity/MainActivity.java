@@ -296,7 +296,8 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                         displayPath();
                         bar.getAddress().setLatLong(loc.getDouble("lat"), loc.getDouble("lng"));
                         try {
-                            findViewById(R.id.time_picker_card).setVisibility(View.VISIBLE);
+                            if(markers.containsKey(R.id.field_start)&&markers.containsKey(R.id.field_end))
+                                findViewById(R.id.time_picker_card).setVisibility(View.VISIBLE);
                         }
                         catch (Exception E){E.printStackTrace();}
                     } catch (JSONException e) {
