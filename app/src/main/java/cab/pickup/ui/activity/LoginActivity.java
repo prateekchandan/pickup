@@ -238,12 +238,12 @@ public class    LoginActivity extends MyActivity {
                 JSONObject journey_data = new JSONObject(prefs.getString("journey", ""));
                 Journey journey = new Journey(journey_data);
 
-                if (journey.group_id == null) {
+                if (journey.group == null) {
                     Intent i  = new Intent(this, MainActivity.class);
                     startActivity(i);
                 } else {
                     Intent i = new Intent(this, RideActivity.class);
-                    i.putExtra("group_id",journey.group_id);
+                    i.putExtra("group_id",journey.group.toString());
                     startActivity(i);
                 }
             } catch (JSONException e) {

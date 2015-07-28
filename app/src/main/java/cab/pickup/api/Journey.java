@@ -30,9 +30,8 @@ public class Journey {
     public Location start, end;
 
     public String user_id;
-    public ArrayList<String> mates_id=new ArrayList<>();
+    public JSONObject group;
     public String datetime, del_time, cab_preference;
-    public String group_id;
 
 
     public Journey(){
@@ -48,6 +47,7 @@ public class Journey {
         del_time=journey.getString("margin_before");
         cab_preference=journey.getString("preference");
 
+        group=journey.getJSONObject("group");
     }
 
     public Journey(User user, Location start, Location end, String datetime, String del_time, String cab_preference){
@@ -120,10 +120,7 @@ public class Journey {
             journey.put("margin_before", del_time);
             journey.put("preference", cab_preference);
 
-            journey.put("mates", mates_id);
-
-            journey.put("group_id",group_id);
-
+            journey.put("group", group);
         } catch (JSONException e) {
             e.printStackTrace();
         }
