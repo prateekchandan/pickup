@@ -463,6 +463,13 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         confirmTask.execute(getUrl("/confirm/"+journey.id+"?key="+getKey()));
 
         Toast.makeText(this, "Confirming your Journey...",Toast.LENGTH_LONG).show();
+    }
+
+    public void exchangeLocations(View v){
+        Location temp = field_end.getAddress();
+        field_end.setAddress(field_start.getAddress());
+        field_start.setAddress(temp);
 
     }
+
 }
