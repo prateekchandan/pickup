@@ -266,7 +266,8 @@ public class    LoginActivity extends MyActivity {
                 }
             }
         };
-        getTask.execute(getUrl("/user/" + String.valueOf(me.id) + "?key=" + getKey()));
+        getTask.execute(getUrl("/user/" + String.valueOf(me.id) + "?key=" + getKey())
+        );
     }
 
     public void checkFromFBID(){
