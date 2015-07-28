@@ -341,6 +341,9 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     }
 
     private boolean displayPath() {
+        if(!markers.containsKey(R.id.field_end) || !markers.containsKey((R.id.field_start)))
+            return false;
+
         try {
             LatLng start = markers.get(R.id.field_start).getPosition();
             LatLng end = markers.get(R.id.field_end).getPosition();
@@ -447,7 +450,12 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             public void onPostExecute(Result res) {
                 super.onPostExecute(res);
                 if(res.statusCode==200){
-                    journey.group=res.data;
+                    Log.d("group",res.data.toString());
+                    try {
+                        journey.group = res.data.getJSONObject("group");
+                    }catch (Exception E){
+                        Log.e("JSONError","MainActivity 457 : group not present in JSON");
+                    }
 
                     prefs.edit().putString("journey",journey.toString()).apply();
 

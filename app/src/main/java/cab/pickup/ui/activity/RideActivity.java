@@ -33,8 +33,8 @@ public class RideActivity extends MapsActivity {
         try {
             journey=new Journey(new JSONObject(prefs.getString("journey","")));
 
-            JSONArray start_pts = journey.group.getJSONArray("start_waypoints");
-            JSONArray end_pts = journey.group.getJSONArray("end_waypoints");
+            JSONArray start_pts = journey.group.getJSONObject("path_waypoints").getJSONArray("startwaypoints");
+            JSONArray end_pts = journey.group.getJSONObject("path_waypoints").getJSONArray("endwaypoints");
 
             double start_lat = start_pts.getJSONArray(0).getDouble(0);
             double start_lng = start_pts.getJSONArray(0).getDouble(1);
@@ -51,10 +51,14 @@ public class RideActivity extends MapsActivity {
             for(int i=0; i<end_pts.length()-1; i++){
                 waypoints+=end_pts.getJSONArray(i).getDouble(0)+","+end_pts.getJSONArray(i).getDouble(1)+"|";
             }
+            if(waypoints.length()==0)
+                waypoints="|";
 
+            Log.d("WAYPTT",waypoints);
             String url="http://maps.googleapis.com/maps/api/directions/json?origin="
                     + start_lat + "," + start_lng + "&destination="
                     + end_lat + "," + end_lng+"&waypoints="+waypoints.substring(0,waypoints.length()-1);
+            Log.d("WAYPTT",url);
             new MapDirectionsTask().execute(url);
         } catch (JSONException e) {
             e.printStackTrace();
