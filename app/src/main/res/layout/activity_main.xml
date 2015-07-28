@@ -201,8 +201,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/Label"
-                    android:text="No Mates Found!"
+                    android:text="Searching for mates..."
+                    android:textSize="20sp"
+                    android:textColor="#999999"
                     android:id="@+id/mates_empty_notif"
                     android:layout_alignTop="@+id/summary_user_list" />
             </RelativeLayout>

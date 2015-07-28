@@ -298,12 +298,10 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                         }
 
                         map.animateCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
-                        displayPath();
                         bar.getAddress().setLatLong(loc.getDouble("lat"), loc.getDouble("lng"));
 
-                        if(markers.containsKey(R.id.field_start)&&markers.containsKey(R.id.field_end))
+                        if(displayPath())
                             findViewById(R.id.time_picker_card).setVisibility(View.VISIBLE);
-
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -327,7 +325,9 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             }
 
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
-            displayPath();
+
+            if(displayPath())
+                findViewById(R.id.time_picker_card).setVisibility(View.VISIBLE);
         }
     }
 
@@ -336,12 +336,11 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         field_start.setAddress(journey.start);
         field_end.setAddress(journey.end);
 
-        displayPath();
-
-        findViewById(R.id.time_picker_card).setVisibility(View.VISIBLE);
+        if(displayPath())
+            findViewById(R.id.time_picker_card).setVisibility(View.VISIBLE);
     }
 
-    private void displayPath() {
+    private boolean displayPath() {
         try {
             LatLng start = markers.get(R.id.field_start).getPosition();
             LatLng end = markers.get(R.id.field_end).getPosition();
@@ -350,32 +349,14 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                     + start.latitude + "," + start.longitude + "&destination="
                     + end.latitude + "," + end.longitude;
             new MapDirectionsTask().execute(url);
+
+            return true;
         } catch (NullPointerException E){
             E.printStackTrace();
         }
+        return false;
     }
 
-/*    public void loadPage(int page){
-        if(page==PAGE_MAIN){
-            findViewById(R.id.location_select).setVisibility(View.VISIBLE);
-            findViewById(R.id.time_select).setVisibility(View.VISIBLE);
-
-            findViewById(R.id.order_summary).setVisibility(View.GONE);
-
-            field_start.setAddress(me.home);
-            field_end.setAddress(me.office);
-        } else {
-            findViewById(R.id.location_select).setVisibility(View.GONE);
-            findViewById(R.id.time_select).setVisibility(View.GONE);
-
-            findViewById(R.id.order_summary).setVisibility(View.VISIBLE);
-
-            user_adapter.addAll(journey.mates_id);
-
-            displayPath();
-        }
-    }
-*/
     public void selectTime(View v) {
 
         if(!((CompoundButton)v).isChecked()){
@@ -416,6 +397,8 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         Log.d(TAG, "Journey time : " +journey.datetime);
 
         journey.addToServer(this, this);
+
+        ((TextView)findViewById(R.id.mates_empty_notif)).setText("Searching for mates...");
     }
 
     public void switchTabs(View v){
@@ -438,10 +421,15 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                     if(res.statusCode==200){
                         try {
                             JSONObject usersJson = res.data.getJSONObject("best_match");
-                            JSONArray users =  usersJson.getJSONArray("user_ids");
+                            if(!usersJson.toString().equals("{}")){
 
-                            for (int i = 0; i < users.length(); i++) {
-                                user_adapter.add(users.getString(i));
+                                JSONArray users = usersJson.getJSONArray("user_ids");
+
+                                for (int i = 0; i < users.length(); i++) {
+                                    user_adapter.add(users.getString(i));
+                                }
+                            } else {
+                                ((TextView)findViewById(R.id.mates_empty_notif)).setText("No mates found!");
                             }
 
                         } catch (JSONException e) {
