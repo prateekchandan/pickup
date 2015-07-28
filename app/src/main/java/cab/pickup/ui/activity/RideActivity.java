@@ -1,7 +1,9 @@
 package cab.pickup.ui.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -66,17 +68,42 @@ public class RideActivity extends MapsActivity {
     }
 
     public void cancel(View v){
-        prefs.edit().remove("journey").apply();
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder
+                .setMessage("Are you sure to cancel this journey ?")
+                .setCancelable(false)
+                .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        prefs.edit().remove("journey").apply();
 
-        new GetTask(this){
-            @Override
-            public void onPostExecute(Result res) {
-                super.onPostExecute(res);
-                startActivity(new Intent(RideActivity.this, MainActivity.class));
-                finish();
-            }
-        }.execute(getUrl("/cancel_journey/" + journey.id + "?key=" + getKey()));
+                        new GetTask(RideActivity.this){
+                            @Override
+                            public void onPostExecute(Result res) {
+                                super.onPostExecute(res);
+                                if(res.statusCode==200)
+                                    Toast.makeText(RideActivity.this,res.statusMessage,Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(RideActivity.this, MainActivity.class));
+                                finish();
+                            }
+                        }.execute(getUrl("/cancel_journey/" + journey.id + "?key=" + getKey()));
 
-        Toast.makeText(this,"Cancelling...", Toast.LENGTH_LONG);
+
+                    }
+                })
+                .setNegativeButton("No",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        // if this button is clicked, just close
+                        // the dialog box and do nothing
+                        dialog.cancel();
+                    }
+                });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+
+
     }
 }
