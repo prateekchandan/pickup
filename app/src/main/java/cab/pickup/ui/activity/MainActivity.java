@@ -447,13 +447,11 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             public void onPostExecute(Result res) {
                 super.onPostExecute(res);
                 if(res.statusCode==200){
-                    String groupId = res.data.optString("group_id");
+                    journey.group=res.data;
 
-                    journey.group_id=groupId;
+                    prefs.edit().putString("journey",journey.toString()).apply();
 
                     Intent i = new Intent(MainActivity.this,RideActivity.class);
-                    i.putExtra("group_id",groupId);
-
                     startActivity(i);
                     finish();
                 }
