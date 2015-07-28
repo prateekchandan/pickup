@@ -193,18 +193,18 @@
                     android:id="@+id/tab_mates"
                     android:onClick="switchTabs" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Label"
-                    android:text="No Mates Found!"
-                    android:id="@+id/mates_empty_notif"/>
-
                 <ListView
                     android:layout_width="240dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/summary_user_list"
                     android:layout_below="@+id/tab_fares"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Label"
+                    android:text="No Mates Found!"
+                    android:id="@+id/mates_empty_notif"
+                    android:layout_alignTop="@+id/summary_user_list" />
             </RelativeLayout>
         </android.support.v7.widget.CardView>
     </RelativeLayout>

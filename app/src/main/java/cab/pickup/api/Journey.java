@@ -175,14 +175,13 @@ public class Journey {
             nameValuePairs.add(new BasicNameValuePair("preference","1"));
 
             nameValuePairs.add(new BasicNameValuePair("start_text",start.longDescription));
-            nameValuePairs.add(new BasicNameValuePair("end_text",end.longDescription));
-            Log.d("post_Data",nameValuePairs.toString());
+            nameValuePairs.add(new BasicNameValuePair("end_text", end.longDescription));
+
             return nameValuePairs;
         }
 
         @Override
         public void onPostExecute(Result ret){
-            super.onPostExecute(ret);
             if(ret.statusCode==200){
                 id = ret.data.optString("journey_id");
 
@@ -190,6 +189,7 @@ public class Journey {
 
                 Toast.makeText(context, ret.statusMessage, Toast.LENGTH_LONG).show();
             }
+            super.onPostExecute(ret);
         }
     }
 }
