@@ -2,21 +2,15 @@ package cab.pickup.api;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cab.pickup.server.GetTask;
 import cab.pickup.server.OnTaskCompletedListener;
-import cab.pickup.server.PostTask;
 import cab.pickup.server.Result;
 
 public class User{
-    public String id, fbid, device_id, name, email, gender,company,mobile,age,company_email;
+    public String id, fbid, device_id, name, email, gender,company, phone,age,company_email;
     public LatLng position;
     public Location home, office;
 
@@ -56,7 +50,7 @@ public class User{
         email=user.optString("email");
         gender=user.optString("gender");
         company=user.optString("company");
-        mobile=user.optString("mobile");
+        phone =user.optString("phone");
         age=user.optString("age");
         company_email=user.optString("company_email");
 
@@ -80,7 +74,7 @@ public class User{
         json+=",\"email\":\""+email+"\"";
         json+=",\"gender\":\""+gender+"\"";
         json+=",\"company\":\""+company+"\"";
-        json+=",\"mobile\":\""+mobile+"\"";
+        json+=",\"phone\":\""+ phone +"\"";
         json+=",\"age\":\""+age+"\"";
         json+=",\"company_email\":\""+company_email+"\"";
         if(home!=null) json+=",\"home\":{\"lat\":"+home.latitude+",\"lng\":"+home.longitude+",\"text\":\""+home.shortDescription+"\"}";

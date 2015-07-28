@@ -1,23 +1,16 @@
 package cab.pickup.ui.activity;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 
 import cab.pickup.R;
-import cab.pickup.SettingsFragment;
-import cab.pickup.ui.widget.LocationPickerView;
 
 
 public class SettingsActivity extends MyActivity {
@@ -49,7 +42,7 @@ public class SettingsActivity extends MyActivity {
             ((TextView)findViewById(R.id.profile_gender)).setText(me.gender);
             ((TextView)findViewById(R.id.profile_email)).setText(me.email);
             ((TextView)findViewById(R.id.profile_company)).setText(me.company);
-            ((TextView)findViewById(R.id.profile_number)).setText(me.mobile);
+            ((TextView)findViewById(R.id.profile_number)).setText(me.phone);
             ((TextView)findViewById(R.id.profile_company_email)).setText(me.company_email);
 
         }
@@ -99,7 +92,7 @@ public class SettingsActivity extends MyActivity {
             me.email = getEditText(R.id.profile_email);
             me.gender = getEditText(R.id.profile_gender);
             me.age=getEditText(R.id.profile_age);
-            me.mobile=getEditText(R.id.profile_number);
+            me.phone =getEditText(R.id.profile_number);
             me.company=getEditText(R.id.profile_company);
             me.company_email=getEditText(R.id.profile_company_email);
 

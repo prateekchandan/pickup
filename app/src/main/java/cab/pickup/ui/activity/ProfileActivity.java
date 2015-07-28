@@ -3,13 +3,8 @@ package cab.pickup.ui.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
-import android.os.Environment;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -113,7 +108,7 @@ public class ProfileActivity extends MyActivity{
         ((TextView)findViewById(R.id.profile_name)).setText(me.name);
         ((TextView)findViewById(R.id.profile_name_1)).setText(me.name);
         ((TextView)findViewById(R.id.profile_email)).setText(me.email);
-        ((TextView)findViewById(R.id.profile_phone)).setText(me.mobile);
+        ((TextView)findViewById(R.id.profile_phone)).setText(me.phone);
         ((TextView)findViewById(R.id.profile_gender)).setText(me.gender);
         String age_gender = String.valueOf(me.age);
         if(me.gender.equals("male"))

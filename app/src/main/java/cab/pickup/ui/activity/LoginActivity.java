@@ -10,7 +10,6 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -168,6 +167,7 @@ public class    LoginActivity extends MyActivity {
             return;
         }
     }
+
     class AddUserTask extends PostTask {
         private static final String TAG = "AddUserTask";
 
@@ -207,6 +207,10 @@ public class    LoginActivity extends MyActivity {
             nameValuePairs.add(new BasicNameValuePair("name", me.name));
             nameValuePairs.add(new BasicNameValuePair("email", me.email));
             nameValuePairs.add(new BasicNameValuePair("gender", me.gender));
+            nameValuePairs.add(new BasicNameValuePair("phone", me.phone));
+            nameValuePairs.add(new BasicNameValuePair("age", me.age));
+            nameValuePairs.add(new BasicNameValuePair("company", me.company));
+            nameValuePairs.add(new BasicNameValuePair("company_email", me.company_email));
 
             String mac_addr = ((WifiManager)getSystemService(WIFI_SERVICE)).getConnectionInfo().getMacAddress();
             nameValuePairs.add(new BasicNameValuePair("mac_addr", mac_addr));
@@ -222,7 +226,6 @@ public class    LoginActivity extends MyActivity {
                 ((LoginActivity) context).addDataToPrefs(ret.data.optString("user_id"), gcm_id);
 
                 Toast.makeText(context, ret.statusMessage, Toast.LENGTH_LONG).show();
-
 
                 startNextActivity();
             }
@@ -291,10 +294,14 @@ public class    LoginActivity extends MyActivity {
                                 try {
                                     JSONObject userdata= ret.data.getJSONObject("user_data");
                                     me.id = userdata.getString("id");
+                                    me.phone = userdata.getString("phone");
+                                    me.age = userdata.getString("age");
+                                    me.company = userdata.getString("company");
+                                    me.company_email = userdata.getString("company_email");
                                     me.email = userdata.getString("email");
                                     me.name = userdata.getString("first_name");
                                     me.gender=userdata.getString("gender");
-                                    //me.mobile=
+
                                     SharedPreferences.Editor spe = prefs.edit();
                                     spe.putString("user_json", me.getJson());
                                     spe.commit();
