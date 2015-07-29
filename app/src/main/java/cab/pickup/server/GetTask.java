@@ -21,16 +21,26 @@ public class GetTask extends AsyncTask<String, Integer, Result> {
     public String url;
     private OnTaskCompletedListener listener;
     ProgressDialog dialog;
+    protected String dialogMessage;
 
-    public GetTask(){}
+    public GetTask(){
+        dialogMessage = "";
+    }
 
     public GetTask(MyActivity context) {
         this.context=context;
+        dialogMessage = "";
+    }
+
+    public GetTask(MyActivity context,String message) {
+        this.context=context;
+        dialogMessage = message;
     }
 
     @Override
     protected void onPreExecute(){
-        dialog = ProgressDialog.show(context, "", "Connecting to server");
+        if(!dialogMessage.equals(""))
+            dialog = ProgressDialog.show(context, "", dialogMessage);
     }
 
     @Override
@@ -60,7 +70,9 @@ public class GetTask extends AsyncTask<String, Integer, Result> {
 
     @Override
     public void onPostExecute(Result res){
-        dialog.dismiss();
+        if(!dialogMessage.equals(""))
+            dialog.dismiss();
+
         if(res.statusCode !=200){
             if(context!=null) Toast.makeText(context, res.statusMessage, Toast.LENGTH_LONG).show();
             Log.e(TAG, "Error "+String.valueOf(res.statusCode

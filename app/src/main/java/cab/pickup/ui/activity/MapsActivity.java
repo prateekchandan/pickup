@@ -60,6 +60,8 @@ public class MapsActivity extends MyActivity implements GoogleMap.OnMapLoadedCal
     }
 
     private void setUpMap() {
+        map.getUiSettings().setZoomControlsEnabled(true);
+        map.setPadding(0,0,0, 100);
         map.setMyLocationEnabled(true);
 
         if(map.getMyLocation() != null)
@@ -114,6 +116,11 @@ public class MapsActivity extends MyActivity implements GoogleMap.OnMapLoadedCal
 
         @Override
         public void onPostExecute(String json) {
+            if(json == null){
+                Toast.makeText(getApplicationContext(), "Error while loading path! Please check your network connection!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             try {
                 Log.d(TAG, json);
                 JSONObject path = new JSONObject(json);

@@ -178,6 +178,7 @@ public class    LoginActivity extends MyActivity {
 
         public AddUserTask(MyActivity context){
             super(context);
+            dialogMessage="Updating user data..";
         }
 
         @Override
@@ -277,8 +278,14 @@ public class    LoginActivity extends MyActivity {
         Request.executeMeRequestAsync(Session.getActiveSession(), new Request.GraphUserCallback() {
             @Override
             public void onCompleted(GraphUser graphUser, Response response) {
-                String fbid = graphUser.getId();
-                GetTask getTask = new GetTask(LoginActivity.this) {
+                if(graphUser==null){
+                    Toast.makeText(getApplicationContext(),"Unable to connect to Facebook. Please check your network conenction!!",Toast.LENGTH_LONG).show();
+                    findViewById(R.id.fb_login).setVisibility(View.VISIBLE);
+                    ((TextView)findViewById(R.id.login_message_text)).setText("");
+                    return;
+                }
+                final String fbid = graphUser.getId();
+                GetTask getTask = new GetTask(LoginActivity.this,"Logging in..") {
                     @Override
                     public void onPostExecute(Result ret){
                         super.onPostExecute(ret);
@@ -301,6 +308,7 @@ public class    LoginActivity extends MyActivity {
                                     me.email = userdata.getString("email");
                                     me.name = userdata.getString("first_name");
                                     me.gender=userdata.getString("gender");
+                                    me.fbid = fbid;
 
                                     SharedPreferences.Editor spe = prefs.edit();
                                     spe.putString("user_json", me.getJson());

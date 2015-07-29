@@ -97,7 +97,7 @@ public class Journey {
 
 
     public void addToServer(MyActivity context, OnTaskCompletedListener listener){
-        AddJourneyTask task = new AddJourneyTask(context);
+        AddJourneyTask task = new AddJourneyTask(context,"Searching..");
         task.setOnTaskCompletedListener(listener);
         task.execute(context.getUrl("/add_journey"));
     }
@@ -152,6 +152,11 @@ public class Journey {
         public AddJourneyTask(MyActivity context){
             super(context);
         }
+        public AddJourneyTask(MyActivity context,String message){
+            super(context);
+            dialogMessage = message;
+        }
+
 
         @Override
         public List<NameValuePair> getPostData(String[] params, int i) {

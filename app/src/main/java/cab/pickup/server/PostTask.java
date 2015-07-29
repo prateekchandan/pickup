@@ -23,16 +23,26 @@ public abstract class PostTask extends AsyncTask<String, Integer, Result> {
     public MyActivity context;
     private OnTaskCompletedListener listener;
     ProgressDialog dialog;
+    protected String dialogMessage;
 
-    public PostTask(MyActivity context){
-        this.context=context;
+    public PostTask(){
+        dialogMessage = "";
     }
 
-    public PostTask(){}
+    public PostTask(MyActivity context) {
+        this.context=context;
+        dialogMessage = "";
+    }
+
+    public PostTask(MyActivity context,String message) {
+        this.context=context;
+        dialogMessage = message;
+    }
 
     @Override
     protected void onPreExecute(){
-        dialog = ProgressDialog.show(context,"","Connecting to server");
+        if(!dialogMessage.equals(""))
+            dialog = ProgressDialog.show(context,"",dialogMessage);
     }
 
     @Override
@@ -66,13 +76,15 @@ public abstract class PostTask extends AsyncTask<String, Integer, Result> {
     public abstract List<NameValuePair> getPostData(String[] params, int i);
 
     public void onFail(String message){
-        Log.e(TAG, "Task failed : "+message);
-        dialog.dismiss();
+        Log.e(TAG, "Task failed : " + message);
+        if(!dialogMessage.equals(""))
+            dialog.dismiss();
     }
 
     @Override
     public void onPostExecute(Result res) {
-        dialog.dismiss();
+        if(!dialogMessage.equals(""))
+            dialog.dismiss();
         if(res.statusCode !=200){
             Toast.makeText(context, res.statusMessage, Toast.LENGTH_LONG).show();
         } else {

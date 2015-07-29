@@ -202,7 +202,7 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
             switch(v.getId()){
                 case R.id.location_search_dialog_myloc:
                     if(tracker.getLastKnownLocation()==null){
-                        Toast.makeText(context, "Waiting for location...", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Unable to get current location. Please check your GPS", Toast.LENGTH_LONG).show();
                         break;
                     }
 

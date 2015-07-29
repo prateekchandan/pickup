@@ -257,7 +257,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
     @Override
     public void onAddressSelected(final LocationSearchBar bar, Location address){
-        if(address == null) return;
+        if(address == null || bar == null) return;
 
         if(map==null){
             Toast.makeText(this,getResources().getString(R.string.map_error),Toast.LENGTH_SHORT).show();
@@ -447,7 +447,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     }
 
     public void confirmRide(View v){
-        GetTask confirmTask = new GetTask(this){
+        GetTask confirmTask = new GetTask(this,"Confirming your Journey..."){
             @Override
             public void onPostExecute(Result res) {
                 super.onPostExecute(res);
@@ -469,8 +469,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         };
 
         confirmTask.execute(getUrl("/confirm/"+journey.id+"?key="+getKey()));
-
-        Toast.makeText(this, "Confirming your Journey...",Toast.LENGTH_LONG).show();
     }
 
     public void exchangeLocations(View v){

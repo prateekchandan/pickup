@@ -76,7 +76,7 @@ public class RideActivity extends MapsActivity {
                     public void onClick(DialogInterface dialog,int id) {
                         prefs.edit().remove("journey").apply();
 
-                        new GetTask(RideActivity.this){
+                        new GetTask(RideActivity.this,"Cancelling Journey.. !!"){
                             @Override
                             public void onPostExecute(Result res) {
                                 super.onPostExecute(res);
