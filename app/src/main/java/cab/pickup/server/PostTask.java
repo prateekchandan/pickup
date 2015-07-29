@@ -1,5 +1,6 @@
 package cab.pickup.server;
 
+import android.app.ProgressDialog;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -21,12 +22,18 @@ public abstract class PostTask extends AsyncTask<String, Integer, Result> {
     private static final String TAG = "PostTask";
     public MyActivity context;
     private OnTaskCompletedListener listener;
+    ProgressDialog dialog;
 
     public PostTask(MyActivity context){
         this.context=context;
     }
 
     public PostTask(){}
+
+    @Override
+    protected void onPreExecute(){
+        dialog = ProgressDialog.show(context,"","Connecting to server");
+    }
 
     @Override
     protected Result doInBackground(String... params) {
@@ -60,10 +67,12 @@ public abstract class PostTask extends AsyncTask<String, Integer, Result> {
 
     public void onFail(String message){
         Log.e(TAG, "Task failed : "+message);
+        dialog.dismiss();
     }
 
     @Override
     public void onPostExecute(Result res) {
+        dialog.dismiss();
         if(res.statusCode !=200){
             Toast.makeText(context, res.statusMessage, Toast.LENGTH_LONG).show();
         } else {

@@ -1,5 +1,6 @@
 package cab.pickup.server;
 
+import android.app.ProgressDialog;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -19,11 +20,17 @@ public class GetTask extends AsyncTask<String, Integer, Result> {
     public MyActivity context;
     public String url;
     private OnTaskCompletedListener listener;
+    ProgressDialog dialog;
 
     public GetTask(){}
 
     public GetTask(MyActivity context) {
         this.context=context;
+    }
+
+    @Override
+    protected void onPreExecute(){
+        dialog = ProgressDialog.show(context, "", "Connecting to server");
     }
 
     @Override
@@ -53,6 +60,7 @@ public class GetTask extends AsyncTask<String, Integer, Result> {
 
     @Override
     public void onPostExecute(Result res){
+        dialog.dismiss();
         if(res.statusCode !=200){
             if(context!=null) Toast.makeText(context, res.statusMessage, Toast.LENGTH_LONG).show();
             Log.e(TAG, "Error "+String.valueOf(res.statusCode

@@ -43,7 +43,9 @@ public class LocationTracker extends Service implements LocationListener,
     public LocationTracker(MyActivity context){
         this.context = context;
 
-        isGooglePlayServicesAvailable();
+        if(!isGooglePlayServicesAvailable()){
+            Log.e(TAG,"GOogle PLay Services unavailable");
+        }
 
         apiClient = new GoogleApiClient.Builder(context)
                 .addApi(LocationServices.API)
@@ -54,7 +56,7 @@ public class LocationTracker extends Service implements LocationListener,
         locRequest = new LocationRequest();
         locRequest.setInterval(INTERVAL);
         locRequest.setFastestInterval(FASTEST_INTERVAL);
-        locRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        locRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
     public LocationTracker(){
@@ -77,14 +79,14 @@ public class LocationTracker extends Service implements LocationListener,
     }
 
     public void startLocationUpdates() {
-        locApi.requestLocationUpdates(
+        LocationServices.FusedLocationApi.requestLocationUpdates(
                 apiClient, locRequest, this);
         Log.d(TAG, "Location update started .......................");
     }
 
     public void stopLocationUpdates() {
         if(apiClient.isConnected()) {
-            locApi.removeLocationUpdates(
+            LocationServices.FusedLocationApi.removeLocationUpdates(
                     apiClient, this);
         }
         Log.d(TAG, "Location update stopped .......................");
@@ -141,7 +143,7 @@ public class LocationTracker extends Service implements LocationListener,
     @Override
     public void onCreate(){
         super.onCreate();
-
+        Log.d(TAG,"Create called");
         apiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)

@@ -3,6 +3,7 @@ package cab.pickup.ui.activity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -10,6 +11,7 @@ import android.content.res.Configuration;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
@@ -55,6 +57,7 @@ import cab.pickup.server.Result;
 import cab.pickup.ui.widget.LocationSearchBar;
 import cab.pickup.ui.widget.UserListAdapter;
 import cab.pickup.util.IOUtil;
+import cab.pickup.util.LocationTracker;
 
 public class MainActivity extends MapsActivity implements   LocationSearchBar.OnAddressSelectedListener,
                                                             OnTaskCompletedListener {
@@ -211,8 +214,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     @Override
     public void onStart() {
         super.onStart();
-        if(tracker!=null)
-            tracker.connect();
 
         if(prefs.contains("journey")){
             try {
@@ -236,6 +237,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
         //loadPage(page);
     }
+
 
     @Override
     public void onStop() {

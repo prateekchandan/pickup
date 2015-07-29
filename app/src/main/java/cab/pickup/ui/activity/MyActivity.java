@@ -43,7 +43,6 @@ public class MyActivity extends ActionBarActivity implements ServiceConnection{
         me.device_id = Settings.Secure.getString(this.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
         Intent i = new Intent(this, LocationTracker.class);
         bindService(i,this,BIND_AUTO_CREATE);
-
     }
 
     @Override
@@ -57,6 +56,8 @@ public class MyActivity extends ActionBarActivity implements ServiceConnection{
             me=new User();
         }
         me.device_id = Settings.Secure.getString(this.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+        Intent i = new Intent(this, LocationTracker.class);
+        bindService(i,this,BIND_AUTO_CREATE);
     }
 
     @Override
@@ -91,6 +92,7 @@ public class MyActivity extends ActionBarActivity implements ServiceConnection{
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
         tracker = ((LocationTracker.LocalBinder) service).getService();
+        tracker.connect();
         Log.d("tracker connected","yo");
     }
 
