@@ -1,24 +1,16 @@
 package cab.pickup.ui.activity;
 
-import android.app.AlertDialog;
-import android.app.NotificationManager;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.RadioGroup;
@@ -39,9 +31,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -49,15 +38,12 @@ import java.util.HashMap;
 import cab.pickup.R;
 import cab.pickup.api.Journey;
 import cab.pickup.api.Location;
-import cab.pickup.api.User;
-import cab.pickup.gcm.GcmIntentService;
 import cab.pickup.server.GetTask;
 import cab.pickup.server.OnTaskCompletedListener;
 import cab.pickup.server.Result;
 import cab.pickup.ui.widget.LocationSearchBar;
 import cab.pickup.ui.widget.UserListAdapter;
 import cab.pickup.util.IOUtil;
-import cab.pickup.util.LocationTracker;
 
 public class MainActivity extends MapsActivity implements   LocationSearchBar.OnAddressSelectedListener,
                                                             OnTaskCompletedListener {
@@ -83,7 +69,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
     ListView user_list_view;
     UserListAdapter user_adapter;
-    BroadcastReceiver mUpdateReceiver;
     LocationSearchBar field_start, field_end;
 
 
@@ -110,33 +95,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
         user_adapter=new UserListAdapter(this);
         user_list_view.setAdapter(user_adapter);
-
-
-        mUpdateReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                NotificationManager mNotificationManager = (NotificationManager)
-                        MainActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
-
-                mNotificationManager.cancel(intent.getIntExtra("notif_id",0));
-
-                if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG)){
-                    Toast.makeText(MainActivity.this, "User added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
-
-                    user_adapter.add(intent.getStringExtra("id"));
-
-                    user_adapter.notifyDataSetChanged();
-                } else if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG)){
-                    Toast.makeText(MainActivity.this, "Driver added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
-
-                    //((TextView)findViewById(R.id.summary_driver)).setText(intent.getStringExtra("id"));
-                }
-            }
-        };
-
-        //registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG));
-        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG));
-
     }
 
     @Override
@@ -175,7 +133,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
     @Override
     public void onDestroy(){
-        unregisterReceiver(mUpdateReceiver);
         super.onDestroy();
     }
 

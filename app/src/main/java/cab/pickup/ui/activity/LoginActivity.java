@@ -139,16 +139,54 @@ public class    LoginActivity extends MyActivity {
         AddUserTask a = new AddUserTask(this);
         a.execute(getUrl("/add_user"));
 
+        registerGCM();
     }
     
-    public void addDataToPrefs(String user_id, String gcm_id){
+    public void addDataToPrefs(String user_id){
         SharedPreferences.Editor spe = prefs.edit();
 
         me.id=user_id;
         spe.putString("user_json", me.getJson());
-        spe.putString("gcm_id", gcm_id);
-        spe.putInt("app_version", getAppVersion());
         spe.commit();
+    }
+
+    public void registerGCM(){
+        final GoogleCloudMessaging gcm;
+
+        final String SENDER_ID = "1032273645702";
+        gcm = GoogleCloudMessaging.getInstance(this);
+
+
+        new PostTask(this){
+            @Override
+            protected Result doInBackground(String... params) {
+                String gcm_id=null;
+                try {
+                    gcm_id = gcm.register(SENDER_ID);
+                    Log.d(TAG,"GCM:"+ gcm_id);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                return super.doInBackground(params[0], gcm_id);
+            }
+
+            @Override
+            public List<NameValuePair> getPostData(String[] params, int i) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+                nameValuePairs.add(new BasicNameValuePair("user_id", me.id));
+                nameValuePairs.add(new BasicNameValuePair("key", getKey()));
+
+                nameValuePairs.add(new BasicNameValuePair("reg_id", params[i++]));
+
+                return nameValuePairs;
+            }
+        }.execute(getUrl("/register_gcm"));
+
+        SharedPreferences.Editor spe = prefs.edit();
+
+        spe.putInt("app_version", getAppVersion());
     }
 
     public void checkGPS(){
@@ -172,29 +210,15 @@ public class    LoginActivity extends MyActivity {
     class AddUserTask extends PostTask {
         private static final String TAG = "AddUserTask";
 
-        GoogleCloudMessaging gcm;
-
-        String SENDER_ID = "1032273645702",
-                gcm_id;
-
         public AddUserTask(MyActivity context){
             super(context);
             dialogMessage="Updating user data..";
         }
 
-        @Override
+        /*@Override
         protected Result doInBackground(String... params) {
-            if (gcm == null) {
-                gcm = GoogleCloudMessaging.getInstance(context);
-            }
-            try {
-                gcm_id = gcm.register(SENDER_ID);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
             return super.doInBackground(params);
-        }
+        }*/
 
         @Override
         public List<NameValuePair> getPostData(String[] params, int i) {
@@ -202,7 +226,7 @@ public class    LoginActivity extends MyActivity {
             nameValuePairs.add(new BasicNameValuePair("user_id", me.id));
             nameValuePairs.add(new BasicNameValuePair("key", getKey()));
 
-            nameValuePairs.add(new BasicNameValuePair("gcm_id", gcm_id));
+            //nameValuePairs.add(new BasicNameValuePair("gcm_id", gcm_id));
 
             nameValuePairs.add(new BasicNameValuePair("device_id", me.device_id));
             nameValuePairs.add(new BasicNameValuePair("fbid", me.fbid));
@@ -225,7 +249,7 @@ public class    LoginActivity extends MyActivity {
         public void onPostExecute(Result ret){
             super.onPostExecute(ret);
             if(ret.statusCode ==200) {
-                ((LoginActivity) context).addDataToPrefs(ret.data.optString("user_id"), gcm_id);
+                ((LoginActivity) context).addDataToPrefs(ret.data.optString("user_id"));
 
                 Toast.makeText(context, ret.statusMessage, Toast.LENGTH_LONG).show();
 
@@ -273,6 +297,8 @@ public class    LoginActivity extends MyActivity {
         };
         getTask.execute(getUrl("/user/" + String.valueOf(me.id) + "?key=" + getKey())
         );
+
+        registerGCM();
     }
 
     public void checkFromFBID(){
@@ -329,6 +355,8 @@ public class    LoginActivity extends MyActivity {
                     }
                 };
                 getTask.execute(getUrl("/user_exists?" + "key=" + getKey()+"&fbid="+fbid));
+
+                registerGCM();
             }
         });
 

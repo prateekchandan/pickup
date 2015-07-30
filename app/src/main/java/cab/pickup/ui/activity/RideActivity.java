@@ -1,7 +1,11 @@
 package cab.pickup.ui.activity;
 
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -14,17 +18,42 @@ import org.json.JSONObject;
 
 import cab.pickup.R;
 import cab.pickup.api.Journey;
+import cab.pickup.gcm.GcmIntentService;
 import cab.pickup.server.GetTask;
 import cab.pickup.server.Result;
 
 
 public class RideActivity extends MapsActivity {
     Journey journey;
+    BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            NotificationManager mNotificationManager = (NotificationManager)
+                    RideActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            mNotificationManager.cancel(intent.getIntExtra("notif_id",0));
+
+            if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG)){
+                Toast.makeText(RideActivity.this, "User added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
+
+                //user_adapter.add(intent.getStringExtra("id"));
+                //user_adapter.notifyDataSetChanged();
+            } else if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG)){
+                Toast.makeText(RideActivity.this, "Driver added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
+
+                //((TextView)findViewById(R.id.summary_driver)).setText(intent.getStringExtra("id"));
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ride);
+
+        //registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG));
+        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG));
+
     }
 
     @Override
@@ -105,5 +134,11 @@ public class RideActivity extends MapsActivity {
         alertDialog.show();
 
 
+    }
+
+    @Override
+    public void onDestroy() {
+        unregisterReceiver(mUpdateReceiver);
+        super.onDestroy();
     }
 }
