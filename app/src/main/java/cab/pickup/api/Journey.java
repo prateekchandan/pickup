@@ -31,6 +31,7 @@ public class Journey {
 
     public String user_id;
     public JSONObject group;
+    public String group_id;
     public String datetime, del_time, cab_preference;
 
 

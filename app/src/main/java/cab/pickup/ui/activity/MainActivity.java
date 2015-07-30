@@ -477,5 +477,4 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         field_start.setAddress(temp);
 
     }
-
 }
