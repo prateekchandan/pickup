@@ -76,7 +76,7 @@ public class    LoginActivity extends MyActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        checkGPS();
+        //checkGPS();
     }
 
     @Override
@@ -93,6 +93,7 @@ public class    LoginActivity extends MyActivity {
         }
         else{
             updateUser();
+            Log.d(TAG,"Reached here");
         }
 
         super.onActivityResult(requestCode, resultCode, data);
