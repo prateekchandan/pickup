@@ -2,10 +2,15 @@ package cab.pickup.ui.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -20,20 +25,68 @@ import cab.pickup.server.Result;
 
 public class RideActivity extends MapsActivity {
     Journey journey;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
         setContentView(R.layout.activity_ride);
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        setupDrawer();
     }
 
+
+    private void setupTextBoxes(){
+        ((TextView)findViewById(R.id.field_start)).setText(journey.start.longDescription);
+        ((TextView)findViewById(R.id.field_end)).setText(journey.end.longDescription);
+        String booktime = journey.datetime;
+        ((TextView)findViewById(R.id.book_time)).setText(booktime);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    private void setupDrawer() {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.string.drawer_open, R.string.drawer_close) {
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getSupportActionBar().setTitle("Navigation!");
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                getSupportActionBar().setTitle(getString(R.string.title_activity_ride));
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+    }
     @Override
     protected void onStart() {
         super.onStart();
 
-        Log.d("JourneyCheck", "Contains journey: "+prefs.contains("journey"));
+        Log.d("JourneyCheck", "Contains journey: " + prefs.contains("journey"));
         try {
             journey=new Journey(new JSONObject(prefs.getString("journey","")));
+            setupTextBoxes();
 
             JSONArray start_pts = journey.group.getJSONObject("path_waypoints").getJSONArray("startwaypoints");
             JSONArray end_pts = journey.group.getJSONObject("path_waypoints").getJSONArray("endwaypoints");
@@ -105,5 +158,19 @@ public class RideActivity extends MapsActivity {
         alertDialog.show();
 
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

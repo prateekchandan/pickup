@@ -9,4 +9,6 @@
 
     <color name="button_bg_enabled">#ff001bb2</color>
     <color name="button_bg_disabled">#BBB4B4</color>
+
+    <color name="light_gray">#EEEEEE</color>
 </resources>

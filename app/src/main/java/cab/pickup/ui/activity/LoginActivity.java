@@ -47,7 +47,10 @@ public class    LoginActivity extends MyActivity {
         try{
             getSupportActionBar().hide();
         }
-        catch (NullPointerException E){E.printStackTrace();}
+        catch (NullPointerException E){
+            E.printStackTrace();
+        }
+
         setContentView(R.layout.activity_login);
 
         Session session = Session.getActiveSession();
