@@ -35,19 +35,15 @@ public class LocationTracker extends Service implements LocationListener,
     GoogleApiClient apiClient;
     LocationRequest locRequest;
     Location location;
-    MyActivity context;
     String lastUpdateTime;
 
     private final IBinder mBinder = new LocalBinder();
 
-    public LocationTracker(MyActivity context){
-        this.context = context;
-
-        if(!isGooglePlayServicesAvailable()){
-            Log.e(TAG,"GOogle PLay Services unavailable");
-        }
-
-        apiClient = new GoogleApiClient.Builder(context)
+    @Override
+    public void onCreate(){
+        super.onCreate();
+        Log.d(TAG,"Create called");
+        apiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -56,7 +52,7 @@ public class LocationTracker extends Service implements LocationListener,
         locRequest = new LocationRequest();
         locRequest.setInterval(INTERVAL);
         locRequest.setFastestInterval(FASTEST_INTERVAL);
-        locRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
     }
 
     public LocationTracker(){
@@ -102,26 +98,12 @@ public class LocationTracker extends Service implements LocationListener,
         return location.getLongitude();
     }
 
-    private boolean isGooglePlayServicesAvailable() {
-        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
-        if (ConnectionResult.SUCCESS == status) {
-            return true;
-        } else {
-            GooglePlayServicesUtil.getErrorDialog(status, context, 0).show();
-            return false;
-        }
-    }
-
     @Override
     public void onLocationChanged(Location location) {
         this.location = location;
         lastUpdateTime = DateFormat.getTimeInstance().format(new Date());
 
-        //Toast.makeText(this, "Location: "+getLatitude()+","+getLongitude(),Toast.LENGTH_LONG).show();
-
-        if(context!=null) context.onLocationUpdate(location);
-
-        Log.d(TAG, "Location: "+getLatitude()+","+getLongitude()+", Time: "+lastUpdateTime);
+        Log.d(TAG, "Location: " + getLatitude() + "," + getLongitude() + ", Time: " + lastUpdateTime);
     }
 
     @Override
@@ -138,22 +120,6 @@ public class LocationTracker extends Service implements LocationListener,
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.d(TAG, "Connection failed: " + connectionResult.toString());
-    }
-
-    @Override
-    public void onCreate(){
-        super.onCreate();
-        Log.d(TAG,"Create called");
-        apiClient = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-
-        locRequest = new LocationRequest();
-        locRequest.setInterval(INTERVAL);
-        locRequest.setFastestInterval(FASTEST_INTERVAL);
-        locRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
     }
 
     @Override

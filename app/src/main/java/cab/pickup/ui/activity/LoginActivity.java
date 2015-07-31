@@ -18,6 +18,8 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.apache.http.NameValuePair;
@@ -139,8 +141,44 @@ public class    LoginActivity extends MyActivity {
             me=new User();
         }
 
-        AddUserTask a = new AddUserTask(this);
-        a.execute(getUrl("/add_user"));
+        new PostTask(this, "Logging you in...") {
+            @Override
+            public List<NameValuePair> getPostData(String[] params, int i) {
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+                nameValuePairs.add(new BasicNameValuePair("user_id", me.id));
+                nameValuePairs.add(new BasicNameValuePair("key", getKey()));
+
+                //nameValuePairs.add(new BasicNameValuePair("gcm_id", gcm_id));
+
+                nameValuePairs.add(new BasicNameValuePair("device_id", me.device_id));
+                nameValuePairs.add(new BasicNameValuePair("fbid", me.fbid));
+                nameValuePairs.add(new BasicNameValuePair("name", me.name));
+                nameValuePairs.add(new BasicNameValuePair("email", me.email));
+                nameValuePairs.add(new BasicNameValuePair("gender", me.gender));
+                nameValuePairs.add(new BasicNameValuePair("phone", me.phone));
+                nameValuePairs.add(new BasicNameValuePair("age", me.age));
+                nameValuePairs.add(new BasicNameValuePair("company", me.company));
+                nameValuePairs.add(new BasicNameValuePair("company_email", me.company_email));
+
+                String mac_addr = ((WifiManager)getSystemService(WIFI_SERVICE)).getConnectionInfo().getMacAddress();
+                nameValuePairs.add(new BasicNameValuePair("mac_addr", mac_addr));
+
+                return nameValuePairs;
+            }
+
+
+            @Override
+            public void onPostExecute(Result ret){
+                super.onPostExecute(ret);
+                if(ret.statusCode ==200) {
+                    ((LoginActivity) context).addDataToPrefs(ret.data.optString("user_id"));
+
+                    Toast.makeText(context, ret.statusMessage, Toast.LENGTH_LONG).show();
+
+                    startNextActivity();
+                }
+            }
+        }.execute(getUrl("/add_user"));
 
         registerGCM();
     }
@@ -150,7 +188,7 @@ public class    LoginActivity extends MyActivity {
 
         me.id=user_id;
         spe.putString("user_json", me.getJson());
-        spe.commit();
+        spe.apply();
     }
 
     public void registerGCM(){
@@ -188,8 +226,19 @@ public class    LoginActivity extends MyActivity {
         }.execute(getUrl("/register_gcm"));
 
         SharedPreferences.Editor spe = prefs.edit();
-
         spe.putInt("app_version", getAppVersion());
+        spe.apply();
+    }
+
+
+    private boolean isGooglePlayServicesAvailable() {
+        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (ConnectionResult.SUCCESS == status) {
+            return true;
+        } else {
+            GooglePlayServicesUtil.getErrorDialog(status, this, 0).show();
+            return false;
+        }
     }
 
     public void checkGPS(){
@@ -207,57 +256,6 @@ public class    LoginActivity extends MyActivity {
             builder.setNegativeButton(R.string.no, null);
             builder.create().show();
             return;
-        }
-    }
-
-    class AddUserTask extends PostTask {
-        private static final String TAG = "AddUserTask";
-
-        public AddUserTask(MyActivity context){
-            super(context);
-            dialogMessage="Updating user data..";
-        }
-
-        /*@Override
-        protected Result doInBackground(String... params) {
-            return super.doInBackground(params);
-        }*/
-
-        @Override
-        public List<NameValuePair> getPostData(String[] params, int i) {
-            List<NameValuePair> nameValuePairs = new ArrayList<>();
-            nameValuePairs.add(new BasicNameValuePair("user_id", me.id));
-            nameValuePairs.add(new BasicNameValuePair("key", getKey()));
-
-            //nameValuePairs.add(new BasicNameValuePair("gcm_id", gcm_id));
-
-            nameValuePairs.add(new BasicNameValuePair("device_id", me.device_id));
-            nameValuePairs.add(new BasicNameValuePair("fbid", me.fbid));
-            nameValuePairs.add(new BasicNameValuePair("name", me.name));
-            nameValuePairs.add(new BasicNameValuePair("email", me.email));
-            nameValuePairs.add(new BasicNameValuePair("gender", me.gender));
-            nameValuePairs.add(new BasicNameValuePair("phone", me.phone));
-            nameValuePairs.add(new BasicNameValuePair("age", me.age));
-            nameValuePairs.add(new BasicNameValuePair("company", me.company));
-            nameValuePairs.add(new BasicNameValuePair("company_email", me.company_email));
-
-            String mac_addr = ((WifiManager)getSystemService(WIFI_SERVICE)).getConnectionInfo().getMacAddress();
-            nameValuePairs.add(new BasicNameValuePair("mac_addr", mac_addr));
-
-            return nameValuePairs;
-        }
-
-
-        @Override
-        public void onPostExecute(Result ret){
-            super.onPostExecute(ret);
-            if(ret.statusCode ==200) {
-                ((LoginActivity) context).addDataToPrefs(ret.data.optString("user_id"));
-
-                Toast.makeText(context, ret.statusMessage, Toast.LENGTH_LONG).show();
-
-                startNextActivity();
-            }
         }
     }
 
