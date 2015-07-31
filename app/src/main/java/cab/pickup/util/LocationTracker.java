@@ -68,7 +68,8 @@ public class LocationTracker extends Service implements LocationListener,
 
     public Location getLastKnownLocation(){
         if(location==null){
-            return locApi.getLastLocation(apiClient);
+            location = locApi.getLastLocation(apiClient);
+            return location;
         } else {
             return location;
         }

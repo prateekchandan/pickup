@@ -272,11 +272,24 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
         List<Location> resultList = null;
         HttpURLConnection conn = null;
         StringBuilder jsonResults = new StringBuilder();
+        tracker = context.getLocationTracker();
+        String locString ="";
+        if(tracker!=null){
+            if(tracker.getLastKnownLocation()!=null){
+                locString=String.valueOf(tracker.getLatitude())+","+String.valueOf(tracker.getLongitude());
+            }
+        }
+
         try {
             StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_AUTOCOMPLETE + OUT_JSON);
             sb.append("?key=" + API_KEY);
             sb.append("&components=country:in");
             sb.append("&input=" + URLEncoder.encode(input, "utf8"));
+            if(locString!="")
+            {
+                sb.append("&location="+locString);
+                sb.append("&radius=50");
+            }
             URL url = new URL(sb.toString());
             conn = (HttpURLConnection) url.openConnection();
             InputStreamReader in = new InputStreamReader(conn.getInputStream());
