@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import cab.pickup.api.Journey;
 import cab.pickup.gcm.GcmIntentService;
 import cab.pickup.server.GetTask;
 import cab.pickup.server.Result;
+import cab.pickup.ui.widget.EventView;
 
 
 public class RideActivity extends MapsActivity {
@@ -43,13 +45,15 @@ public class RideActivity extends MapsActivity {
 
             if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG)){
                 Toast.makeText(RideActivity.this, "User added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
-
-                //user_adapter.add(intent.getStringExtra("id"));
-                //user_adapter.notifyDataSetChanged();
+                EventView event = new EventView(RideActivity.this);
+                event.setContent("Mate added to journey!", "00:00", R.drawable.user);
+                ((LinearLayout)findViewById(R.id.event_box)).addView(event);
             } else if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG)){
                 Toast.makeText(RideActivity.this, "Driver added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
 
-                //((TextView)findViewById(R.id.summary_driver)).setText(intent.getStringExtra("id"));
+                EventView event = new EventView(RideActivity.this);
+                event.setContent("Driver allocated", "00:00", R.drawable.user);
+                ((LinearLayout)findViewById(R.id.event_box)).addView(event);
             }
         }
     };
@@ -62,6 +66,19 @@ public class RideActivity extends MapsActivity {
         setContentView(R.layout.activity_ride);
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         setupDrawer();
+
+        if(getIntent().hasExtra("action")){
+            String action = getIntent().getStringExtra("action");
+            EventView event = new EventView(this);
+
+            if(action.equals(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG)){
+                event.setContent("Mate added to journey!", "00:00", R.drawable.user);
+            } else if(action.equals(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG)){
+                event.setContent("Driver allocated!", "00:00", R.drawable.user);
+            }
+
+            ((LinearLayout)findViewById(R.id.event_box)).addView(event);
+        }
     }
 
 
@@ -109,6 +126,7 @@ public class RideActivity extends MapsActivity {
         mDrawerToggle.setDrawerIndicatorEnabled(true);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
+
     @Override
     protected void onStart() {
         super.onStart();
