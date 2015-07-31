@@ -211,10 +211,6 @@
                             android:paddingTop="10dp"
                             android:id="@+id/event_box"
                             >
-                            <include layout="@layout/event_view"/>
-                            <include layout="@layout/event_view"/>
-                            <include layout="@layout/event_view"/>
-                            <include layout="@layout/event_view"/>
                         </LinearLayout>
                     </ScrollView>
 
