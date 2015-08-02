@@ -36,6 +36,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import cab.pickup.R;
+import cab.pickup.api.Group;
 import cab.pickup.api.Journey;
 import cab.pickup.api.Location;
 import cab.pickup.server.GetTask;
@@ -64,8 +65,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     Location start, end;
 
     Journey journey;
-
-    RadioGroup timeOption;
 
     ListView user_list_view;
     UserListAdapter user_adapter;
@@ -411,7 +410,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                 if(res.statusCode==200){
                     Log.d("group",res.data.toString());
                     try {
-                        journey.group = res.data.getJSONObject("group");
+                        journey.group = new Group(res.data.getJSONObject("group"));
                     }catch (Exception E){
                         Log.e("JSONError","MainActivity 457 : group not present in JSON");
                     }

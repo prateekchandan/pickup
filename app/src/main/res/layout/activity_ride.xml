@@ -195,23 +195,13 @@
                         android:id="@+id/event_here_text"
                         android:text="Real time events will be shown here"/>
 
-                    <ScrollView
+                    <ListView
                         android:layout_width="match_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_marginTop="5dp"
-                        android:layout_below="@id/event_here_text"
-                        android:background="#ffffff">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingLeft="5dp"
-                            android:paddingRight="5dp"
-                            android:paddingTop="10dp"
-                            android:id="@+id/event_box"
-                            >
-                        </LinearLayout>
-                    </ScrollView>
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingTop="10dp"
+                        android:id="@+id/event_box"/>
 
 
                 </RelativeLayout>
