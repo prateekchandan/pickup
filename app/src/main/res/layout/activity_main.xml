@@ -226,6 +226,7 @@
         android:layout_width="250dp "
         android:id="@+id/navList"
         android:layout_height="match_parent"
+        android:clickable="true"
         android:layout_gravity="start"
         android:background="#ffeeeeee">
 
