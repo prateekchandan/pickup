@@ -19,7 +19,7 @@ import cab.pickup.ui.activity.MyActivity;
 public class UserProfileView extends RelativeLayout implements OnTaskCompletedListener{
     MyActivity mContext;
     ProfilePictureView mPicture;
-    TextView mName;
+    TextView mName,mAge;
 
     User mUser;
 
@@ -43,6 +43,7 @@ public class UserProfileView extends RelativeLayout implements OnTaskCompletedLi
 
         mPicture = (ProfilePictureView) view.findViewById(R.id.user_profile_img);
         mName = (TextView) view.findViewById(R.id.user_profile_name);
+        mAge = (TextView) view.findViewById(R.id.user_age_sex);
 
         mName.setHint("Loading...");
     }
@@ -56,7 +57,12 @@ public class UserProfileView extends RelativeLayout implements OnTaskCompletedLi
 
             mPicture.setProfileId(mUser.fbid);
             mName.setText(mUser.name);
-
+            String s =String.valueOf(mUser.age);
+            if(mUser.gender.equals("male"))
+                s+= " M";
+            else if(mUser.gender.equals("female"))
+                s+= " F";
+            mAge.setText(s);
             Log.d("UserProfileView", "Loaded : " + mUser.name);
     }
 }

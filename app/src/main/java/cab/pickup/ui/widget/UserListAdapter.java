@@ -38,11 +38,13 @@ public class UserListAdapter extends ArrayAdapter<String> {
     @Override
     public void add(String u){
         users.add(u);
+        super.add(u);
     }
 
     @Override
     public void clear(){
         users.clear();
+        super.clear();
     }
 
     @Override

@@ -230,6 +230,7 @@
             app:borderWidth="0dp"
             android:layout_above="@id/button_confirm"
             app:backgroundTint="@color/theme_color"
+            android:onClick="toggleMap"
             android:layout_alignParentRight="true"/>
 
         <Button

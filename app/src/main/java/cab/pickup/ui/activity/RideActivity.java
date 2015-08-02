@@ -8,12 +8,14 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,6 +81,9 @@ public class RideActivity extends MapsActivity {
 
             ((LinearLayout)findViewById(R.id.event_box)).addView(event);
         }
+
+        //make map invisible
+        findViewById(R.id.map).setVisibility(View.INVISIBLE);
     }
 
 
@@ -226,5 +231,29 @@ public class RideActivity extends MapsActivity {
     public void onDestroy() {
         unregisterReceiver(mUpdateReceiver);
         super.onDestroy();
+    }
+
+    public void toggleMap(View V){
+        View mapView = findViewById(R.id.map);
+        View eventView = findViewById(R.id.eventView);
+        FloatingActionButton button = ((FloatingActionButton)findViewById(R.id.fab));
+        if(mapView.getVisibility()==View.INVISIBLE){
+            mapView.setVisibility(View.VISIBLE);
+            mapView.setAlpha(0.0f);
+
+            mapView.animate()
+                    .alpha(1.0f);
+            eventView.setVisibility(View.INVISIBLE);
+            button.setImageResource(R.drawable.b_arrow);
+        }
+        else{
+            eventView.setVisibility(View.VISIBLE);
+            eventView.setAlpha(0.0f);
+
+            eventView.animate()
+                    .alpha(1.0f);
+            mapView.setVisibility(View.INVISIBLE);
+            button.setImageResource(R.drawable.map);
+        }
     }
 }

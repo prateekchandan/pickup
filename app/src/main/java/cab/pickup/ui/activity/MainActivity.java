@@ -221,6 +221,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             return;
         }
 
+        onAddressChangeClear();
         if(!address.locUpdated){
             AsyncTask<String, Void, String> locFetch = new AsyncTask<String,Void,String>(){
                 @Override
@@ -325,6 +326,8 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             ((CompoundButton)v).setChecked(true);
         }
 
+        clearFareAndMates();
+
         v.setSelected(true);
         start = field_start.getAddress();
         end = field_end.getAddress();
@@ -368,6 +371,14 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         ((ToggleButton)findViewById(R.id.tab_mates)).setChecked(false);
 
         ((ToggleButton)v).setChecked(true);
+        if(v.getId()==R.id.tab_fares){
+            findViewById(R.id.summary_fare).setVisibility(View.VISIBLE);
+            findViewById(R.id.summary_user_list).setVisibility(View.GONE);
+        }
+        else{
+            findViewById(R.id.summary_fare).setVisibility(View.GONE);
+            findViewById(R.id.summary_user_list).setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -382,6 +393,8 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                     super.onPostExecute(res);
                     if(res.statusCode==200){
                         try {
+                            ((TextView)findViewById(R.id.mates_empty_notif)).setVisibility(View.INVISIBLE);
+                            Log.d("bestmatch","here");
                             JSONObject usersJson = res.data.getJSONObject("best_match");
                             if(!usersJson.toString().equals("{}")){
 
@@ -389,8 +402,10 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
                                 for (int i = 0; i < users.length(); i++) {
                                     user_adapter.add(users.getString(i));
+                                    Log.d("bestmatch", users.getString(i));
                                 }
                             } else {
+                                ((TextView)findViewById(R.id.mates_empty_notif)).setVisibility(View.VISIBLE);
                                 ((TextView)findViewById(R.id.mates_empty_notif)).setText("No mates found!");
                             }
 
@@ -399,7 +414,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                         }
                     }
                 }
-            }.execute(getUrl("/get_best_match/"+journey.id+"?key="+getKey()));
+            }.execute(getUrl("/get_best_match/" + journey.id + "?key=" + getKey()));
         }
     }
 
@@ -433,5 +448,26 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         field_end.setAddress(field_start.getAddress());
         field_start.setAddress(temp);
 
+    }
+
+    //Clearing Function
+    public void clearFareAndMates(){
+        user_adapter.clear();
+        findViewById(R.id.summary_fare).setVisibility(View.GONE);
+        findViewById(R.id.summary_user_list).setVisibility(View.VISIBLE);
+        ((ToggleButton)findViewById(R.id.tab_fares)).setChecked(false);
+        ((ToggleButton)findViewById(R.id.tab_mates)).setChecked(true);
+    }
+
+    public void clearTimers(){
+        ((CompoundButton)findViewById(R.id.time_30)).setChecked(false);
+        ((CompoundButton)findViewById(R.id.time_60)).setChecked(false);
+    }
+
+    public void onAddressChangeClear(){
+        findViewById(R.id.fare_and_mates_card).setVisibility(View.INVISIBLE);
+        findViewById(R.id.button_confirm).setVisibility(View.INVISIBLE);
+        clearFareAndMates();
+        clearTimers();
     }
 }

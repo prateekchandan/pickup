@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -144,6 +145,9 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
             setContentView(R.layout.widget_location_search_dialog);
 
             searchField = (EditText)findViewById(R.id.location_search_dialog_edittext);
+            if(searchField.requestFocus()) {
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            }
             list = (ListView) findViewById(R.id.location_search_dialog_list);
 
             adapter=new PlacesAdapter(context);
@@ -189,6 +193,8 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
             });
 
             getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            getWindow().getAttributes().x=0;
+            getWindow().getAttributes().y=0;
         }
 
         @Override
