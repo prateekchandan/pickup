@@ -19,14 +19,14 @@ import cab.pickup.R;
 import cab.pickup.api.User;
 
 public class UserListAdapter extends ArrayAdapter<String> {
-    List<String> users = new ArrayList<>();
+
     Context context;
 
     public UserListAdapter(Context context, List<String> objects) {
         super(context, android.R.layout.simple_list_item_1, objects);
 
         this.context=context;
-        users = objects;
+
     }
 
     public UserListAdapter(Context context) {
@@ -35,29 +35,15 @@ public class UserListAdapter extends ArrayAdapter<String> {
         this.context=context;
     }
 
-    @Override
-    public void add(String u){
-        users.add(u);
-        super.add(u);
-    }
 
-    @Override
-    public void clear(){
-        users.clear();
-        super.clear();
-    }
 
-    @Override
-    public int getCount(){
-        return users.size();
-    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         UserProfileView user_layout = new UserProfileView(context);
         ListView.LayoutParams lp = new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.WRAP_CONTENT);
         user_layout.setLayoutParams(lp);
-        user_layout.setUserId(users.get(position));
+        user_layout.setUserId(getItem(position));
 
         return user_layout;
     }

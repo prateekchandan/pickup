@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.net.URL;
 
 import cab.pickup.R;
+import cab.pickup.util.Helper;
 
 public class ProfileActivity extends MyActivity{
 
@@ -73,6 +74,7 @@ public class ProfileActivity extends MyActivity{
     }
 
     public void setProfilePicture(){
+        Helper.setFBImage(me.fbid,this,mProfilePic);
         new AsyncTask<String,Void,Bitmap>(){
 
             @Override
