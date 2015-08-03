@@ -45,8 +45,6 @@ public class RideActivity extends MapsActivity {
 
     ListView mEventList;
     EventAdapter mEventAdapter;
-    List<User> mates = new ArrayList<>();
-
 
     BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -82,20 +80,16 @@ public class RideActivity extends MapsActivity {
 
         if(getIntent().hasExtra("action")){
             String action = getIntent().getStringExtra("action");
-            final EventView event = new EventView(this);
-
             if(action.equals(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG)){
                 journey.group.mates.add(0, new User(getIntent().getStringExtra("id"), new OnTaskCompletedListener() {
                     @Override
                     public void onTaskCompleted(Result res) {
-                        event.setEvent(new Event(Event.TYPE_USER_ADDED,journey.group.mates.get(0)));
+                        mEventAdapter.add(new Event(Event.TYPE_USER_ADDED,journey.group.mates.get(0)));
                     }
                 }));
             } else if(action.equals(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG)){
-                event.setEvent(new Event(Event.TYPE_DRIVER_ADDED,getIntent().getStringExtra("id")));
+                mEventAdapter.add(new Event(Event.TYPE_DRIVER_ADDED, getIntent().getStringExtra("id")));
             }
-
-            ((LinearLayout)findViewById(R.id.event_box)).addView(event);
         }
     }
 
@@ -184,6 +178,13 @@ public class RideActivity extends MapsActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        prefs.edit().putString("journey",journey.toString());
     }
 
     public void cancel(View v){

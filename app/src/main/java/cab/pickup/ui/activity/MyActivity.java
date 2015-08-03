@@ -34,6 +34,7 @@ public class MyActivity extends ActionBarActivity implements ServiceConnection{
         try {
             me=new User(new JSONObject(prefs.getString("user_json","")));
             Log.d("MyAct", me.getJson());
+            Log.d("MyAct", "Journey: "+prefs.getString("journey",""));
         } catch (JSONException e) {
             e.printStackTrace();
             me=new User();
