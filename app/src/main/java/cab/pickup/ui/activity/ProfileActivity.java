@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,6 +28,7 @@ public class ProfileActivity extends MyActivity{
         supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         try {
             getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.profile_actionbar_gradient));
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         catch (Exception E){
             E.printStackTrace();
@@ -59,6 +61,11 @@ public class ProfileActivity extends MyActivity{
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+
+        if(id == android.R.id.home){
+            onBackPressed();
             return true;
         }
 

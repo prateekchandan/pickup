@@ -248,13 +248,15 @@
 
 
 
-    <ListView
+    <cab.pickup.ui.widget.SideBarMenu
+        android:layout_width="250dp "
         android:id="@+id/navList"
-        android:layout_width="200dp"
         android:layout_height="match_parent"
-        android:layout_gravity="left|start"
-        android:background="#ffeeeeee"/>
+        android:clickable="true"
+        android:layout_gravity="start"
+        android:background="#ffeeeeee">
 
+    </cab.pickup.ui.widget.SideBarMenu>
 
 
 </android.support.v4.widget.DrawerLayout>

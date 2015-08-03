@@ -118,8 +118,7 @@
 
         <activity
             android:name=".ui.activity.ProfileActivity"
-            android:label="@string/title_activity_profile"
-            android:parentActivityName=".ui.activity.MainActivity">
+            android:label="@string/title_activity_profile">
         </activity>
     </application>
 
