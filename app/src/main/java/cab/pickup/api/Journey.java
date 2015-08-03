@@ -30,8 +30,8 @@ public class Journey {
     public Location start, end;
 
     public String user_id;
-    public JSONObject group;
-    public String group_id;
+    public Group group;
+
     public String datetime, del_time, cab_preference;
 
 
@@ -48,7 +48,8 @@ public class Journey {
         del_time=journey.getString("margin_before");
         cab_preference=journey.getString("preference");
 
-        group=journey.getJSONObject("group");
+
+        group = new Group(journey.getJSONObject("group"));
     }
 
     public Journey(User user, Location start, Location end, String datetime, String del_time, String cab_preference){
@@ -126,23 +127,6 @@ public class Journey {
             e.printStackTrace();
         }
 
-        /*String json="{";
-
-        json+="\"journey_id\":\""+id+"\",";
-        json+="\"journey_time\":\""+datetime+"\",";
-
-        json+="\"start_lat\":\""+start.latitude+"\",";
-        json+="\"start_long\":\""+start.longitude+"\",";
-        json+="\"start_text\":\""+start.longDescription+"\",";
-
-        json+="\"end_lat\":\""+end.latitude+"\",";
-        json+="\"end_long\":\""+end.longitude+"\",";
-        json+="\"end_text\":\""+end.longDescription+"\",";
-
-        json+="\"margin_before\":\""+del_time+"\",";
-        json+="\"preference\":\""+cab_preference+"\"";
-
-        json+="}";*/
         return journey.toString();
     }
 

@@ -7,12 +7,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import cab.pickup.R;
+import cab.pickup.api.Event;
+import cab.pickup.server.OnTaskCompletedListener;
 import cab.pickup.ui.activity.MyActivity;
 
 public class EventView extends LinearLayout{
-    public String title="Not Init";
-    public String time="infinite time ago";
-    public int icon= R.drawable.user;
+    Event mEvent;
 
     TextView mTitle;
     TextView mTime;
@@ -39,15 +39,13 @@ public class EventView extends LinearLayout{
     }
 
     public void updateView(){
-        mTitle.setText(title);
-        mTime.setText(time);
-        mIcon.setImageDrawable(context.getResources().getDrawable(icon));
+        mTitle.setText(mEvent.getTitle());
+        mTime.setText(mEvent.time.toString());
+        mIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.user));
     }
 
-    public void setContent(String title, String time, int icon){
-        this.time=time;
-        this.title=title;
-        this.icon=icon;
+    public void setEvent(Event e){
+        mEvent = e;
 
         updateView();
     }

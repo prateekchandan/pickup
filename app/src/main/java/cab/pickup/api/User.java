@@ -15,8 +15,8 @@ public class User{
     public Location home, office;
 
 
-    public User(JSONObject user, boolean hasAddress) throws JSONException{
-        loadJSONdata(user,hasAddress);
+    public User(JSONObject user) throws JSONException{
+        loadJSONdata(user,false);
     }
 
     public User(String id, OnTaskCompletedListener listener){

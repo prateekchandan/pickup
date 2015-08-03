@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,11 +25,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cab.pickup.R;
+import cab.pickup.api.Event;
 import cab.pickup.api.Journey;
+import cab.pickup.api.User;
 import cab.pickup.gcm.GcmIntentService;
 import cab.pickup.server.GetTask;
+import cab.pickup.server.OnTaskCompletedListener;
 import cab.pickup.server.Result;
+import cab.pickup.ui.widget.EventAdapter;
 import cab.pickup.ui.widget.EventView;
 
 
@@ -36,6 +44,9 @@ public class RideActivity extends MapsActivity {
     Journey journey;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
+
+    ListView mEventList;
+    EventAdapter mEventAdapter;
 
     BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -47,15 +58,11 @@ public class RideActivity extends MapsActivity {
 
             if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG)){
                 Toast.makeText(RideActivity.this, "User added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
-                EventView event = new EventView(RideActivity.this);
-                event.setContent("Mate added to journey!", "00:00", R.drawable.user);
-                ((LinearLayout)findViewById(R.id.event_box)).addView(event);
+
             } else if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG)){
                 Toast.makeText(RideActivity.this, "Driver added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
 
-                EventView event = new EventView(RideActivity.this);
-                event.setContent("Driver allocated", "00:00", R.drawable.user);
-                ((LinearLayout)findViewById(R.id.event_box)).addView(event);
+                mEventAdapter.add(new Event(Event.TYPE_DRIVER_ADDED, intent.getStringExtra("id")));
             }
         }
     };
@@ -69,17 +76,22 @@ public class RideActivity extends MapsActivity {
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         setupDrawer();
 
+        mEventAdapter = new EventAdapter(this, R.layout.event_view);
+        mEventList = (ListView) findViewById(R.id.event_box);
+        mEventList.setAdapter(mEventAdapter);
+
         if(getIntent().hasExtra("action")){
             String action = getIntent().getStringExtra("action");
-            EventView event = new EventView(this);
-
             if(action.equals(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG)){
-                event.setContent("Mate added to journey!", "00:00", R.drawable.user);
+                journey.group.mates.add(0, new User(getIntent().getStringExtra("id"), new OnTaskCompletedListener() {
+                    @Override
+                    public void onTaskCompleted(Result res) {
+                        mEventAdapter.add(new Event(Event.TYPE_USER_ADDED,journey.group.mates.get(0)));
+                    }
+                }));
             } else if(action.equals(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG)){
-                event.setContent("Driver allocated!", "00:00", R.drawable.user);
+                mEventAdapter.add(new Event(Event.TYPE_DRIVER_ADDED, getIntent().getStringExtra("id")));
             }
-
-            ((LinearLayout)findViewById(R.id.event_box)).addView(event);
         }
 
         //make map invisible
@@ -139,8 +151,8 @@ public class RideActivity extends MapsActivity {
             journey=new Journey(new JSONObject(prefs.getString("journey","")));
             setupTextBoxes();
 
-            JSONArray start_pts = journey.group.getJSONObject("path_waypoints").getJSONArray("startwaypoints");
-            JSONArray end_pts = journey.group.getJSONObject("path_waypoints").getJSONArray("endwaypoints");
+            JSONArray start_pts = journey.group.json.getJSONObject("path_waypoints").getJSONArray("startwaypoints");
+            JSONArray end_pts = journey.group.json.getJSONObject("path_waypoints").getJSONArray("endwaypoints");
 
             double start_lat = start_pts.getJSONArray(0).getDouble(0);
             double start_lng = start_pts.getJSONArray(0).getDouble(1);
@@ -169,6 +181,13 @@ public class RideActivity extends MapsActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        prefs.edit().putString("journey",journey.toString());
     }
 
     public void cancel(View v){

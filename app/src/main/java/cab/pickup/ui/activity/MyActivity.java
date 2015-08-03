@@ -8,10 +8,8 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,8 +32,9 @@ public class MyActivity extends ActionBarActivity implements ServiceConnection{
 
         prefs=getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
         try {
-            me=new User(new JSONObject(prefs.getString("user_json","")), false);
+            me=new User(new JSONObject(prefs.getString("user_json","")));
             Log.d("MyAct", me.getJson());
+            Log.d("MyAct", "Journey: "+prefs.getString("journey",""));
         } catch (JSONException e) {
             e.printStackTrace();
             me=new User();
@@ -49,7 +48,7 @@ public class MyActivity extends ActionBarActivity implements ServiceConnection{
     protected void onResume(){
         super.onResume();
         try {
-            me=new User(new JSONObject(prefs.getString("user_json","")), false);
+            me=new User(new JSONObject(prefs.getString("user_json","")));
             Log.d("MyAct", me.getJson());
         } catch (JSONException e) {
             e.printStackTrace();
