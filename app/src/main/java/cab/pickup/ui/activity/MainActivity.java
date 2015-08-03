@@ -425,10 +425,10 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                     try {
                         journey.group = new Group(res.data.getJSONObject("group"));
                     }catch (Exception E){
-                        Log.e("JSONError","MainActivity 457 : group not present in JSON");
+                        E.printStackTrace();
                     }
 
-                    prefs.edit().putString("journey",journey.toString()).apply();
+                    prefs.edit().putString("journey",journey.toString()).commit();
 
                     Intent i = new Intent(MainActivity.this,RideActivity.class);
                     startActivity(i);

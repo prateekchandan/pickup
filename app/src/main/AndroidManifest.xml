@@ -118,7 +118,11 @@
 
         <activity
             android:name=".ui.activity.ProfileActivity"
-            android:label="@string/title_activity_profile">
+            android:label="@string/title_activity_profile" >
+        </activity>
+        <activity
+            android:name=".ui.activity.HistoryActivity"
+            android:label="@string/title_activity_history" >
         </activity>
     </application>
 

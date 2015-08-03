@@ -19,6 +19,7 @@ import org.w3c.dom.Text;
 
 import cab.pickup.R;
 import cab.pickup.api.User;
+import cab.pickup.ui.activity.HistoryActivity;
 import cab.pickup.ui.activity.MyActivity;
 import cab.pickup.ui.activity.ProfileActivity;
 import cab.pickup.ui.activity.SettingsActivity;
@@ -56,7 +57,7 @@ public class SideBarMenu extends RelativeLayout {
         mUser=mContext.me;
 
         ImageView userImg = ((ImageView) findViewById(R.id.user_photo));
-                ((TextView) findViewById(R.id.user_name)).setText(mUser.name);
+        ((TextView) findViewById(R.id.user_name)).setText(mUser.name);
         ((TextView)findViewById(R.id.user_email)).setText(mUser.email);
         Helper.setFBImage(mUser.fbid, mContext,userImg);
 
@@ -113,7 +114,7 @@ public class SideBarMenu extends RelativeLayout {
         menu.findViewById(R.id.menu_history).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mContext.startActivity(new Intent(mContext, HistoryActivity.class));
             }
         });
 

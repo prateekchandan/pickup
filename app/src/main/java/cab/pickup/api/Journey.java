@@ -49,7 +49,7 @@ public class Journey {
         cab_preference=journey.getString("preference");
 
 
-        group = new Group(journey.getJSONObject("group"));
+        group = new Group(new JSONObject(journey.getString("group")));
     }
 
     public Journey(User user, Location start, Location end, String datetime, String del_time, String cab_preference){

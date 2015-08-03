@@ -1,5 +1,7 @@
 package cab.pickup.api;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,18 +16,20 @@ public class Group {
     }
 
     public Group(JSONObject rep) throws JSONException{
+        Log.d("GROUP", rep.toString());
         if(rep.has("mates")) {
-            JSONArray users = rep.getJSONArray("users_list");
+            JSONArray users = rep.getJSONArray("mates");
             for (int i = 0; i < users.length(); i++) {
                 mates.add(new User(users.getString(i), null));
             }
+            this.json = rep.getJSONObject("json");
         } else {
-            JSONArray mate_array = rep.getJSONArray("mates");
+            JSONArray mate_array = rep.getJSONArray("users_list");
             for (int i = 0; i < mate_array.length(); i++) {
                 mates.add(new User(mate_array.getJSONObject(i)));
             }
 
-            this.json = rep.getJSONObject("json");
+            this.json = rep;
         }
     }
 

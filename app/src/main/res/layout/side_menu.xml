@@ -40,7 +40,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
+    <!--TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -53,7 +53,7 @@
         android:drawableStart="@drawable/ic_car_gray"
         android:drawableLeft="@drawable/ic_car_gray"
         android:drawablePadding="15dp"
-        />
+        /-->
 
     <TextView
         android:layout_width="match_parent"
@@ -69,7 +69,7 @@
         android:drawableLeft="@drawable/ic_history"
         android:drawablePadding="15dp"
         />
-
+    <TextView  android:layout_width="match_parent"  android:layout_height="2dp" android:background="#ddd" android:layout_marginLeft="20dp" android:layout_marginRight="20dp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -84,6 +84,7 @@
         android:drawableLeft="@drawable/ic_user_gray"
         android:drawablePadding="15dp"
         />
+    <TextView  android:layout_width="match_parent"  android:layout_height="2dp" android:background="#ddd" android:layout_marginLeft="20dp" android:layout_marginRight="20dp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -99,6 +100,7 @@
         android:drawableLeft="@drawable/ic_gear_gray"
         android:drawablePadding="15dp"
         />
+    <TextView  android:layout_width="match_parent"  android:layout_height="2dp" android:background="#ddd" android:layout_marginLeft="20dp" android:layout_marginRight="20dp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -114,6 +116,7 @@
         android:drawableLeft="@drawable/ic_wallet_gray"
         android:drawablePadding="15dp"
         />
+    <TextView  android:layout_width="match_parent"  android:layout_height="2dp" android:background="#ddd" android:layout_marginLeft="20dp" android:layout_marginRight="20dp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -129,6 +132,7 @@
         android:drawableLeft="@drawable/ic_share_gray"
         android:drawablePadding="15dp"
         />
+    <TextView  android:layout_width="match_parent"  android:layout_height="2dp" android:background="#ddd" android:layout_marginLeft="20dp" android:layout_marginRight="20dp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -144,6 +148,7 @@
         android:drawableLeft="@drawable/ic_rate_gray"
         android:drawablePadding="15dp"
         />
+    <TextView  android:layout_width="match_parent"  android:layout_height="2dp" android:background="#ddd" android:layout_marginLeft="20dp" android:layout_marginRight="20dp"/>
 
 
 </LinearLayout>

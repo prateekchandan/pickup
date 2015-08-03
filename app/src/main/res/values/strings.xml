@@ -62,5 +62,6 @@
     <string name="title_activity_profile">Profile Page</string>
 
     <string name="login_successful">Successfully logged in!!</string>
+    <string name="title_activity_history">History</string>
 
 </resources>
