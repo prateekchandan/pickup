@@ -211,7 +211,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
     @Override
     public void onAddressSelected(final LocationSearchBar bar, Location address){
-        if(address == null || bar == null) return;
+        if(address == null || bar == null || bar.getAddress()==null) return;
 
         if(map==null){
             Toast.makeText(this,getResources().getString(R.string.map_error),Toast.LENGTH_SHORT).show();
