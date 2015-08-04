@@ -51,6 +51,8 @@ public class RideActivity extends MapsActivity {
     BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.d("GCM","update Reciever called");
+
             NotificationManager mNotificationManager = (NotificationManager)
                     RideActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -59,6 +61,12 @@ public class RideActivity extends MapsActivity {
             if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG)){
                 Toast.makeText(RideActivity.this, "User added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
 
+                journey.group.mates.add(0, new User(intent.getStringExtra("id"), new OnTaskCompletedListener() {
+                    @Override
+                    public void onTaskCompleted(Result res) {
+                        mEventAdapter.add(new Event(Event.TYPE_USER_ADDED,journey.group.mates.get(0)));
+                    }
+                }));
             } else if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG)){
                 Toast.makeText(RideActivity.this, "Driver added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
 
@@ -82,6 +90,7 @@ public class RideActivity extends MapsActivity {
 
         if(getIntent().hasExtra("action")){
             String action = getIntent().getStringExtra("action");
+            Log.d("GCM", "Action: " +action);
             if(action.equals(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG)){
                 journey.group.mates.add(0, new User(getIntent().getStringExtra("id"), new OnTaskCompletedListener() {
                     @Override
@@ -92,6 +101,8 @@ public class RideActivity extends MapsActivity {
             } else if(action.equals(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG)){
                 mEventAdapter.add(new Event(Event.TYPE_DRIVER_ADDED, getIntent().getStringExtra("id")));
             }
+        } else {
+            Log.d("GCM", "No action");
         }
 
         //make map invisible
@@ -111,9 +122,9 @@ public class RideActivity extends MapsActivity {
         super.onPostCreate(savedInstanceState);
         mDrawerToggle.syncState();
 
-        //registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG));
+        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG));
         registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG));
-
+        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_DRIVER_ARRIVED_INTENT_TAG));
     }
 
     @Override

@@ -104,7 +104,7 @@ public class LocationTracker extends Service implements LocationListener,
         this.location = location;
         lastUpdateTime = DateFormat.getTimeInstance().format(new Date());
 
-        Log.d(TAG, "Location: " + getLatitude() + "," + getLongitude() + ", Time: " + lastUpdateTime);
+        Log.v(TAG, "Location: " + getLatitude() + "," + getLongitude() + ", Time: " + lastUpdateTime);
     }
 
     @Override

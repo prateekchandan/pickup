@@ -20,7 +20,8 @@ android:layout_height="wrap_content">
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="10dp"
-        android:src="@drawable/user"/>
+        android:src="@drawable/user"
+        android:id="@+id/event_icon" />
     <ImageView
         android:layout_width="5dp"
         android:layout_height="5dp"
@@ -66,7 +67,7 @@ android:layout_height="wrap_content">
             android:layout_height="20dp"
             android:layout_marginRight="5dp"
             android:src="@android:drawable/ic_menu_today"
-            android:id="@+id/event_icon"
+            android:id="@+id/"
             />
         <TextView
             android:layout_width="wrap_content"

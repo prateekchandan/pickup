@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import cab.pickup.R;
 import cab.pickup.api.Event;
-import cab.pickup.server.OnTaskCompletedListener;
 import cab.pickup.ui.activity.MyActivity;
 
 public class EventView extends LinearLayout{
@@ -34,13 +33,11 @@ public class EventView extends LinearLayout{
         mTitle = ((TextView)eventView.findViewById(R.id.event_title));
         mIcon = ((ImageView)eventView.findViewById(R.id.event_icon));
         mTime = ((TextView)eventView.findViewById(R.id.event_time));
-
-        updateView();
     }
 
     public void updateView(){
         mTitle.setText(mEvent.getTitle());
-        mTime.setText(mEvent.time.toString());
+        mTime.setText("00:00");
         mIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.user));
     }
 
