@@ -1,6 +1,9 @@
 package cab.pickup.api;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Date;
 
 import cab.pickup.server.OnTaskCompletedListener;
@@ -20,6 +23,15 @@ public class Event {
         this.data = data;
     }
 
+    public Event(JSONObject json) throws JSONException {
+        type=json.getInt("type");
+        if(type==TYPE_DRIVER_ADDED){
+            data=json.getString("data");
+        } else {
+            data=new User(json.getJSONObject("data"));
+        }
+    }
+
     public String getTitle() {
         switch (type){
             case TYPE_DRIVER_ADDED:
@@ -33,5 +45,12 @@ public class Event {
         }
 
         return "Not Init";
+    }
+
+    @Override
+    public String toString() {
+        String json = "{\"type\" : "+type+",\"data\":"+data.toString()+"}";
+
+        return json;
     }
 }

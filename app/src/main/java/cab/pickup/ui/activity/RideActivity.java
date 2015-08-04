@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -71,6 +72,24 @@ public class RideActivity extends MapsActivity {
                 Toast.makeText(RideActivity.this, "Driver added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
 
                 mEventAdapter.add(new Event(Event.TYPE_DRIVER_ADDED, intent.getStringExtra("id")));
+            } else if(intent.getAction().equals(GcmIntentService.JOURNEY_USER_DROPPED_INTENT_TAG)){
+                Toast.makeText(RideActivity.this, "User dropped : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
+
+                for(User u: journey.group.mates) {
+                    if(u.id.equals(intent.getStringExtra("id"))) {
+                        mEventAdapter.add(new Event(Event.TYPE_USER_DROPPED, u));
+                        break;
+                    }
+                }
+            } else if(intent.getAction().equals(GcmIntentService.JOURNEY_USER_PICKED_INTENT_TAG)){
+                Toast.makeText(RideActivity.this, "User picked : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
+
+                for(User u: journey.group.mates) {
+                    if(u.id.equals(intent.getStringExtra("id"))) {
+                        mEventAdapter.add(new Event(Event.TYPE_USER_PICKED, u));
+                        break;
+                    }
+                }
             }
         }
     };
@@ -88,6 +107,30 @@ public class RideActivity extends MapsActivity {
         mEventList = (ListView) findViewById(R.id.event_box);
         mEventList.setAdapter(mEventAdapter);
 
+        //make map invisible
+        findViewById(R.id.map).setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
+
+        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG));
+        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG));
+        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_DRIVER_ARRIVED_INTENT_TAG));
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshList();
         if(getIntent().hasExtra("action")){
             String action = getIntent().getStringExtra("action");
             Log.d("GCM", "Action: " +action);
@@ -104,27 +147,26 @@ public class RideActivity extends MapsActivity {
         } else {
             Log.d("GCM", "No action");
         }
-
-        //make map invisible
-        findViewById(R.id.map).setVisibility(View.INVISIBLE);
     }
 
+    protected void refreshList(){
+        mEventAdapter.clear();
+
+        try {
+            JSONArray events = new JSONArray(prefs.getString("events",""));
+            for(int i=0; i<events.length(); i++){
+                mEventAdapter.add(new Event(events.getJSONObject(i)));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void setupTextBoxes(){
         ((TextView)findViewById(R.id.field_start)).setText(journey.start.longDescription);
         ((TextView)findViewById(R.id.field_end)).setText(journey.end.longDescription);
         String booktime = journey.datetime;
         ((TextView)findViewById(R.id.book_time)).setText(booktime);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
-
-        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG));
-        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG));
-        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_DRIVER_ARRIVED_INTENT_TAG));
     }
 
     @Override
@@ -198,7 +240,19 @@ public class RideActivity extends MapsActivity {
     protected void onPause() {
         super.onPause();
 
-        prefs.edit().putString("journey",journey.toString());
+        SharedPreferences.Editor spe = prefs.edit();
+        spe.putString("journey", journey.toString());
+        try {
+            JSONArray events = new JSONArray();
+            for(int i=0; i<mEventAdapter.getCount(); i++){
+                events.put(new JSONObject(mEventAdapter.getItem(i).toString()));
+            }
+            spe.putString("events",events.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        spe.apply();
     }
 
     public void cancel(View v){

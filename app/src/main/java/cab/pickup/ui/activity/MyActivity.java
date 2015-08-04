@@ -36,6 +36,7 @@ public class MyActivity extends AppCompatActivity implements ServiceConnection{
             me=new User(new JSONObject(prefs.getString("user_json","")));
             Log.d("MyAct", me.getJson());
             Log.d("MyAct", "Journey: "+prefs.getString("journey",""));
+            Log.d("MyAct", "Events: "+prefs.getString("events",""));
         } catch (JSONException e) {
             e.printStackTrace();
             me=new User();
