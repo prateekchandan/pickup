@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -19,7 +20,7 @@ import cab.pickup.api.User;
 import cab.pickup.util.IOUtil;
 import cab.pickup.util.LocationTracker;
 
-public class MyActivity extends ActionBarActivity implements ServiceConnection{
+public class MyActivity extends AppCompatActivity implements ServiceConnection{
     public User me;
 
     SharedPreferences prefs;
