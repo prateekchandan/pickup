@@ -48,6 +48,7 @@ public class RideActivity extends MapsActivity {
 
     ListView mEventList;
     EventAdapter mEventAdapter;
+    private boolean isCancelled = false;
 
     BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -68,11 +69,13 @@ public class RideActivity extends MapsActivity {
                         mEventAdapter.add(new Event(Event.TYPE_USER_ADDED,journey.group.mates.get(0)));
                     }
                 }));
-            } else if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG)){
+            }
+            else if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG)){
                 Toast.makeText(RideActivity.this, "Driver added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
 
                 mEventAdapter.add(new Event(Event.TYPE_DRIVER_ADDED, intent.getStringExtra("id")));
-            } else if(intent.getAction().equals(GcmIntentService.JOURNEY_USER_DROPPED_INTENT_TAG)){
+            }
+            else if(intent.getAction().equals(GcmIntentService.JOURNEY_USER_DROPPED_INTENT_TAG)){
                 Toast.makeText(RideActivity.this, "User dropped : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
 
                 for(User u: journey.group.mates) {
@@ -90,6 +93,17 @@ public class RideActivity extends MapsActivity {
                         break;
                     }
                 }
+            }
+
+            else if(intent.getAction().equals(GcmIntentService.JOURNEY_DRIVER_ARRIVED_INTENT_TAG)){
+                Toast.makeText(RideActivity.this, "Driver Arrived : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
+                mEventAdapter.add(new Event(Event.TYPE_DRIVER_ARRIVED, intent.getStringExtra("id")));
+
+            }
+            else if(intent.getAction().equals(GcmIntentService.JOURNEY_DRIVER_ARRIVED_INTENT_TAG)){
+                Toast.makeText(RideActivity.this, "Driver Arrived : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
+                mEventAdapter.add(new Event(Event.TYPE_DRIVER_ARRIVED, intent.getStringExtra("id")));
+
             }
         }
     };
@@ -115,10 +129,13 @@ public class RideActivity extends MapsActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mDrawerToggle.syncState();
-
+        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_USER_CANCELLED_INTENT_TAG));
+        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_USER_DROPPED_INTENT_TAG));
+        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_USER_PICKED_INTENT_TAG));
         registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG));
         registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG));
         registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_DRIVER_ARRIVED_INTENT_TAG));
+
     }
 
     @Override
@@ -151,9 +168,11 @@ public class RideActivity extends MapsActivity {
 
     protected void refreshList(){
         mEventAdapter.clear();
-
+        String eventString = prefs.getString("events","");
+        if(eventString==null)
+            return;
         try {
-            JSONArray events = new JSONArray(prefs.getString("events",""));
+            JSONArray events = new JSONArray(eventString);
             for(int i=0; i<events.length(); i++){
                 mEventAdapter.add(new Event(events.getJSONObject(i)));
             }
@@ -240,19 +259,22 @@ public class RideActivity extends MapsActivity {
     protected void onPause() {
         super.onPause();
 
-        SharedPreferences.Editor spe = prefs.edit();
-        spe.putString("journey", journey.toString());
-        try {
-            JSONArray events = new JSONArray();
-            for(int i=0; i<mEventAdapter.getCount(); i++){
-                events.put(new JSONObject(mEventAdapter.getItem(i).toString()));
-            }
-            spe.putString("events",events.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        if(!isCancelled) {
 
-        spe.apply();
+            SharedPreferences.Editor spe = prefs.edit();
+            spe.putString("journey", journey.toString());
+            try {
+                JSONArray events = new JSONArray();
+                for (int i = 0; i < mEventAdapter.getCount(); i++) {
+                    events.put(new JSONObject(mEventAdapter.getItem(i).toString()));
+                }
+                spe.putString("events", events.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            spe.apply();
+        }
     }
 
     public void cancel(View v){
@@ -262,7 +284,7 @@ public class RideActivity extends MapsActivity {
                 .setCancelable(false)
                 .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
-                        prefs.edit().remove("journey").apply();
+
 
                         new GetTask(RideActivity.this,"Cancelling Journey.. !!"){
                             @Override
@@ -270,8 +292,13 @@ public class RideActivity extends MapsActivity {
                                 super.onPostExecute(res);
                                 if(res.statusCode==200)
                                     Toast.makeText(RideActivity.this,res.statusMessage,Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(RideActivity.this, MainActivity.class));
-                                finish();
+                                    startActivity(new Intent(RideActivity.this, MainActivity.class));
+                                    isCancelled = true;
+                                    SharedPreferences.Editor spe = prefs.edit();
+                                    spe.remove("journey");
+                                    spe.remove("events");
+                                    spe.apply();
+                                    finish();
                             }
                         }.execute(getUrl("/cancel_journey/" + journey.id + "?key=" + getKey()));
 

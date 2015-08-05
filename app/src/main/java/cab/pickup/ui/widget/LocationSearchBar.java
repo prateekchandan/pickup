@@ -275,9 +275,14 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
     }
 
     List<Location> searchFromString(String input){
-        List<Location> resultList = null;
+        List<Location> resultList = new ArrayList();
         HttpURLConnection conn = null;
         StringBuilder jsonResults = new StringBuilder();
+
+        // Checking validity of input search string
+        if(input == null || input.length()==0)
+            return  resultList;
+
         tracker = context.getLocationTracker();
         String locString ="";
         if(tracker!=null){
@@ -325,7 +330,7 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
             for (int i = 0; i < predsJsonArray.length(); i++) {
                 resultList.add(new Location(predsJsonArray.getJSONObject(i).getString("place_id"), predsJsonArray.getJSONObject(i).getString("description")));
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             Log.e(LOG_TAG, "Cannot process JSON results", e);
         }
 

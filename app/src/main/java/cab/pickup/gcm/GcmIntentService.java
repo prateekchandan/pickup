@@ -110,7 +110,7 @@ public class GcmIntentService extends IntentService {
                                 "One mate was dropped",
                                 data.getString("user_name")+" was dropped at his location");
                     }
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 

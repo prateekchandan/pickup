@@ -79,10 +79,7 @@ public class GetTask extends AsyncTask<String, Integer, Result> {
             )+": "+res.statusMessage);
         } else {
             if(listener!=null){
-                Log.d(TAG, "Listener called");
                 listener.onTaskCompleted(res);
-            } else {
-                Log.d(TAG, "Listener is null");
             }
         }
     }

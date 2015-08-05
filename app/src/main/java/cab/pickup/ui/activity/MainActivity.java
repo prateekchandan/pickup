@@ -1,6 +1,7 @@
 package cab.pickup.ui.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
@@ -174,28 +175,29 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                 JSONObject journey_data = new JSONObject(prefs.getString("journey", ""));
                 journey=new Journey(journey_data);
 
-                /*if(journey.del_time.equals("30"))
-                    timeOption.check(R.id.time_30);
-                else
-                    timeOption.check(R.id.time_60);*/
             } catch (JSONException e) {
                 e.printStackTrace();
                 Log.d("journeyError", e.getMessage());
                 journey = new Journey();
             }
 
-            page=PAGE_SUMMARY;
         } else {
             journey = new Journey();
         }
-
+        try {
+            Log.d("JourneyNow", journey.toString());
+        }catch (Exception E){E.printStackTrace();}
         //loadPage(page);
     }
 
 
     @Override
     public void onStop() {
-        if(journey.id!=null) prefs.edit().putString("journey", journey.toString()).apply();
+        if(journey.id!=null) {
+            SharedPreferences.Editor spe=prefs.edit();
+            spe.putString("journey", journey.toString());
+            spe.apply();
+        }
         super.onStop();
     }
 
@@ -412,6 +414,8 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                     }
                 }
             }.execute(getUrl("/get_best_match/" + journey.id + "?key=" + getKey()));
+        }else{
+            clearTimers();
         }
     }
 
@@ -428,7 +432,10 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                         E.printStackTrace();
                     }
 
-                    prefs.edit().putString("journey",journey.toString()).commit();
+                    SharedPreferences.Editor spe = prefs.edit();
+
+                    spe.putString("journey",journey.toString());
+                    spe.apply();
 
                     Intent i = new Intent(MainActivity.this,RideActivity.class);
                     startActivity(i);

@@ -45,7 +45,7 @@ public class    LoginActivity extends MyActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+            super.onCreate(savedInstanceState);
         try{
             getSupportActionBar().hide();
         }
@@ -86,6 +86,7 @@ public class    LoginActivity extends MyActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("LoginDebug","ActivityResult");
         Session.getActiveSession().onActivityResult(this, requestCode,
                 resultCode, data);
 
@@ -93,7 +94,7 @@ public class    LoginActivity extends MyActivity {
             findViewById(R.id.fb_login).setVisibility(View.GONE);
             ((TextView)findViewById(R.id.login_message_text)).setText("Adding user..");
             checkFromFBID();
-        } else if(me.id==null){
+        } else if(me.id==null || me.id==""){
             addUser();
         }
         else{
@@ -106,6 +107,7 @@ public class    LoginActivity extends MyActivity {
 
 
     public void getBiodata(){
+        Log.d("LoginDebug","getBioData");
         Request.executeMeRequestAsync(Session.getActiveSession(), new Request.GraphUserCallback() {
             @Override
             public void onCompleted(GraphUser graphUser, Response response) {
@@ -116,7 +118,7 @@ public class    LoginActivity extends MyActivity {
 
                 me.fbid = graphUser.getId();
 
-                Log.i(TAG, "fbid : " + graphUser.getId());
+                Log.i(TAG, "fbid : " + graphUser.getId() + " " + graphUser.getName() + " " + (String) graphUser.getProperty("email") + (String) graphUser.getProperty("gender"));
 
                 i.putExtra(getString(R.string.profile_tag_email), (String) graphUser.getProperty("email"));
                 i.putExtra(getString(R.string.profile_tag_gender), (String) graphUser.getProperty("gender"));
@@ -126,6 +128,7 @@ public class    LoginActivity extends MyActivity {
     }
 
     private void addUser() {
+        Log.d("LoginDebug","AddUser");
         Log.d(TAG, "add user");
         setResult(RESULT_OK);
 
@@ -180,10 +183,10 @@ public class    LoginActivity extends MyActivity {
             }
         }.execute(getUrl("/add_user"));
 
-        registerGCM();
     }
     
     public void addDataToPrefs(String user_id){
+        Log.d("LoginDebug","addDatatoPrefs");
         SharedPreferences.Editor spe = prefs.edit();
 
         me.id=user_id;
@@ -192,6 +195,7 @@ public class    LoginActivity extends MyActivity {
     }
 
     public void registerGCM(){
+        Log.d("LoginDebug","regGCM");
         final GoogleCloudMessaging gcm;
 
         final String SENDER_ID = "1032273645702";
@@ -260,6 +264,8 @@ public class    LoginActivity extends MyActivity {
     }
 
     private void startNextActivity() {
+        Log.d("LoginDebug","startNextActivity");
+        registerGCM();
         if(prefs.contains("journey")) {
             try {
                 JSONObject journey_data = new JSONObject(prefs.getString("journey", ""));
@@ -299,13 +305,13 @@ public class    LoginActivity extends MyActivity {
         getTask.execute(getUrl("/user/" + String.valueOf(me.id) + "?key=" + getKey())
         );
 
-        registerGCM();
     }
 
     public void checkFromFBID(){
+        Log.d("LoginDebug","checkfromFBID");
         Request.executeMeRequestAsync(Session.getActiveSession(), new Request.GraphUserCallback() {
             @Override
-            public void onCompleted(GraphUser graphUser, Response response) {
+            public void onCompleted(final GraphUser graphUser, Response response) {
                 if(graphUser==null){
                     Toast.makeText(getApplicationContext(),"Unable to connect to Facebook. Please check your network conenction!!",Toast.LENGTH_LONG).show();
                     findViewById(R.id.fb_login).setVisibility(View.VISIBLE);
@@ -318,7 +324,7 @@ public class    LoginActivity extends MyActivity {
                     public void onPostExecute(Result ret){
                         super.onPostExecute(ret);
                         if(ret.statusCode==200){
-                            int userPresent;
+                            int userPresent=0;
                             try{
                                 userPresent = ret.data.getInt("user_present");
                             }
@@ -344,8 +350,7 @@ public class    LoginActivity extends MyActivity {
                                     startNextActivity();
                                     Toast.makeText(getApplicationContext(),getString(R.string.login_successful),Toast.LENGTH_LONG).show();
                                 }catch (Exception E){
-                                    Log.e(TAG,E.getMessage());
-                                    getBiodata();
+                                    E.printStackTrace();
                                 }
                             }
                             else{
@@ -355,9 +360,9 @@ public class    LoginActivity extends MyActivity {
                         }
                     }
                 };
-                getTask.execute(getUrl("/user_exists?" + "key=" + getKey()+"&fbid="+fbid));
+                getTask.execute(getUrl("/user_exists?" + "key=" + getKey() + "&fbid="+fbid));
 
-                registerGCM();
+
             }
         });
 

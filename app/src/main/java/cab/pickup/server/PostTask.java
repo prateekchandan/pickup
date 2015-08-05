@@ -62,7 +62,7 @@ public abstract class PostTask extends AsyncTask<String, Integer, Result> {
 
             res = new Result(IOUtil.buildStringFromIS(response.getEntity().getContent()));
 
-            Log.d(TAG, res.statusCode + " : " + response.getStatusLine().getReasonPhrase());
+            Log.d(TAG, res.statusCode + " : " + url + " : " + response.getStatusLine().getReasonPhrase());
 
         } catch (IOException e) {
             onFail(e.getMessage());

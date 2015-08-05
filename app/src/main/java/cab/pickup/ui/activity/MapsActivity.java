@@ -63,6 +63,7 @@ public class MapsActivity extends MyActivity implements GoogleMap.OnMapLoadedCal
         map.getUiSettings().setZoomControlsEnabled(true);
         map.setPadding(0,0,0, 100);
         map.setMyLocationEnabled(true);
+        map.getUiSettings().setMapToolbarEnabled(false);
 
         if(map.getMyLocation() != null)
         {
@@ -122,7 +123,6 @@ public class MapsActivity extends MyActivity implements GoogleMap.OnMapLoadedCal
             }
 
             try {
-                Log.d(TAG, json);
                 JSONObject path = new JSONObject(json);
 
                 addPath(Journey.getPath(path), Journey.getLatLngBounds(path), "0");

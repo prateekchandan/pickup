@@ -38,21 +38,20 @@ public class PastJourney {
         }
     }
 
-
-}
-
-class UserTemp{
-    public int user_id;
-    public String fbid,name,gender,age;
-    public UserTemp(JSONObject user){
-        try {
-            user_id = user.getInt("user_id");
-            fbid = user.getString("fbid");
-            name = user.getString("user_name");
-            age = user.getString("age");
-            gender = user.getString("gender");
-        }catch (Exception E){
-            E.printStackTrace();
+    class UserTemp{
+        public int user_id;
+        public String fbid,name,gender,age;
+        public UserTemp(JSONObject user){
+            try {
+                user_id = user.getInt("user_id");
+                fbid = user.getString("fbid");
+                name = user.getString("user_name");
+                age = user.getString("age");
+                gender = user.getString("gender");
+            }catch (Exception E){
+                E.printStackTrace();
+            }
         }
     }
+
 }

@@ -20,9 +20,10 @@ public class SettingsActivity extends MyActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_settings);
+        Log.d(TAG,String.valueOf(me.id));
 
-
-        if(me.id==null) {
+        if(me.id==null ) {
+            Log.d("SettingsDebug","ID us NULL " + getData(getString(R.string.profile_tag_name)));
             me.name = getData(getString(R.string.profile_tag_name));
             me.email = getData(getString(R.string.profile_tag_email));
             me.gender = getData(getString(R.string.profile_tag_gender));
@@ -37,7 +38,8 @@ public class SettingsActivity extends MyActivity {
         }
         else
         {
-            ((TextView)findViewById(R.id.profile_name)).setText(me.name);
+            Log.d("SettingsDebug", "ID is " + me.id);
+            ((TextView) findViewById(R.id.profile_name)).setText(me.name);
             ((TextView)findViewById(R.id.profile_age)).setText(me.age);
             ((TextView)findViewById(R.id.profile_gender)).setText(me.gender);
             ((TextView)findViewById(R.id.profile_email)).setText(me.email);

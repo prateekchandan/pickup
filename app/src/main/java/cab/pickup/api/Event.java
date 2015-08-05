@@ -1,6 +1,8 @@
 package cab.pickup.api;
 
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,6 +15,7 @@ public class Event {
     public static final int TYPE_USER_PICKED=2;
     public static final int TYPE_USER_DROPPED=3;
     public static final int TYPE_DRIVER_ADDED=4;
+    public static final int TYPE_DRIVER_ARRIVED=5;
 
     public Date time;
     public int type;
@@ -24,6 +27,7 @@ public class Event {
     }
 
     public Event(JSONObject json) throws JSONException {
+        Log.d("JSONDATA",json.toString());
         type=json.getInt("type");
         if(type==TYPE_DRIVER_ADDED){
             data=json.getString("data");
@@ -36,6 +40,8 @@ public class Event {
         switch (type){
             case TYPE_DRIVER_ADDED:
                 return "Driver allocated to your journey";
+            case TYPE_DRIVER_ARRIVED:
+                return "Driver is about to reach you";
             case TYPE_USER_ADDED:
                 return ((User)data).name + " added to your group";
             case TYPE_USER_PICKED:
