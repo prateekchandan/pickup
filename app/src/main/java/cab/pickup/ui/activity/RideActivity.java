@@ -176,6 +176,8 @@ public class RideActivity extends MapsActivity {
     }
 
     protected void refreshList(){
+        Log.d("RidePage", "refreshList");
+
         mEventAdapter.clear();
         String eventString = prefs.getString("events","");
         if(eventString==null)

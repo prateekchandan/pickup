@@ -150,7 +150,7 @@ public class Journey {
             nameValuePairs.add(new BasicNameValuePair("user_id", user_id));
             nameValuePairs.add(new BasicNameValuePair("key", context.getKey()));
 
-            nameValuePairs.add(new BasicNameValuePair("journey_id", id));
+            //nameValuePairs.add(new BasicNameValuePair("journey_id", id));
             nameValuePairs.add(new BasicNameValuePair("start_lat", start.latitude+""));
             nameValuePairs.add(new BasicNameValuePair("start_long", start.longitude+""));
             nameValuePairs.add(new BasicNameValuePair("end_lat", end.latitude+""));

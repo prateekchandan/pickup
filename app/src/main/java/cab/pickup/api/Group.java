@@ -20,13 +20,13 @@ public class Group {
         if(rep.has("mates")) {
             JSONArray users = rep.getJSONArray("mates");
             for (int i = 0; i < users.length(); i++) {
-                mates.add(new User(users.getString(i), null));
+                mates.add(new User(users.getJSONObject(i)));
             }
             this.json = rep.getJSONObject("json");
         } else {
             JSONArray mate_array = rep.getJSONArray("users_list");
             for (int i = 0; i < mate_array.length(); i++) {
-                mates.add(new User(mate_array.getJSONObject(i)));
+                mates.add(new User(mate_array.getString(i),null));
             }
 
             this.json = rep;
@@ -38,9 +38,11 @@ public class Group {
         JSONObject rep=new JSONObject();
         JSONArray mate_array = new JSONArray();
 
-        for(User u : mates) mate_array.put(u);
 
         try {
+            for(User u : mates)
+                mate_array.put(new JSONObject(u.toString()));
+
             rep.put("mates",mate_array);
             rep.put("json",json);
         } catch (JSONException e) {
