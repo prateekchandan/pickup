@@ -6,6 +6,8 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import cab.pickup.server.OnTaskCompletedListener;
@@ -22,14 +24,16 @@ public class Event {
     public int type;
     public Object data;
 
-    public Event(int type, Object data){
+    public Event(int type, Object data, long time){
         this.type = type;
         this.data = data;
+        this.time=new Date(time);
     }
 
     public Event(JSONObject json) throws JSONException {
         Log.d("JSONDATA",json.toString());
         type=json.getInt("type");
+        time=new Date(json.getLong("time"));
         if(type==TYPE_DRIVER_ADDED){
             data=json.getString("data");
         } else {
@@ -54,9 +58,26 @@ public class Event {
         return "Not Init";
     }
 
+    public String getTimeString(){
+        long curr = System.currentTimeMillis();
+        if(curr-time.getTime() < 60000){
+            return "moments ago";
+        }else if(curr-time.getTime() < 60*60000){
+            return ((curr-time.getTime())/60000) + " minutes ago";
+        }else {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(time);
+            int hour = cal.get(Calendar.HOUR_OF_DAY);
+            int minutes = cal.get(Calendar.MINUTE);
+
+            return  hour+":"+minutes;
+        }
+
+    }
+
     @Override
     public String toString() {
-        String json = "{\"type\" : "+type+",\"data\":"+data.toString()+"}";
+        String json = "{\"type\" : "+type+",\"data\":"+data.toString()+",\"time\":"+time.getTime()+"}";
 
         return json;
     }

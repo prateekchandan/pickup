@@ -37,7 +37,7 @@ public class EventView extends LinearLayout{
 
     public void updateView(){
         mTitle.setText(mEvent.getTitle());
-        mTime.setText("00:00");
+        mTime.setText(mEvent.getTimeString());
         mIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.user));
     }
 
