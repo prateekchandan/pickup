@@ -84,6 +84,10 @@ public class User{
         return json;
     }
 
+    public String toString(){
+        return getJson();
+    }
+
     public void setPosition(String position) {
         int comma = position.indexOf(',');
         this.position = new LatLng(Double.valueOf(position.substring(0,comma)), Double.valueOf(position.substring(comma+1)));

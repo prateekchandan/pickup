@@ -16,6 +16,7 @@ public class Event {
     public static final int TYPE_USER_DROPPED=3;
     public static final int TYPE_DRIVER_ADDED=4;
     public static final int TYPE_DRIVER_ARRIVED=5;
+    public static final int TYPE_USER_CANCELLED=6;
 
     public Date time;
     public int type;

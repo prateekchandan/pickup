@@ -60,6 +60,10 @@ public class RideActivity extends MapsActivity {
 
             mNotificationManager.cancel(intent.getIntExtra("notif_id",0));
 
+            if(!journey.id.equals(intent.getStringExtra("journey_id"))){
+                return;
+            }
+
             if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG)){
                 Toast.makeText(RideActivity.this, "User added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
 
@@ -100,9 +104,14 @@ public class RideActivity extends MapsActivity {
                 mEventAdapter.add(new Event(Event.TYPE_DRIVER_ARRIVED, intent.getStringExtra("id")));
 
             }
-            else if(intent.getAction().equals(GcmIntentService.JOURNEY_DRIVER_ARRIVED_INTENT_TAG)){
-                Toast.makeText(RideActivity.this, "Driver Arrived : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
-                mEventAdapter.add(new Event(Event.TYPE_DRIVER_ARRIVED, intent.getStringExtra("id")));
+            else if(intent.getAction().equals(GcmIntentService.JOURNEY_USER_CANCELLED_INTENT_TAG)){
+                Toast.makeText(RideActivity.this, "User Cancelled : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
+                for(User u: journey.group.mates) {
+                    if(u.id.equals(intent.getStringExtra("id"))) {
+                        mEventAdapter.add(new Event(Event.TYPE_USER_CANCELLED, u));
+                        break;
+                    }
+                }
 
             }
         }

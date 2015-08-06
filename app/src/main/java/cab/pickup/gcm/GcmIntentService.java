@@ -88,27 +88,27 @@ public class GcmIntentService extends IntentService {
                     if(msg_type==TYPE_USER_ADDED){
                         sendJourneyUpdate(JOURNEY_ADD_USER_INTENT_TAG, data.getString("user_id"),
                                 "New mate added!",
-                                data.getString("user_name")+" will now ride with you");
+                                data.getString("user_name")+" will now ride with you",data.getString("journey_id"),data.getString("time"));
                     } else if(msg_type==TYPE_DRIVER_ADDED){
                         sendJourneyUpdate(JOURNEY_ADD_DRIVER_INTENT_TAG, data.getString("driver_id"),
                                 "Driver allocated!",
-                                "Check to see your driver's details");
+                                "Check to see your driver's details",data.getString("journey_id"),data.getString("time"));
                     } else if(msg_type==TYPE_DRIVER_ARRIVED){
                         sendJourneyUpdate(JOURNEY_DRIVER_ARRIVED_INTENT_TAG, data.getString("driver_id"),
                                 "Your driver is arriving...",
-                                "Please reach the pickup location");
+                                "Please reach the pickup location",data.getString("journey_id"),data.getString("time"));
                     } else if(msg_type==TYPE_USER_CANCELLED){
                         sendJourneyUpdate(JOURNEY_USER_CANCELLED_INTENT_TAG, data.getString("user_id"),
                                 "One mate left journey",
-                                data.getString("user_name")+" cancelled his journey");
+                                data.getString("user_name")+" cancelled his journey",data.getString("journey_id"),data.getString("time"));
                     }else if(msg_type==TYPE_USER_PICKED){
                         sendJourneyUpdate(JOURNEY_USER_PICKED_INTENT_TAG, data.getString("user_id"),
                                 "One mate was picked up",
-                                data.getString("user_name")+" was picked up from his location");
+                                data.getString("user_name")+" was picked up from his location",data.getString("journey_id"),data.getString("time"));
                     }else if(msg_type==TYPE_USER_DROPPED){
                         sendJourneyUpdate(JOURNEY_USER_DROPPED_INTENT_TAG, data.getString("user_id"),
                                 "One mate was dropped",
-                                data.getString("user_name")+" was dropped at his location");
+                                data.getString("user_name")+" was dropped at his location",data.getString("journey_id"),data.getString("time"));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -121,10 +121,12 @@ public class GcmIntentService extends IntentService {
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    private void sendJourneyUpdate(String intent_tag, String user_id, String title, String message){
+    private void sendJourneyUpdate(String intent_tag, String user_id, String title, String message,String journey_id,String time){
         Intent i=new Intent(this, RideActivity.class);
         i.putExtra("action", intent_tag);
         i.putExtra("id", user_id);
+        i.putExtra("journey_id",journey_id);
+        i.putExtra("time",time);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 i, PendingIntent.FLAG_CANCEL_CURRENT);
 
@@ -139,8 +141,10 @@ public class GcmIntentService extends IntentService {
         mNotificationManager.notify(user_id.hashCode(), mBuilder.build());
 
         Intent broadcast = new Intent(intent_tag);
-        broadcast.putExtra("id",user_id);
-        broadcast.putExtra("notif_id",user_id.hashCode());
+        broadcast.putExtra("id", user_id);
+        broadcast.putExtra("notif_id", user_id.hashCode());
+        broadcast.putExtra("journey_id", journey_id);
+        broadcast.putExtra("time",time);
         sendBroadcast(broadcast);
     }
 }
