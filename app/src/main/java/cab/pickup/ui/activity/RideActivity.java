@@ -23,6 +23,8 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -170,14 +172,19 @@ public class RideActivity extends MapsActivity {
                 }
             }
 
-            if(intent.getStringExtra("id").equals(me.id));
+            final RelativeLayout dialogView = (RelativeLayout) getLayoutInflater().inflate(R.layout.dialog_rate_journey, null);
+            ((TextView)dialogView.findViewById(R.id.fare_text)).setText("Rs. 1 Crore");
+
+            if(intent.getStringExtra("id").equals(me.id))
                 new AlertDialog.Builder(this)
                     .setTitle("Journey Completed!")
-                    .setMessage("Your journey ended successfully!")
+                    .setView(dialogView)
                     .setNeutralButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            startActivity(new Intent(RideActivity.this, MainActivity.class));
+                            Log.d("JourneyRating", String.valueOf(((RatingBar)dialogView.findViewById(R.id.rate_journey)).getNumStars()));
+
+                                    startActivity(new Intent(RideActivity.this, MainActivity.class));
                             isCancelled = true;
                             SharedPreferences.Editor spe = prefs.edit();
                             spe.remove("journey");
