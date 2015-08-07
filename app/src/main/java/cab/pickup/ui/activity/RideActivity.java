@@ -141,7 +141,7 @@ public class RideActivity extends MapsActivity {
             journey.group.mates.add(0, new User(intent.getStringExtra("id"), new OnTaskCompletedListener() {
                 @Override
                 public void onTaskCompleted(Result res) {
-                    mEventAdapter.add(new Event(Event.TYPE_USER_ADDED,journey.group.mates.get(0),time));
+                    mEventAdapter.add(new Event(Event.TYPE_USER_ADDED, journey.group.mates.get(0), time));
                 }
             }));
         }
@@ -269,6 +269,13 @@ public class RideActivity extends MapsActivity {
             user_adapter.add(U.id);
         }
         ((TextView)dialog.findViewById(R.id.head_text)).setText(String.format(getString(R.string.mates_dialog_head),journey.group.mates.size()));
+        ((ImageView)dialog.findViewById(R.id.icon_close)).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
         dialog.show();
     }
 

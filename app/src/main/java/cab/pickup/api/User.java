@@ -1,13 +1,18 @@
 package cab.pickup.api;
 
+import android.os.AsyncTask;
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cab.pickup.MyApplication;
 import cab.pickup.server.GetTask;
 import cab.pickup.server.OnTaskCompletedListener;
 import cab.pickup.server.Result;
+import cab.pickup.util.UserDatabaseHandler;
 
 public class User{
     public String id, fbid, device_id, name, email, gender,company, phone,age,company_email;
@@ -19,23 +24,59 @@ public class User{
         loadJSONdata(user,false);
     }
 
-    public User(String id, OnTaskCompletedListener listener){
-        GetTask getUserDetails=new GetTask(){
-            @Override
-            public void onPostExecute(Result res){
-                if(res.statusCode==200){
-                    try {
-                        loadJSONdata(res.data, false);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                super.onPostExecute(res);
-            }
-        };
+    public User(String id, final OnTaskCompletedListener listener){
 
-        getUserDetails.setOnTaskCompletedListener(listener);
-        getUserDetails.execute("http://pickup.prateekchandan.me/user/"+id+"?key=9f83c32cf3c9d529e");
+        final UserDatabaseHandler db = new UserDatabaseHandler(MyApplication.getAppContext());
+        User temp = db.findUser(id);
+        if(temp!=null){
+            JSONObject data=null;
+            try {
+                data = new JSONObject(temp.toString());
+                loadJSONdata(data,false);
+            }catch (Exception E){
+                E.printStackTrace();
+            }
+
+            final Result res = new Result();
+            res.statusCode=200;
+            res.statusMessage="User Details!!";
+            res.data=data;
+
+            //This async task is to make sure that the call to constructor is not stopped
+            new AsyncTask<String,Integer,Result>(){
+                @Override
+                protected Result doInBackground(String... params) {
+                    try {
+                        Thread.sleep(100);
+                    }catch (InterruptedException E){
+                        E.printStackTrace();
+                    }
+                    return res;
+                }
+                @Override
+                public void onPostExecute(Result res){
+                    listener.onTaskCompleted(res);
+                }
+            }.execute("");
+        }else{
+            GetTask getUserDetails=new GetTask(){
+                @Override
+                public void onPostExecute(Result res){
+                    if(res.statusCode==200){
+                        try {
+                            loadJSONdata(res.data, false);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    super.onPostExecute(res);
+                    db.addUser(User.this);
+                }
+            };
+
+            getUserDetails.setOnTaskCompletedListener(listener);
+            getUserDetails.execute("http://pickup.prateekchandan.me/user/" + id + "?key=9f83c32cf3c9d529e");
+        }
     }
 
     public User(){

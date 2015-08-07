@@ -24,11 +24,18 @@
         android:layout_marginRight="5dp"
         android:layout_marginTop="10dp"
         android:src="@drawable/ic_cancel_black" />
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="#aaa"
+        android:layout_below="@+id/head_text"
+        android:layout_height="1dp"/>
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/summary_user_list"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_marginTop="1dp"
         android:layout_below="@+id/head_text">
 
     </ListView>

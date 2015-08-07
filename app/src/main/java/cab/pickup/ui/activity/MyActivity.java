@@ -1,6 +1,7 @@
 package cab.pickup.ui.activity;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
@@ -105,4 +106,5 @@ public class MyActivity extends AppCompatActivity implements ServiceConnection{
     public void onLocationUpdate(Location location){
         // do nothing
     }
+
 }
