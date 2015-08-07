@@ -160,6 +160,27 @@ public class RideActivity extends MapsActivity {
                     break;
                 }
             }
+
+            if(intent.getStringExtra("id").equals(me.id));
+                new AlertDialog.Builder(this)
+                    .setTitle("Journey Completed!")
+                    .setMessage("Your journey ended successfully!")
+                    .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            startActivity(new Intent(RideActivity.this, MainActivity.class));
+                            isCancelled = true;
+                            SharedPreferences.Editor spe = prefs.edit();
+                            spe.remove("journey");
+                            spe.remove("events");
+                            spe.apply();
+                            finish();
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .create()
+                    .show();
+
         } else if(intent.getAction().equals(GcmIntentService.JOURNEY_USER_PICKED_INTENT_TAG)){
             Toast.makeText(RideActivity.this, "User picked : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
 
