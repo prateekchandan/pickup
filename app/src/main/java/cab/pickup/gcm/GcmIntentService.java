@@ -88,27 +88,27 @@ public class GcmIntentService extends IntentService {
                     if(msg_type==TYPE_USER_ADDED){
                         sendJourneyUpdate(JOURNEY_ADD_USER_INTENT_TAG, data.getString("user_id"),
                                 "New mate added!",
-                                data.getString("user_name")+" will now ride with you",data.getString("journey_id"),data.getString("time"));
+                                data.getString("user_name")+" will now ride with you",data.getString("journey_id"),data.getLong("time"));
                     } else if(msg_type==TYPE_DRIVER_ADDED){
                         sendJourneyUpdate(JOURNEY_ADD_DRIVER_INTENT_TAG, data.getString("driver_id"),
                                 "Driver allocated!",
-                                "Check to see your driver's details",data.getString("journey_id"),data.getString("time"));
+                                "Check to see your driver's details",data.getString("journey_id"),data.getLong("time"));
                     } else if(msg_type==TYPE_DRIVER_ARRIVED){
                         sendJourneyUpdate(JOURNEY_DRIVER_ARRIVED_INTENT_TAG, data.getString("driver_id"),
                                 "Your driver is arriving...",
-                                "Please reach the pickup location",data.getString("journey_id"),data.getString("time"));
+                                "Please reach the pickup location",data.getString("journey_id"),data.getLong("time"));
                     } else if(msg_type==TYPE_USER_CANCELLED){
                         sendJourneyUpdate(JOURNEY_USER_CANCELLED_INTENT_TAG, data.getString("user_id"),
                                 "One mate left journey",
-                                data.getString("user_name")+" cancelled his journey",data.getString("journey_id"),data.getString("time"));
+                                data.getString("user_name")+" cancelled his journey",data.getString("journey_id"),data.getLong("time"));
                     }else if(msg_type==TYPE_USER_PICKED){
                         sendJourneyUpdate(JOURNEY_USER_PICKED_INTENT_TAG, data.getString("user_id"),
                                 "One mate was picked up",
-                                data.getString("user_name")+" was picked up from his location",data.getString("journey_id"),data.getString("time"));
+                                data.getString("user_name")+" was picked up from his location",data.getString("journey_id"),data.getLong("time"));
                     }else if(msg_type==TYPE_USER_DROPPED){
                         sendJourneyUpdate(JOURNEY_USER_DROPPED_INTENT_TAG, data.getString("user_id"),
                                 "One mate was dropped",
-                                data.getString("user_name")+" was dropped at his location",data.getString("journey_id"),data.getString("time"));
+                                data.getString("user_name")+" was dropped at his location",data.getString("journey_id"),data.getLong("time"));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -121,7 +121,7 @@ public class GcmIntentService extends IntentService {
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    private void sendJourneyUpdate(String intent_tag, String user_id, String title, String message,String journey_id,String time){
+    private void sendJourneyUpdate(String intent_tag, String user_id, String title, String message,String journey_id,long time){
         Intent i=new Intent(this, RideActivity.class);
         i.putExtra("action", intent_tag);
         i.putExtra("id", user_id);
@@ -134,6 +134,7 @@ public class GcmIntentService extends IntentService {
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.logo)
                         .setContentTitle(title)
+                        .setContentInfo(message)
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(message));
 
