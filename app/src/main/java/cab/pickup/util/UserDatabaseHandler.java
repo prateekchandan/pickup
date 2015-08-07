@@ -117,6 +117,7 @@ public class UserDatabaseHandler extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
+        //TODO : Update the last fetch time for user .. it will be used for removing unused users and save emory space
         return  user;
     }
 }

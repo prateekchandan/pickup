@@ -35,7 +35,7 @@ public class Event {
         type=json.getInt("type");
         time=new Date(json.getLong("time"));
         if(type==TYPE_DRIVER_ADDED){
-            data=json.getString("data");
+            data=new Driver(json.getJSONObject("data"));
         } else {
             data=new User(json.getJSONObject("data"));
         }

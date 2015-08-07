@@ -15,9 +15,6 @@ import cab.pickup.server.GetTask;
 import cab.pickup.server.OnTaskCompletedListener;
 import cab.pickup.server.Result;
 
-/**
- * Created by prateek on 6/8/15.
- */
 public class Driver{
     public String driver_id, driver_name, driver_address, phone,car_model,car_number,picUrl;
     public LatLng position;
