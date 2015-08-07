@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.facebook.widget.ProfilePictureView;
+import cab.pickup.ui.widget.ProfilePictureView;
 
 import cab.pickup.R;
 import cab.pickup.api.User;
