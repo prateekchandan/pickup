@@ -46,6 +46,7 @@ import cab.pickup.gcm.GcmIntentService;
 import cab.pickup.server.GetTask;
 import cab.pickup.server.OnTaskCompletedListener;
 import cab.pickup.server.Result;
+import cab.pickup.ui.widget.DriverShortProfileView;
 import cab.pickup.ui.widget.EventAdapter;
 import cab.pickup.ui.widget.EventView;
 import cab.pickup.ui.widget.UserListAdapter;
@@ -252,7 +253,7 @@ public class RideActivity extends MapsActivity {
         }
 
         updateMatesCard();
-
+        updateDriverCard();
     }
 
     public void showUserDialog(View v){
@@ -280,7 +281,24 @@ public class RideActivity extends MapsActivity {
     }
 
     protected void updateDriverCard(){
-        // TODO bhardo pls
+        LinearLayout user_1 = (LinearLayout)findViewById(R.id.driver_short_view);
+
+        if(journey.group.driver==null){
+            user_1.removeAllViews();
+            TextView moreTxt = new TextView(this);
+            moreTxt.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+            moreTxt.setPadding(20, 20, 20, 20);
+            moreTxt.setTextColor(Color.parseColor("#999999"));
+            moreTxt.setText("Driver Not Allocated Yet");
+            user_1.addView(moreTxt);
+        }
+        else{
+            user_1.removeAllViews();
+            DriverShortProfileView driverView = new DriverShortProfileView(this);
+            driverView.setUser(journey.group.driver);
+            user_1.addView(driverView);
+        }
     }
 
     protected void updateMatesCard(){
