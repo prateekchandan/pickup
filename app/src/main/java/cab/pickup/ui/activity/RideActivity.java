@@ -251,8 +251,42 @@ public class RideActivity extends MapsActivity {
             E.printStackTrace();
         }
 
+        updateMatesCard();
 
+    }
+
+    public void showUserDialog(View v){
+        if(journey.group.mates.size()==0){
+            return;
+        }
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.user_list_dialog);
+        ListView user_list_view=(ListView)dialog.findViewById(R.id.summary_user_list);
+        UserListAdapter user_adapter=new UserListAdapter(this);
+        user_list_view.setAdapter(user_adapter);
+        for (User U : journey.group.mates){
+            user_adapter.add(U.id);
+        }
+        ((TextView)dialog.findViewById(R.id.head_text)).setText(String.format(getString(R.string.mates_dialog_head), journey.group.mates.size()));
+        ((ImageView)dialog.findViewById(R.id.icon_close)).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    protected void updateDriverCard(){
+        // TODO bhardo pls
+    }
+
+    protected void updateMatesCard(){
         LinearLayout user_1 = (LinearLayout)findViewById(R.id.summary_user_one);
+        if(journey.group.mates==null)
+            return;
         if(journey.group.mates.size()>0){
             user_1.removeAllViews();
             UserProfileView userView = new UserProfileView(this);
@@ -287,38 +321,6 @@ public class RideActivity extends MapsActivity {
             moreTxt.setText("No Users with you");
             user_1.addView(moreTxt);
         }
-    }
-
-    public void showUserDialog(View v){
-        if(journey.group.mates.size()==0){
-            return;
-        }
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.user_list_dialog);
-        ListView user_list_view=(ListView)dialog.findViewById(R.id.summary_user_list);
-        UserListAdapter user_adapter=new UserListAdapter(this);
-        user_list_view.setAdapter(user_adapter);
-        for (User U : journey.group.mates){
-            user_adapter.add(U.id);
-        }
-        ((TextView)dialog.findViewById(R.id.head_text)).setText(String.format(getString(R.string.mates_dialog_head),journey.group.mates.size()));
-        ((ImageView)dialog.findViewById(R.id.icon_close)).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
-
-    protected void updateDriverCard(){
-        // TODO bhardo pls
-    }
-
-    protected void updateMatesCard(){
-        // TODO isko bhi
     }
 
     @Override

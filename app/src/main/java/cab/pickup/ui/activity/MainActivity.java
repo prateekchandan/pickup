@@ -265,6 +265,9 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             };
 

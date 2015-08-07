@@ -23,8 +23,12 @@ public class Group {
             for (int i = 0; i < users.length(); i++) {
                 mates.add(new User(users.getJSONObject(i)));
             }
-
-            driver = new Driver(rep.getJSONObject("driver"));
+            try {
+                driver = new Driver(rep.getJSONObject("driver"));
+            }
+            catch (Exception E){
+                E.printStackTrace();
+            }
             this.json = rep.getJSONObject("json");
         } else {
             JSONArray mate_array = rep.getJSONArray("users_list");
@@ -48,7 +52,8 @@ public class Group {
 
             rep.put("mates",mate_array);
             rep.put("json",json);
-            rep.put("driver", new JSONObject(driver.toString()));
+            if(driver!=null)
+                rep.put("driver", new JSONObject(driver.toString()));
         } catch (JSONException e) {
             e.printStackTrace();
 

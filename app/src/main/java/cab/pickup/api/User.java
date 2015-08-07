@@ -55,7 +55,8 @@ public class User{
                 }
                 @Override
                 public void onPostExecute(Result res){
-                    listener.onTaskCompleted(res);
+                    if(listener!=null)
+                            listener.onTaskCompleted(res);
                 }
             }.execute("");
         }else{
