@@ -222,6 +222,7 @@
                         android:paddingRight="5dp"
                         android:paddingTop="10dp"
                         android:id="@+id/event_box"
+                        android:background="#fff"
                         tools:listitem="@android:layout/simple_list_item_1"
                         android:layout_below="@+id/event_here_text" />
 

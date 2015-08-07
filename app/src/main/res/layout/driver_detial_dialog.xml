@@ -67,6 +67,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:background="#ddd"
             android:orientation="horizontal">
             <Button
                 android:layout_width="0dp"
@@ -75,6 +76,7 @@
                 android:background="#fff"
                 android:textSize="18sp"
                 android:id="@+id/callBtn"
+                android:layout_margin="1dp"
                 android:textColor="@color/text_color_dark"
                 android:layout_height="match_parent" />
             <Button
@@ -82,6 +84,7 @@
                 android:layout_weight="1"
                 android:text="SMS Sriver"
                 android:background="#fff"
+                android:layout_margin="1dp"
                 android:textSize="18sp"
                 android:id="@+id/smsBtn"
                 android:textColor="@color/text_color_dark"
