@@ -194,6 +194,7 @@
                                 android:id="@+id/driver_short_view"
                                 android:orientation="horizontal"
                                 android:layout_below="@+id/card_head"
+                                android:onClick="showDriverDialog"
                                 android:visibility="visible">
                                 <TextView
                                     android:layout_width="match_parent"

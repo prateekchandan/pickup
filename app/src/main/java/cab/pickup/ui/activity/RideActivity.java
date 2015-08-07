@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
@@ -275,6 +276,43 @@ public class RideActivity extends MapsActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    public void showDriverDialog(View v){
+        if(journey.group.driver==null)
+            return;
+        final Driver driver = journey.group.driver;
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.driver_detial_dialog);
+        (dialog.findViewById(R.id.icon_close)).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        ((TextView)dialog.findViewById(R.id.driver_name)).setText(driver.driver_name);
+        ((TextView)dialog.findViewById(R.id.car_model_name)).setText(driver.car_model);
+        ((TextView)dialog.findViewById(R.id.car_number)).setText(driver.car_number);
+        (dialog.findViewById(R.id.callBtn)).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                String uri = "tel:" + driver.phone.trim();
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse(uri));
+                startActivity(intent);
+            }
+        });
+        (dialog.findViewById(R.id.smsBtn)).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", driver.phone.trim(), null)));
             }
         });
         dialog.show();

@@ -26,7 +26,7 @@
         android:src="@drawable/ic_cancel_black" />
     <LinearLayout
         android:layout_width="match_parent"
-        android:background="#aaa"
+        android:background="#ccc"
         android:layout_below="@+id/head_text"
         android:layout_height="1dp"/>
     <ListView
