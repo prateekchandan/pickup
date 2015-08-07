@@ -1,5 +1,6 @@
 package cab.pickup.ui.activity;
 
+import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,25 +9,32 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cab.pickup.R;
@@ -39,6 +47,8 @@ import cab.pickup.server.OnTaskCompletedListener;
 import cab.pickup.server.Result;
 import cab.pickup.ui.widget.EventAdapter;
 import cab.pickup.ui.widget.EventView;
+import cab.pickup.ui.widget.UserListAdapter;
+import cab.pickup.ui.widget.UserProfileView;
 
 
 public class RideActivity extends MapsActivity {
@@ -195,8 +205,69 @@ public class RideActivity extends MapsActivity {
     private void setupTextBoxes(){
         ((TextView)findViewById(R.id.field_start)).setText(journey.start.longDescription);
         ((TextView)findViewById(R.id.field_end)).setText(journey.end.longDescription);
-        String booktime = journey.datetime;
-        ((TextView)findViewById(R.id.book_time)).setText(booktime);
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            sdf.setLenient(false);
+            Date bookdate = sdf.parse(journey.datetime);
+            ((TextView) findViewById(R.id.book_time)).setText("Booked Ride at " + new SimpleDateFormat("h:mm a").format(bookdate));
+        }
+        catch (Exception E){
+            E.printStackTrace();
+        }
+
+
+        LinearLayout user_1 = (LinearLayout)findViewById(R.id.summary_user_one);
+        if(journey.group.mates.size()>0){
+            user_1.removeAllViews();
+            UserProfileView userView = new UserProfileView(this);
+            for (User U : journey.group.mates){
+                userView.setUser(U);
+                break;
+            }
+            TextView moreTxt = new TextView(this);
+            moreTxt.setText("+"+String.valueOf(journey.group.mates.size()-1)+" more");
+            LinearLayout.LayoutParams param1 = new LinearLayout.LayoutParams(
+                    0,LinearLayout.LayoutParams.MATCH_PARENT, 0.3f);
+            LinearLayout.LayoutParams param2 = new LinearLayout.LayoutParams(
+                    0,
+                    LinearLayout.LayoutParams.WRAP_CONTENT, 0.7f);
+
+            userView.setLayoutParams(param2);
+            moreTxt.setLayoutParams(param1);
+            moreTxt.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+            moreTxt.setPadding(0, 15, 15, 15);
+            moreTxt.setTextColor(getResources().getColor(R.color.theme_color_dark));
+            user_1.setWeightSum(1.0f);
+            user_1.addView(userView);
+            user_1.addView(moreTxt);
+        }
+        else{
+            user_1.removeAllViews();
+            TextView moreTxt = new TextView(this);
+            moreTxt.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+            moreTxt.setPadding(20, 20, 20, 20);
+            moreTxt.setTextColor(Color.parseColor("#999999"));
+            moreTxt.setText("No Users with you");
+            user_1.addView(moreTxt);
+        }
+    }
+
+    public void showUserDialog(View v){
+        if(journey.group.mates.size()==0){
+            return;
+        }
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.user_list_dialog);
+        ListView user_list_view=(ListView)dialog.findViewById(R.id.summary_user_list);
+        UserListAdapter user_adapter=new UserListAdapter(this);
+        user_list_view.setAdapter(user_adapter);
+        for (User U : journey.group.mates){
+            user_adapter.add(U.id);
+        }
+        ((TextView)dialog.findViewById(R.id.head_text)).setText(String.format(getString(R.string.mates_dialog_head),journey.group.mates.size()));
+        dialog.show();
     }
 
     @Override
@@ -374,6 +445,20 @@ public class RideActivity extends MapsActivity {
                     .alpha(1.0f);
             mapView.setVisibility(View.INVISIBLE);
             button.setImageResource(R.drawable.map);
+        }
+    }
+
+    public void switchTabs(View v){
+        ((ToggleButton)findViewById(R.id.tab_driver)).setChecked(false);
+        ((ToggleButton)findViewById(R.id.tab_mates)).setChecked(false);
+        ((ToggleButton)v).setChecked(true);
+        if(v.getId()==R.id.tab_driver){
+            findViewById(R.id.summary_user_one).setVisibility(View.GONE);
+            findViewById(R.id.driver_short_view).setVisibility(View.VISIBLE);
+        }
+        else{
+            findViewById(R.id.driver_short_view).setVisibility(View.GONE);
+            findViewById(R.id.summary_user_one).setVisibility(View.VISIBLE);
         }
     }
 }

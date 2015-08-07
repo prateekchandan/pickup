@@ -52,17 +52,27 @@ public class UserProfileView extends RelativeLayout implements OnTaskCompletedLi
         mUser=new User(id,this);
     }
 
+    public void setUser(User u){
+        mUser = u;
+        loadProfile();
+    }
+
     @Override
     public void onTaskCompleted(Result res) {
 
-            mPicture.setProfileId(mUser.fbid);
-            mName.setText(mUser.name);
-            String s =String.valueOf(mUser.age);
-            if(mUser.gender.equals("male"))
-                s+= " M";
-            else if(mUser.gender.equals("female"))
-                s+= " F";
-            mAge.setText(s);
-            Log.d("UserProfileView", "Loaded : " + mUser.name);
+        loadProfile();
     }
+
+    private void loadProfile(){
+        mPicture.setProfileId(mUser.fbid);
+        mName.setText(mUser.name);
+        String s =String.valueOf(mUser.age);
+        if(mUser.gender.equals("male"))
+            s+= " M";
+        else if(mUser.gender.equals("female"))
+            s+= " F";
+        mAge.setText(s);
+        Log.d("UserProfileView", "Loaded : " + mUser.name);
+    }
+
 }

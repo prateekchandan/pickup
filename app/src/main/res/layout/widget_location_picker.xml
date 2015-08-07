@@ -9,15 +9,15 @@
     <cab.pickup.ui.widget.LocationSearchBar
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="Search"
+        android:hint="@string/search"
         android:id="@+id/location_picker_search_field"
         style="@style/LocationSearchBar"/>
     <RelativeLayout android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:layout_below="@+id/location_picker_search_field"
         android:layout_above="@+id/location_picker_set_home"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_marginBottom="5dp"
         android:id="@+id/location_picker_container">
 
@@ -33,6 +33,7 @@
             android:layout_centerInParent="true"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_location"
+            android:contentDescription="Marker"
             />
 
     </RelativeLayout>

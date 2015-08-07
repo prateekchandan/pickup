@@ -11,4 +11,5 @@
     <color name="button_bg_disabled">#BBB4B4</color>
 
     <color name="light_gray">#EEEEEE</color>
+    <color name="href_blue_color">#2196F3</color>
 </resources>

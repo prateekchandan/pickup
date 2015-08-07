@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/location_search_dialog_edittext"
-        android:hint="Type here to search"
+        android:hint="@string/type_to_search"
         android:textColor="@color/text_color_dark"
         android:layout_alignBottom="@+id/location_search_dialog_myloc"
         android:paddingRight="50dp"

@@ -31,11 +31,14 @@
     <string name="profile_tag_email">Email</string>
     <string name="title_activity_book">Book A Ride</string>
     <string name="title_activity_journey">JourneyActivity</string>
-    <string name="title_activity_ride">Ride Page</string>
+    <string name="title_activity_ride">Pickup</string>
     <string name="title_activity_journey_log">JourneyLogActivity</string>
     <string name="title_activity_location_picker">LocationPickerActivity</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_order_summary">OrderSummaryActivity</string>
+    <string name="title_activity_profile">Profile Page</string>
+    <string name="title_activity_history">History</string>
+
 
     <string name="settings_btn_text">Save</string>
 
@@ -59,9 +62,21 @@
     <string name="pickup_location">Pickup Location</string>
     <string name="drop_location">Drop Location</string>
     <string name="ride_now">Ride Now</string>
-    <string name="title_activity_profile">Profile Page</string>
+
 
     <string name="login_successful">Successfully logged in!!</string>
-    <string name="title_activity_history">History</string>
+
+    <!-- Menu Strings -->
+    <string name="side_menu_history">History</string>
+    <string name="side_menu_profile">Profile</string>
+    <string name="side_menu_settings">Settings</string>
+    <string name="side_menu_payment">Payment</string>
+    <string name="side_menu_share">Share</string>
+    <string name="side_menu_rate">Rate</string>
+
+    <string name="search">Search</string>
+    <string name="type_to_search">Type here to search</string>
+
+    <string name="mates_dialog_head">Mates (%1d)</string>
 
 </resources>
