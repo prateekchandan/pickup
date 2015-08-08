@@ -171,7 +171,6 @@ public class Journey {
         public void onPostExecute(Result ret){
             if(ret.statusCode==200){
                 id = ret.data.optString("journey_id");
-
                 Log.d(TAG, ret.statusMessage);
 
                 Toast.makeText(context, ret.statusMessage, Toast.LENGTH_LONG).show();

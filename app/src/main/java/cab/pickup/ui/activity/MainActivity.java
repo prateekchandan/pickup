@@ -340,12 +340,11 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         }
 
         Date now = new Date();
+        now = new Date(now.getTime());
 
         if(v.getId() == R.id.time_30) {
-            now = new Date(now.getTime() + 30 * 60 * 1000);
             ((ToggleButton)findViewById(R.id.time_60)).setChecked(false);
         } else if(v.getId() == R.id.time_60) {
-            now = new Date(now.getTime() + 60 * 60 * 1000);
             ((ToggleButton)findViewById(R.id.time_30)).setChecked(false);
         }
 
