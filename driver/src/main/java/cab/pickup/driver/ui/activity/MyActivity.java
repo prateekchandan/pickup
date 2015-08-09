@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import cab.pickup.driver.R;
-import cab.pickup.driver.util.IOUtil;
+import cab.pickup.common.util.IOUtil;
 
 /**
  * Created by prateek on 4/8/15.

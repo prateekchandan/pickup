@@ -1,14 +1,12 @@
 package cab.pickup.driver.ui.activity;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
+import cab.pickup.common.Constants;
 import cab.pickup.driver.R;
-import cab.pickup.driver.server.GetTask;
-import cab.pickup.driver.server.Result;
+import cab.pickup.common.server.GetTask;
+import cab.pickup.common.server.Result;
 
 
 public class LoginActivity extends MyActivity {
@@ -24,15 +22,6 @@ public class LoginActivity extends MyActivity {
         }
         setContentView(R.layout.activity_login);
 
-        new GetTask(this,"yolotest"){
-            @Override
-            public void onPostExecute(Result res){
-                super.onPostExecute(res);
-                if(res.statusCode==200) {
-                    Log.d("yolo", res.data.toString());
-                }
-            }
-        }.execute(getUrl("/user/1?key="+getKey()));
     }
 
 }

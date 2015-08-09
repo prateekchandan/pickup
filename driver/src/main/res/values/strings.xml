@@ -5,60 +5,9 @@
     <string name="app_id">262521600615048</string>
 
     <string name="title_activity_login">LoginActivity</string>
-    <string name="base_url">http://pickup.prateekchandan.me</string>
-    <string name="key">9f83c32cf3c9d529e</string>
+
     <string name="preferences">pickup_driver_prefs</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="action_profile">Profile</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="extra_start_coord">start</string>
-    <string name="extra_end_coord">end</string>
 
-    <!-- profile tags -->
-
-    <string name="profile_tag_name">Name</string>
-    <string name="profile_tag_company">Company</string>
-    <string name="profile_tag_number">Number</string>
-    <string name="profile_tag_age">Age</string>
-    <string name="profile_tag_gender">Gender</string>
-    <string name="profile_tag_home">Home</string>
-    <string name="profile_tag_office">Office</string>
-    <string name="profile_tag_fbid">fbid</string>
-    <string name="profile_tag_email">Email</string>
-    <string name="title_activity_book">Book A Ride</string>
-    <string name="title_activity_journey">JourneyActivity</string>
-    <string name="title_activity_ride">Ride Page</string>
-    <string name="title_activity_journey_log">JourneyLogActivity</string>
-    <string name="title_activity_location_picker">LocationPickerActivity</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_order_summary">OrderSummaryActivity</string>
-
-    <string name="settings_btn_text">Save</string>
-
-    <!-- Other Strings used in App -->
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="gps_not_found_message">Do you want to enable Location Services</string>
-    <string name="gps_not_found_title">Location Services Disabled</string>
-
-    <string name="edit_page_title">Enter your Personal Info</string>
-
-
-    <!-- Error message -->
-    <string name="empty_error">This field can\'t be empty</string>
-    <string name="map_error">Map is not setup</string>
-
-    <!-- Drawere messages -->
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
-
-    <string name="pickup_location">Pickup Location</string>
-    <string name="drop_location">Drop Location</string>
-    <string name="ride_now">Ride Now</string>
-    <string name="title_activity_profile">Profile Page</string>
-
-    <string name="login_successful">Successfully logged in!!</string>
-    <string name="title_activity_history">History</string>
 
 </resources>
