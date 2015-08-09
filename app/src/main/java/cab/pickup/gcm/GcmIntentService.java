@@ -4,21 +4,39 @@ import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cab.pickup.MyApplication;
 import cab.pickup.R;
+import cab.pickup.common.api.Driver;
+import cab.pickup.common.api.Event;
+import cab.pickup.common.api.Journey;
+import cab.pickup.common.api.User;
+import cab.pickup.common.server.OnTaskCompletedListener;
+import cab.pickup.common.server.Result;
 import cab.pickup.ui.activity.MainActivity;
 import cab.pickup.ui.activity.RideActivity;
 
 public class GcmIntentService extends IntentService {
+    SharedPreferences prefs;
+    Journey journey;
+    JSONArray eventList = new JSONArray();
 
     public static final int TYPE_USER_ADDED=10,
                             TYPE_DRIVER_ADDED=11,
@@ -45,6 +63,16 @@ public class GcmIntentService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        prefs=getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
+
+        try {
+            journey = new Journey(new JSONObject(prefs.getString("journey","")), MyApplication.getDB());
+
+            eventList = new JSONArray(prefs.getString("events",""));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -83,32 +111,72 @@ public class GcmIntentService extends IntentService {
                     msg = new JSONObject(extras.getString("message"));
 
                     int msg_type = msg.getInt("type");
-                    JSONObject data = msg.getJSONObject("data");
+                    final JSONObject data = msg.getJSONObject("data");
+                    final long time = data.getLong("time");
+
+                    if(!data.getString("journey_id").equals(journey.id))
+                        return;
 
                     if(msg_type==TYPE_USER_ADDED){
-                        sendJourneyUpdate(JOURNEY_ADD_USER_INTENT_TAG, data.getString("user_id"),
-                                "New mate added!",
-                                data.getString("user_name")+" will now ride with you",data.getString("journey_id"),data.getLong("time"));
+                        journey.group.mates.add(0, new User(intent.getStringExtra("id"), new OnTaskCompletedListener() {
+                            @Override
+                            public void onTaskCompleted(Result res) {
+                                try {
+                                    eventList.put(new JSONObject(new Event(Event.TYPE_USER_ADDED, journey.group.mates.get(0), time).toString()));
+
+                                    sendJourneyUpdate(JOURNEY_ADD_USER_INTENT_TAG, "New mate added!", data.getString("user_name") + " will now ride with you");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },MyApplication.getDB()));
                     } else if(msg_type==TYPE_DRIVER_ADDED){
-                        sendJourneyUpdate(JOURNEY_ADD_DRIVER_INTENT_TAG, data.getString("driver_id"),
-                                "Driver allocated!",
-                                "Check to see your driver's details",data.getString("journey_id"),data.getLong("time"));
+                        journey.group.driver = new Driver(data.getString("driver_id"), new OnTaskCompletedListener() {
+                            @Override
+                            public void onTaskCompleted(Result res) {
+                                try {
+                                    eventList.put(new JSONObject(new Event(Event.TYPE_DRIVER_ADDED, journey.group.driver,time).toString()));
+
+                                    sendJourneyUpdate(JOURNEY_ADD_DRIVER_INTENT_TAG, "Driver allocated!", "Check to see your driver's details");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
                     } else if(msg_type==TYPE_DRIVER_ARRIVED){
-                        sendJourneyUpdate(JOURNEY_DRIVER_ARRIVED_INTENT_TAG, data.getString("driver_id"),
-                                "Your driver is arriving...",
-                                "Please reach the pickup location",data.getString("journey_id"),data.getLong("time"));
+                        eventList.put(new JSONObject(new Event(Event.TYPE_DRIVER_ARRIVED, journey.group.driver, time).toString()));
+
+                        sendJourneyUpdate(JOURNEY_DRIVER_ARRIVED_INTENT_TAG,"Your driver is arriving...",
+                                "Please reach the pickup location");
                     } else if(msg_type==TYPE_USER_CANCELLED){
-                        sendJourneyUpdate(JOURNEY_USER_CANCELLED_INTENT_TAG, data.getString("user_id"),
-                                "One mate left journey",
-                                data.getString("user_name")+" cancelled his journey",data.getString("journey_id"),data.getLong("time"));
+                        for(User u: journey.group.mates) {
+                            if(u.id.equals(intent.getStringExtra("id"))) {
+                                eventList.put(new JSONObject(new Event(Event.TYPE_USER_CANCELLED, new User(new JSONObject(u.toString())), time).toString()));
+                                journey.group.mates.remove(u);
+
+                                break;
+                            }
+                        }
+                        sendJourneyUpdate(JOURNEY_USER_CANCELLED_INTENT_TAG,"One mate left journey",
+                                data.getString("user_name")+" cancelled his journey");
                     }else if(msg_type==TYPE_USER_PICKED){
-                        sendJourneyUpdate(JOURNEY_USER_PICKED_INTENT_TAG, data.getString("user_id"),
-                                "One mate was picked up",
-                                data.getString("user_name")+" was picked up from his location",data.getString("journey_id"),data.getLong("time"));
+                        for(User u: journey.group.mates) {
+                            if(u.id.equals(intent.getStringExtra("id"))) {
+                                eventList.put(new JSONObject(new Event(Event.TYPE_USER_PICKED, u, time).toString()));
+                                break;
+                            }
+                        }
+
+                        sendJourneyUpdate(JOURNEY_USER_PICKED_INTENT_TAG,"One mate was picked up",data.getString("user_name")+" was picked up from his location");
                     }else if(msg_type==TYPE_USER_DROPPED){
-                        sendJourneyUpdate(JOURNEY_USER_DROPPED_INTENT_TAG, data.getString("user_id"),
-                                "One mate was dropped",
-                                data.getString("user_name")+" was dropped at his location",data.getString("journey_id"),data.getLong("time"));
+                        for(User u: journey.group.mates) {
+                            if(u.id.equals(intent.getStringExtra("id"))) {
+                                eventList.put(new JSONObject(new Event(Event.TYPE_USER_DROPPED, u, time).toString()));
+                                break;
+                            }
+                        }
+                        sendJourneyUpdate(JOURNEY_USER_DROPPED_INTENT_TAG,"One mate was dropped",data.getString("user_name")+" was dropped at his location");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -121,12 +189,14 @@ public class GcmIntentService extends IntentService {
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    private void sendJourneyUpdate(String intent_tag, String user_id, String title, String message,String journey_id,long time){
+    private void sendJourneyUpdate(String intent_tag, String title, String message){
+        prefs.edit()
+            .putString("events",eventList.toString())
+            .putString("journey",journey.toString())
+            .commit();
+
         Intent i=new Intent(this, RideActivity.class);
         i.putExtra("action", intent_tag);
-        i.putExtra("id", user_id);
-        i.putExtra("journey_id",journey_id);
-        i.putExtra("time",time);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 i, PendingIntent.FLAG_CANCEL_CURRENT);
 
@@ -139,13 +209,9 @@ public class GcmIntentService extends IntentService {
                                 .bigText(message));
 
         mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(user_id.hashCode(), mBuilder.build());
+        mNotificationManager.notify(1, mBuilder.build());
 
         Intent broadcast = new Intent(intent_tag);
-        broadcast.putExtra("id", user_id);
-        broadcast.putExtra("notif_id", user_id.hashCode());
-        broadcast.putExtra("journey_id", journey_id);
-        broadcast.putExtra("time",time);
         sendBroadcast(broadcast);
     }
 }

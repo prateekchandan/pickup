@@ -29,7 +29,7 @@ public class Group {
                 driver = new Driver(rep.getJSONObject("driver"));
             }
             catch (Exception E){
-                E.printStackTrace();
+                Log.w("Group",E.getMessage()+" @ driver load");
             }
             this.json = rep.getJSONObject("json");
         } else {

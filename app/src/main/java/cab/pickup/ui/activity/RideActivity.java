@@ -71,7 +71,7 @@ public class RideActivity extends MapsActivity {
             NotificationManager mNotificationManager = (NotificationManager)
                     RideActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-            //mNotificationManager.cancel(intent.getIntExtra("notif_id",0));
+            mNotificationManager.cancel(intent.getIntExtra("notif_id",0));
 
             if(!journey.id.equals(intent.getStringExtra("journey_id"))){
                 return;
@@ -129,99 +129,15 @@ public class RideActivity extends MapsActivity {
     }
 
     protected void loadEventData(Intent intent){
-        final long time = intent.getLongExtra("time",0);
+        try {
+            journey=new Journey(new JSONObject(prefs.getString("journey","")),MyApplication.getDB());
 
-        Log.d("loadEventData", intent.getExtras().toString());
-
-        if(intent.getAction()==null){
-            Log.w("loadEventData", "action is null");
-            return;
-        }
-
-        if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG)){
-            Toast.makeText(RideActivity.this, "User added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
-
-            journey.group.mates.add(0, new User(intent.getStringExtra("id"), new OnTaskCompletedListener() {
-                @Override
-                public void onTaskCompleted(Result res) {
-                    mEventAdapter.add(new Event(Event.TYPE_USER_ADDED, journey.group.mates.get(0), time));
-                    updateMatesCard();
-                }
-            },MyApplication.getDB()));
-        }
-        else if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG)){
-            Toast.makeText(RideActivity.this, "Driver added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
-
-            journey.group.driver = new Driver(intent.getStringExtra("id"), new OnTaskCompletedListener() {
-                @Override
-                public void onTaskCompleted(Result res) {
-                    mEventAdapter.add(new Event(Event.TYPE_DRIVER_ADDED, journey.group.driver,time));
-
-                    updateDriverCard();
-                }
-            });
-
-        }
-        else if(intent.getAction().equals(GcmIntentService.JOURNEY_USER_DROPPED_INTENT_TAG)){
-            Toast.makeText(RideActivity.this, "User dropped : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
-
-            for(User u: journey.group.mates) {
-                if(u.id.equals(intent.getStringExtra("id"))) {
-                    mEventAdapter.add(new Event(Event.TYPE_USER_DROPPED, u,time));
-                    break;
-                }
-            }
-
-            final RelativeLayout dialogView = (RelativeLayout) getLayoutInflater().inflate(R.layout.dialog_rate_journey, null);
-            ((TextView)dialogView.findViewById(R.id.fare_text)).setText("Rs. 1 Crore");
-
-            if(intent.getStringExtra("id").equals(me.id))
-                new AlertDialog.Builder(this)
-                    .setTitle("Journey Completed!")
-                    .setView(dialogView)
-                    .setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Log.d("JourneyRating", String.valueOf(((RatingBar)dialogView.findViewById(R.id.rate_journey)).getNumStars()));
-
-                                    startActivity(new Intent(RideActivity.this, MainActivity.class));
-                            isCancelled = true;
-                            SharedPreferences.Editor spe = prefs.edit();
-                            spe.remove("journey");
-                            spe.remove("events");
-                            spe.apply();
-                            finish();
-                            dialogInterface.dismiss();
-                        }
-                    })
-                    .create()
-                    .show();
-
-        } else if(intent.getAction().equals(GcmIntentService.JOURNEY_USER_PICKED_INTENT_TAG)){
-            Toast.makeText(RideActivity.this, "User picked : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
-
-            for(User u: journey.group.mates) {
-                if(u.id.equals(intent.getStringExtra("id"))) {
-                    mEventAdapter.add(new Event(Event.TYPE_USER_PICKED, u,time));
-                    break;
-                }
-            }
-        }
-
-        else if(intent.getAction().equals(GcmIntentService.JOURNEY_DRIVER_ARRIVED_INTENT_TAG)){
-            Toast.makeText(RideActivity.this, "Driver Arrived : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
-            mEventAdapter.add(new Event(Event.TYPE_DRIVER_ARRIVED, journey.group.driver,time));
-
-        }
-        else if(intent.getAction().equals(GcmIntentService.JOURNEY_USER_CANCELLED_INTENT_TAG)){
-            Toast.makeText(RideActivity.this, "User Cancelled : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
-            for(User u: journey.group.mates) {
-                if(u.id.equals(intent.getStringExtra("id"))) {
-                    mEventAdapter.add(new Event(Event.TYPE_USER_CANCELLED, u,time));
-                    break;
-                }
-            }
-
+            refreshList();
+            setupTextBoxes();
+            updateDriverCard();
+            updateMatesCard();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
