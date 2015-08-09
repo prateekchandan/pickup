@@ -20,10 +20,10 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <permission
-        android:name="cab.pickup.permission.C2D_MESSAGE"
+        android:name="cab.pickup.driver.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="cab.pickup.permission.C2D_MESSAGE" />
+    <uses-permission android:name="cab.pickup.driver.permission.C2D_MESSAGE" />
 
     <application
         android:allowBackup="true"
@@ -43,6 +43,10 @@
             android:name=".ui.activity.MainActivity"
             android:label="@string/title_activity_main" >
         </activity>
+        <service android:name=".util.DriverTracker"
+            android:process=":PickupDriver">
+
+        </service>
     </application>
 
 </manifest>

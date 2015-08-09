@@ -1,7 +1,9 @@
 package cab.pickup.driver.ui.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cab.pickup.common.Constants;
+import cab.pickup.common.api.Driver;
+import cab.pickup.common.server.GetTask;
 import cab.pickup.common.server.PostTask;
 import cab.pickup.common.server.Result;
 import cab.pickup.driver.R;
@@ -33,8 +37,16 @@ public class LoginActivity extends MyActivity {
         usernameField = ((EditText)findViewById(R.id.username));
         passwordField = ((EditText)findViewById(R.id.password));
 
+        if(me.driver_id!=null){
+            startNextActivity();
+        }
+
     }
 
+    public void startNextActivity(){
+        startActivity(new Intent(this,MainActivity.class));
+        finish();
+    }
     public void login(View v){
         final String username , password;
         username=usernameField.getText().toString();
@@ -67,8 +79,14 @@ public class LoginActivity extends MyActivity {
                 super.onPostExecute(ret);
                 if(ret.statusCode ==200) {
                     Toast.makeText(LoginActivity.this,getString(R.string.login_success),Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    finish();
+                    try{
+                        me = new Driver(ret.data.getJSONObject("driver"));
+                        SharedPreferences.Editor spe = prefs.edit();
+                        spe.putString("driver_json", me.getJson());
+                        spe.apply();
+                    }catch (Exception E){
+                        E.printStackTrace();
+                    }
                 }else{
                     passwordField.setText("");
                     passwordField.setError(ret.statusMessage);

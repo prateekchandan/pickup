@@ -1,5 +1,6 @@
 package cab.pickup.driver.ui.activity;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -34,6 +35,13 @@ public class MainActivity extends MyActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+
+        if(id == R.id.action_logout){
+            prefs.edit().clear().apply();
+            startActivity(new Intent(this,LoginActivity.class));
+            finish();
             return true;
         }
 

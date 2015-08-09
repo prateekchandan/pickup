@@ -21,6 +21,9 @@
     <string name="login_success">Login Successful</string>
 
 
+    <!-- Strings on Main Page -->
+    <string name="logout">Logout</string>
+
     <string name="hello_world">Hello world!</string>
 
 </resources>
