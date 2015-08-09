@@ -1,4 +1,4 @@
-package cab.pickup.util;
+package cab.pickup.common.util;
 
 
 import android.content.Context;

@@ -4,20 +4,22 @@ package cab.pickup;
 import android.app.Application;
 import android.content.Context;
 
+import cab.pickup.common.util.UserDatabaseHandler;
+
 public class MyApplication extends Application{
+    protected static UserDatabaseHandler db;
+
     public MyApplication() {
     }
-
-    private static Context context;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        MyApplication.context = getApplicationContext();
-        // Initialize the Parse SDK.
+
+        MyApplication.db=new UserDatabaseHandler(getApplicationContext());
     }
 
-    public static Context getAppContext() {
-        return MyApplication.context;
+    public static UserDatabaseHandler getDB(){
+        return db;
     }
 }

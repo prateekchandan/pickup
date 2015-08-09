@@ -1,6 +1,7 @@
-package cab.pickup.server;
+package cab.pickup.common.server;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -10,17 +11,15 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.List;
 
-import cab.pickup.ui.activity.MyActivity;
-import cab.pickup.util.IOUtil;
+import cab.pickup.common.util.IOUtil;
 
 public abstract class PostTask extends AsyncTask<String, Integer, Result> {
     private static final String TAG = "PostTask";
-    public MyActivity context;
+    public Context context;
     private OnTaskCompletedListener listener;
     ProgressDialog dialog;
     protected String dialogMessage;
@@ -29,12 +28,12 @@ public abstract class PostTask extends AsyncTask<String, Integer, Result> {
         dialogMessage = "";
     }
 
-    public PostTask(MyActivity context) {
+    public PostTask(Context context) {
         this.context=context;
         dialogMessage = "";
     }
 
-    public PostTask(MyActivity context,String message) {
+    public PostTask(Context context,String message) {
         this.context=context;
         dialogMessage = message;
     }

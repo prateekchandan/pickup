@@ -1,4 +1,4 @@
-package cab.pickup.api;
+package cab.pickup.common.api;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

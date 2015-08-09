@@ -7,8 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import cab.pickup.R;
-import cab.pickup.api.Event;
-import cab.pickup.api.User;
+import cab.pickup.common.api.Event;
 import cab.pickup.ui.activity.MyActivity;
 
 public class EventView extends LinearLayout{

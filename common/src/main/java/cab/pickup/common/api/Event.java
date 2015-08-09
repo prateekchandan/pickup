@@ -1,4 +1,4 @@
-package cab.pickup.api;
+package cab.pickup.common.api;
 
 
 import android.util.Log;
@@ -6,11 +6,8 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import cab.pickup.server.OnTaskCompletedListener;
 
 public class Event {
     public static final int TYPE_USER_ADDED=1;

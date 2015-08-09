@@ -12,7 +12,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -26,9 +25,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cab.pickup.R;
-import cab.pickup.api.Journey;
-import cab.pickup.api.Location;
-import cab.pickup.util.IOUtil;
+import cab.pickup.common.api.Journey;
+import cab.pickup.common.api.Location;
+import cab.pickup.common.util.IOUtil;
 
 public class MapsActivity extends MyActivity implements GoogleMap.OnMapLoadedCallback{
     GoogleMap map; // Might be null if Google Play services APK is not available.

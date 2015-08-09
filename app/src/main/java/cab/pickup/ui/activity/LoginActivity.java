@@ -31,12 +31,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cab.pickup.MyApplication;
 import cab.pickup.R;
-import cab.pickup.api.Journey;
-import cab.pickup.api.User;
-import cab.pickup.server.GetTask;
-import cab.pickup.server.PostTask;
-import cab.pickup.server.Result;
+import cab.pickup.common.Constants;
+import cab.pickup.common.api.Journey;
+import cab.pickup.common.api.User;
+import cab.pickup.common.server.GetTask;
+import cab.pickup.common.server.PostTask;
+import cab.pickup.common.server.Result;
 
 
 public class    LoginActivity extends MyActivity {
@@ -181,7 +183,7 @@ public class    LoginActivity extends MyActivity {
                     startNextActivity();
                 }
             }
-        }.execute(getUrl("/add_user"));
+        }.execute(Constants.getUrl("/add_user"));
 
     }
     
@@ -227,7 +229,7 @@ public class    LoginActivity extends MyActivity {
 
                 return nameValuePairs;
             }
-        }.execute(getUrl("/register_gcm"));
+        }.execute(Constants.getUrl("/register_gcm"));
 
         SharedPreferences.Editor spe = prefs.edit();
         spe.putInt("app_version", getAppVersion());
@@ -269,7 +271,7 @@ public class    LoginActivity extends MyActivity {
         if(prefs.contains("journey")) {
             try {
                 JSONObject journey_data = new JSONObject(prefs.getString("journey", ""));
-                Journey journey = new Journey(journey_data);
+                Journey journey = new Journey(journey_data, MyApplication.getDB());
 
                 if (journey.group == null) {
                     Intent i  = new Intent(this, MainActivity.class);
@@ -302,7 +304,7 @@ public class    LoginActivity extends MyActivity {
                 }
             }
         };
-        getTask.execute(getUrl("/user/" + String.valueOf(me.id) + "?key=" + getKey())
+        getTask.execute(Constants.getUrl("/user/" + String.valueOf(me.id) + "?key=" + getKey())
         );
 
     }
@@ -360,7 +362,7 @@ public class    LoginActivity extends MyActivity {
                         }
                     }
                 };
-                getTask.execute(getUrl("/user_exists?" + "key=" + getKey() + "&fbid="+fbid));
+                getTask.execute(Constants.getUrl("/user_exists?" + "key=" + getKey() + "&fbid=" + fbid));
 
 
             }

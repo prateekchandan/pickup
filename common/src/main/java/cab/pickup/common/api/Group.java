@@ -1,4 +1,4 @@
-package cab.pickup.api;
+package cab.pickup.common.api;
 
 import android.util.Log;
 
@@ -8,6 +8,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import cab.pickup.common.util.UserDatabaseHandler;
+
 public class Group {
     public ArrayList<User> mates = new ArrayList<>();
     public JSONObject json;
@@ -16,7 +18,7 @@ public class Group {
     public Group(){
     }
 
-    public Group(JSONObject rep) throws JSONException{
+    public Group(JSONObject rep, UserDatabaseHandler db) throws JSONException{
         Log.d("GROUP", rep.toString());
         if(rep.has("mates")) {
             JSONArray users = rep.getJSONArray("mates");
@@ -33,7 +35,7 @@ public class Group {
         } else {
             JSONArray mate_array = rep.getJSONArray("users_list");
             for (int i = 0; i < mate_array.length(); i++) {
-                mates.add(new User(mate_array.getString(i),null));
+                mates.add(new User(mate_array.getString(i),null,db));
             }
 
             this.json = rep;

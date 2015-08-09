@@ -1,4 +1,4 @@
-package cab.pickup.util;
+package cab.pickup.common.util;
 
 
 import android.app.Service;
@@ -11,7 +11,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationListener;
@@ -20,8 +19,6 @@ import com.google.android.gms.location.LocationServices;
 
 import java.text.DateFormat;
 import java.util.Date;
-
-import cab.pickup.ui.activity.MyActivity;
 
 public class LocationTracker extends Service implements LocationListener,
         GoogleApiClient.ConnectionCallbacks,

@@ -1,4 +1,4 @@
-package cab.pickup.api;
+package cab.pickup.common.api;
 
 public class Location {
     public double latitude, longitude;

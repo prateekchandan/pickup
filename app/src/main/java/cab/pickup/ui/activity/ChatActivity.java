@@ -16,9 +16,10 @@ import android.widget.TextView;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import cab.pickup.R;
+import cab.pickup.common.Constants;
 import cab.pickup.gcm.GcmIntentService;
-import cab.pickup.server.SendMessageTask;
-import cab.pickup.util.IOUtil;
+import cab.pickup.common.server.SendMessageTask;
+import cab.pickup.common.util.IOUtil;
 
 
 public class ChatActivity extends MyActivity {
@@ -110,7 +111,7 @@ public class ChatActivity extends MyActivity {
         SendMessageTask task = new SendMessageTask();
 
         String msg = ((EditText)findViewById(R.id.msg_input)).getText().toString();
-        task.execute(msg, getUrl("/send.php"), me.device_id, getKey());
+        task.execute(msg, Constants.getUrl("/send.php"), me.device_id, getKey());
 
 
         LinearLayout sentMsg = (LinearLayout)getLayoutInflater().inflate(R.layout.sent_msg, msgList);

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,10 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import cab.pickup.R;
-import cab.pickup.api.Driver;
-import cab.pickup.api.User;
-import cab.pickup.server.OnTaskCompletedListener;
-import cab.pickup.server.Result;
+import cab.pickup.common.api.Driver;
 import cab.pickup.ui.activity.MyActivity;
 
 /**

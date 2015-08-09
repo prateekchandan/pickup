@@ -11,14 +11,13 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
 
 import cab.pickup.R;
-import cab.pickup.util.Helper;
+import cab.pickup.common.util.Helper;
 
 public class ProfileActivity extends MyActivity{
 

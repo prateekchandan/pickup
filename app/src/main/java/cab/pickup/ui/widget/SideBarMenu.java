@@ -7,23 +7,18 @@ import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import cab.pickup.R;
-import cab.pickup.api.User;
+import cab.pickup.common.api.User;
 import cab.pickup.ui.activity.HistoryActivity;
 import cab.pickup.ui.activity.MyActivity;
 import cab.pickup.ui.activity.ProfileActivity;
 import cab.pickup.ui.activity.SettingsActivity;
-import cab.pickup.util.Helper;
+import cab.pickup.common.util.Helper;
 
 /**
  * Created by prateek on 3/8/15.

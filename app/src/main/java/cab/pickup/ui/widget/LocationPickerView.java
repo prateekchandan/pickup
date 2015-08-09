@@ -26,11 +26,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 import cab.pickup.R;
-import cab.pickup.api.Location;
-import cab.pickup.server.GetTask;
-import cab.pickup.server.Result;
+import cab.pickup.common.api.Location;
 import cab.pickup.ui.activity.MyActivity;
-import cab.pickup.util.IOUtil;
+import cab.pickup.common.util.IOUtil;
 
 public class LocationPickerView extends LinearLayout implements LocationSearchBar.OnAddressSelectedListener, View.OnClickListener{
     private static final String TAG = "LocationPickerView";

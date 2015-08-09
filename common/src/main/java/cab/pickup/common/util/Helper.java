@@ -1,5 +1,6 @@
-package cab.pickup.util;
+package cab.pickup.common.util;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -9,13 +10,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
 
-import cab.pickup.ui.activity.MyActivity;
 
 /**
  * Created by prateek on 3/8/15.
  */
 public class Helper {
-    public static void setFBImage(final String fbid,final MyActivity context,final ImageView v){
+    public static void setFBImage(final String fbid,final Context context,final ImageView v){
         new AsyncTask<String,Void,Bitmap>(){
 
             @Override

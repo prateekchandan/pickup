@@ -6,9 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import cab.pickup.R;
-import cab.pickup.api.Event;
-import cab.pickup.api.User;
+import cab.pickup.common.api.Event;
 
 public class EventAdapter extends ArrayAdapter<Event> {
     public EventAdapter(Context context, int resource) {

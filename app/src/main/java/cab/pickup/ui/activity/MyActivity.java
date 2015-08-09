@@ -1,7 +1,6 @@
 package cab.pickup.ui.activity;
 
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
@@ -9,7 +8,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -17,9 +15,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cab.pickup.R;
-import cab.pickup.api.User;
-import cab.pickup.util.IOUtil;
-import cab.pickup.util.LocationTracker;
+import cab.pickup.common.api.User;
+import cab.pickup.common.util.IOUtil;
+import cab.pickup.common.util.LocationTracker;
 
 public class MyActivity extends AppCompatActivity implements ServiceConnection{
     public User me;
@@ -59,7 +57,7 @@ public class MyActivity extends AppCompatActivity implements ServiceConnection{
         }
         me.device_id = Settings.Secure.getString(this.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
         Intent i = new Intent(this, LocationTracker.class);
-        bindService(i,this,BIND_AUTO_CREATE);
+        bindService(i, this, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -72,9 +70,6 @@ public class MyActivity extends AppCompatActivity implements ServiceConnection{
         return IOUtil.getAppVersion(getApplicationContext());
     }
 
-    public String getUrl(String... path){
-        return getString(R.string.base_url)+(path!=null?path[0]:"");
-    }
 
     public String getKey(){
         return getString(R.string.key);

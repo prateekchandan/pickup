@@ -2,10 +2,7 @@ package cab.pickup.ui.widget;
 
 
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -22,19 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.actions.ReserveIntents;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.AutocompletePrediction;
-import com.google.android.gms.location.places.AutocompletePredictionBuffer;
-import com.google.android.gms.location.places.GeoDataApi;
-import com.google.android.gms.location.places.Places;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -44,14 +29,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import cab.pickup.R;
-import cab.pickup.api.Location;
+import cab.pickup.common.api.Location;
 import cab.pickup.ui.activity.MyActivity;
-import cab.pickup.util.LocationTracker;
+import cab.pickup.common.util.LocationTracker;
 
 
 public class LocationSearchBar extends TextView implements View.OnClickListener{

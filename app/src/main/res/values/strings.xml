@@ -7,8 +7,6 @@
     <string name="title_activity_settings">Preferences</string>
     <string name="title_fb_login">Facebook Login</string>
     <string name="title_activity_login">LoginActivity</string>
-    <string name="base_url">http://pickup.prateekchandan.me</string>
-    <string name="key">9f83c32cf3c9d529e</string>
     <string name="preferences">pickup_prefs</string>
     <string name="title_activity_chat">Chat</string>
     <string name="hello_world">Hello world!</string>

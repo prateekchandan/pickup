@@ -1,11 +1,8 @@
 package cab.pickup.ui.activity;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +14,11 @@ import android.widget.TextView;
 import org.json.JSONArray;
 
 import cab.pickup.R;
-import cab.pickup.api.Event;
-import cab.pickup.api.PastJourney;
-import cab.pickup.server.GetTask;
-import cab.pickup.server.Result;
-import cab.pickup.ui.widget.EventView;
-import de.hdodenhof.circleimageview.CircleImageView;
+import cab.pickup.common.Constants;
+import cab.pickup.common.api.Event;
+import cab.pickup.common.api.PastJourney;
+import cab.pickup.common.server.GetTask;
+import cab.pickup.common.server.Result;
 
 public class HistoryActivity extends MyActivity {
 
@@ -60,7 +56,7 @@ public class HistoryActivity extends MyActivity {
 
                 }
             }
-        }.execute(getUrl("/get_history/"+String.valueOf(me.id)+"?key="+getKey()));
+        }.execute(Constants.getUrl("/get_history/" + String.valueOf(me.id) + "?key=" + getKey()));
     }
 
 

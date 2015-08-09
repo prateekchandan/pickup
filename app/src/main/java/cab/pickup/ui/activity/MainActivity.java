@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -36,16 +35,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
+import cab.pickup.MyApplication;
 import cab.pickup.R;
-import cab.pickup.api.Group;
-import cab.pickup.api.Journey;
-import cab.pickup.api.Location;
-import cab.pickup.server.GetTask;
-import cab.pickup.server.OnTaskCompletedListener;
-import cab.pickup.server.Result;
+import cab.pickup.common.Constants;
+import cab.pickup.common.api.Group;
+import cab.pickup.common.api.Journey;
+import cab.pickup.common.api.Location;
+import cab.pickup.common.server.GetTask;
+import cab.pickup.common.server.OnTaskCompletedListener;
+import cab.pickup.common.server.Result;
 import cab.pickup.ui.widget.LocationSearchBar;
 import cab.pickup.ui.widget.UserListAdapter;
-import cab.pickup.util.IOUtil;
+import cab.pickup.common.util.IOUtil;
 
 public class MainActivity extends MapsActivity implements   LocationSearchBar.OnAddressSelectedListener,
                                                             OnTaskCompletedListener {
@@ -173,7 +174,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         if(prefs.contains("journey")){
             try {
                 JSONObject journey_data = new JSONObject(prefs.getString("journey", ""));
-                journey=new Journey(journey_data);
+                journey=new Journey(journey_data, MyApplication.getDB());
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -203,7 +204,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
 
     private void setJourney(String journey_json) throws JSONException{
-        journey = new Journey(new JSONObject(journey_json));
+        journey = new Journey(new JSONObject(journey_json),MyApplication.getDB());
 
         ((LocationSearchBar)findViewById(R.id.field_start)).setAddress(journey.start);
         ((LocationSearchBar)findViewById(R.id.field_end)).setAddress(journey.end);
@@ -415,7 +416,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                         }
                     }
                 }
-            }.execute(getUrl("/get_best_match/" + journey.id + "?key=" + getKey()));
+            }.execute(Constants.getUrl("/get_best_match/" + journey.id + "?key=" + getKey()));
         }else{
             clearTimers();
         }
@@ -429,7 +430,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                 if(res.statusCode==200){
                     Log.d("group",res.data.toString());
                     try {
-                        journey.group = new Group(res.data.getJSONObject("group"));
+                        journey.group = new Group(res.data.getJSONObject("group"),MyApplication.getDB());
                     }catch (Exception E){
                         E.printStackTrace();
                     }
@@ -446,7 +447,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             }
         };
 
-        confirmTask.execute(getUrl("/confirm/"+journey.id+"?key="+getKey()));
+        confirmTask.execute(Constants.getUrl("/confirm/" + journey.id + "?key=" + getKey()));
     }
 
     public void exchangeLocations(View v){

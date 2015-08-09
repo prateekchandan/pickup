@@ -1,7 +1,6 @@
-package cab.pickup.api;
+package cab.pickup.common.api;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -10,10 +9,10 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import cab.pickup.R;
-import cab.pickup.server.GetTask;
-import cab.pickup.server.OnTaskCompletedListener;
-import cab.pickup.server.Result;
+import cab.pickup.common.R;
+import cab.pickup.common.server.GetTask;
+import cab.pickup.common.server.OnTaskCompletedListener;
+import cab.pickup.common.server.Result;
 
 public class Driver{
     public String driver_id, driver_name, driver_address, phone,car_model,car_number,picUrl;

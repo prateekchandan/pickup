@@ -1,4 +1,4 @@
-package cab.pickup.server;
+package cab.pickup.common.server;
 
 
 import android.util.Log;

@@ -1,5 +1,6 @@
-package cab.pickup.api;
+package cab.pickup.common.api;
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -12,16 +13,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import cab.pickup.server.OnTaskCompletedListener;
-import cab.pickup.server.PostTask;
-import cab.pickup.server.Result;
-import cab.pickup.ui.activity.MyActivity;
-import cab.pickup.util.MapUtil;
+import cab.pickup.common.Constants;
+import cab.pickup.common.server.OnTaskCompletedListener;
+import cab.pickup.common.server.PostTask;
+import cab.pickup.common.server.Result;
+import cab.pickup.common.util.MapUtil;
+import cab.pickup.common.util.UserDatabaseHandler;
 
 // Wrapper class for Journey details json
 public class Journey {
@@ -38,7 +38,7 @@ public class Journey {
     public Journey(){
     }
 
-    public Journey(JSONObject journey) throws JSONException{
+    public Journey(JSONObject journey, UserDatabaseHandler db) throws JSONException{
         id=journey.getString("journey_id");
         datetime=journey.getString("journey_time");
 
@@ -49,7 +49,7 @@ public class Journey {
         cab_preference=journey.getString("preference");
 
 
-        group = new Group(new JSONObject(journey.getString("group")));
+        group = new Group(new JSONObject(journey.getString("group")),db);
     }
 
     public Journey(User user, Location start, Location end, String datetime, String del_time, String cab_preference){
@@ -98,10 +98,10 @@ public class Journey {
 
 
 
-    public void addToServer(MyActivity context, OnTaskCompletedListener listener){
+    public void addToServer(Context context, OnTaskCompletedListener listener){
         AddJourneyTask task = new AddJourneyTask(context,"Searching..");
         task.setOnTaskCompletedListener(listener);
-        task.execute(context.getUrl("/add_journey"));
+        task.execute(Constants.getUrl("/add_journey"));
     }
 
     @Override
@@ -134,10 +134,10 @@ public class Journey {
     class AddJourneyTask extends PostTask {
         private static final String TAG = "AddJourneyTask";
 
-        public AddJourneyTask(MyActivity context){
+        public AddJourneyTask(Context context){
             super(context);
         }
-        public AddJourneyTask(MyActivity context,String message){
+        public AddJourneyTask(Context context,String message){
             super(context);
             dialogMessage = message;
         }
@@ -148,7 +148,7 @@ public class Journey {
             List<NameValuePair> nameValuePairs = new ArrayList<>(2);
 
             nameValuePairs.add(new BasicNameValuePair("user_id", user_id));
-            nameValuePairs.add(new BasicNameValuePair("key", context.getKey()));
+            nameValuePairs.add(new BasicNameValuePair("key", Constants.KEY));
 
             //nameValuePairs.add(new BasicNameValuePair("journey_id", id));
             nameValuePairs.add(new BasicNameValuePair("start_lat", start.latitude+""));

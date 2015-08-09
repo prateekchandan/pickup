@@ -8,12 +8,11 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import cab.pickup.ui.widget.ProfilePictureView;
-
+import cab.pickup.MyApplication;
 import cab.pickup.R;
-import cab.pickup.api.User;
-import cab.pickup.server.OnTaskCompletedListener;
-import cab.pickup.server.Result;
+import cab.pickup.common.api.User;
+import cab.pickup.common.server.OnTaskCompletedListener;
+import cab.pickup.common.server.Result;
 import cab.pickup.ui.activity.MyActivity;
 
 public class UserProfileView extends RelativeLayout implements OnTaskCompletedListener{
@@ -49,7 +48,7 @@ public class UserProfileView extends RelativeLayout implements OnTaskCompletedLi
     }
 
     public void setUserId(String id){
-        mUser=new User(id,this);
+        mUser=new User(id,this, MyApplication.getDB());
     }
 
     public void setUser(User u){

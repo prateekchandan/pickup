@@ -34,24 +34,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
+import cab.pickup.MyApplication;
 import cab.pickup.R;
-import cab.pickup.api.Driver;
-import cab.pickup.api.Event;
-import cab.pickup.api.Journey;
-import cab.pickup.api.User;
+import cab.pickup.common.Constants;
+import cab.pickup.common.api.Driver;
+import cab.pickup.common.api.Event;
+import cab.pickup.common.api.Journey;
+import cab.pickup.common.api.User;
 import cab.pickup.gcm.GcmIntentService;
-import cab.pickup.server.GetTask;
-import cab.pickup.server.OnTaskCompletedListener;
-import cab.pickup.server.Result;
+import cab.pickup.common.server.GetTask;
+import cab.pickup.common.server.OnTaskCompletedListener;
+import cab.pickup.common.server.Result;
 import cab.pickup.ui.widget.DriverShortProfileView;
 import cab.pickup.ui.widget.EventAdapter;
-import cab.pickup.ui.widget.EventView;
 import cab.pickup.ui.widget.UserListAdapter;
 import cab.pickup.ui.widget.UserProfileView;
 
@@ -149,7 +147,7 @@ public class RideActivity extends MapsActivity {
                     mEventAdapter.add(new Event(Event.TYPE_USER_ADDED, journey.group.mates.get(0), time));
                     updateMatesCard();
                 }
-            }));
+            },MyApplication.getDB()));
         }
         else if(intent.getAction().equals(GcmIntentService.JOURNEY_ADD_DRIVER_INTENT_TAG)){
             Toast.makeText(RideActivity.this, "Driver added : "+intent.getStringExtra("id"), Toast.LENGTH_LONG).show();
@@ -418,7 +416,7 @@ public class RideActivity extends MapsActivity {
 
         Log.d("JourneyCheck", "Contains journey: " + prefs.contains("journey"));
         try {
-            journey=new Journey(new JSONObject(prefs.getString("journey","")));
+            journey=new Journey(new JSONObject(prefs.getString("journey","")),MyApplication.getDB());
             setupTextBoxes();
 
             JSONArray start_pts = journey.group.json.getJSONObject("path_waypoints").getJSONArray("startwaypoints");
@@ -498,7 +496,7 @@ public class RideActivity extends MapsActivity {
                                     spe.apply();
                                     finish();
                             }
-                        }.execute(getUrl("/cancel_journey/" + journey.id + "?key=" + getKey()));
+                        }.execute(Constants.getUrl("/cancel_journey/" + journey.id + "?key=" + getKey()));
 
 
                     }

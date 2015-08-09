@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cab.pickup.R;
-import cab.pickup.api.Location;
+import cab.pickup.common.api.Location;
 
 public class PlacesAdapter  extends ArrayAdapter<Location> {
     List<Location> addrs = new ArrayList<>();
