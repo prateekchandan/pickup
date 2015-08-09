@@ -16,8 +16,41 @@
             android:layout_height="wrap_content"
             android:id="@+id/title"
             android:src="@drawable/logo"
-            android:layout_centerHorizontal="true"
             />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_color_light"
+            android:text="@string/for_driver"
+            android:layout_marginTop="-30dp"
+            android:gravity="center"
+            android:textSize="16sp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/username"
+            android:textColor="@color/text_color_light"
+            android:textColorHint="@color/text_color_light"
+            android:layout_marginTop="30dp"
+            android:id="@+id/username"
+            android:backgroundTint="@color/text_color_light"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:textColor="@color/text_color_light"
+            android:layout_marginTop="10dp"
+            android:id="@+id/password"
+            android:textColorHint="@color/text_color_light"
+            android:backgroundTint="@color/text_color_light"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Login"
+            android:onClick="login"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/text_color_light"/>
 
 
 
