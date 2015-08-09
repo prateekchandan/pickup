@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import cab.pickup.R;
 import cab.pickup.api.Event;
+import cab.pickup.api.User;
 import cab.pickup.ui.activity.MyActivity;
 
 public class EventView extends LinearLayout{
@@ -16,6 +17,7 @@ public class EventView extends LinearLayout{
     TextView mTitle;
     TextView mTime;
     ImageView mIcon;
+   // ProfilePictureView fbImage;
 
     MyActivity context;
 
@@ -33,12 +35,22 @@ public class EventView extends LinearLayout{
         mTitle = ((TextView)eventView.findViewById(R.id.event_title));
         mIcon = ((ImageView)eventView.findViewById(R.id.event_icon));
         mTime = ((TextView)eventView.findViewById(R.id.event_time));
+      //  fbImage = ((ProfilePictureView)findViewById(R.id.user_pic));
     }
 
     public void updateView(){
         mTitle.setText(mEvent.getTitle());
         mTime.setText(mEvent.getTimeString());
-        mIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.user));
+      //  if(!(mEvent.data instanceof User) || mEvent.data == null) {
+            mIcon.setVisibility(VISIBLE);
+        //    fbImage.setVisibility(GONE);
+            mIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.user));
+       // }
+       // else{
+       //     mIcon.setVisibility(GONE);
+        //    fbImage.setVisibility(VISIBLE);
+        //    fbImage.setProfileId(((User) mEvent.data).fbid);
+        //}
     }
 
     public void setEvent(Event e){

@@ -22,7 +22,7 @@ public class PastJourney {
             status = data.getString("status");
             start_text = data.getString("start_text");
             end_text = data.getString("end_text");
-            distance = Float.parseFloat(data.getString("distance"));
+            distance = Float.parseFloat(data.getString("distance"))/1000f;
             fare = data.getInt("fare");
             start_lat = Float.parseFloat(data.getString("start_lat"));
             start_long = Float.parseFloat(data.getString("start_long"));

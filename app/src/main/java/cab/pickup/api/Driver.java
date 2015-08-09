@@ -86,7 +86,7 @@ public class Driver{
             return image;
 
         // TODO : Fetch Image from server if not present
-        image = BitmapFactory.decodeResource(context.getResources(),R.drawable.car);
+        image = BitmapFactory.decodeResource(context.getResources(),R.drawable.ic_user_gray);
 
         return image;
     }

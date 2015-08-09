@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
@@ -48,6 +49,7 @@ import cab.pickup.gcm.GcmIntentService;
 import cab.pickup.server.GetTask;
 import cab.pickup.server.OnTaskCompletedListener;
 import cab.pickup.server.Result;
+import cab.pickup.ui.widget.DriverShortProfileView;
 import cab.pickup.ui.widget.EventAdapter;
 import cab.pickup.ui.widget.EventView;
 import cab.pickup.ui.widget.UserListAdapter;
@@ -259,7 +261,7 @@ public class RideActivity extends MapsActivity {
         }
 
         updateMatesCard();
-
+        updateDriverCard();
     }
 
     public void showUserDialog(View v){
@@ -286,8 +288,62 @@ public class RideActivity extends MapsActivity {
         dialog.show();
     }
 
+    public void showDriverDialog(View v){
+        if(journey.group.driver==null)
+            return;
+        final Driver driver = journey.group.driver;
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.driver_detial_dialog);
+        (dialog.findViewById(R.id.icon_close)).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        ((TextView)dialog.findViewById(R.id.driver_name)).setText(driver.driver_name);
+        ((TextView)dialog.findViewById(R.id.car_model_name)).setText(driver.car_model);
+        ((TextView)dialog.findViewById(R.id.car_number)).setText(driver.car_number);
+        (dialog.findViewById(R.id.callBtn)).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                String uri = "tel:" + driver.phone.trim();
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse(uri));
+                startActivity(intent);
+            }
+        });
+        (dialog.findViewById(R.id.smsBtn)).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", driver.phone.trim(), null)));
+            }
+        });
+        dialog.show();
+    }
+
     protected void updateDriverCard(){
-        // TODO bhardo pls
+        LinearLayout user_1 = (LinearLayout)findViewById(R.id.driver_short_view);
+
+        if(journey.group.driver==null){
+            user_1.removeAllViews();
+            TextView moreTxt = new TextView(this);
+            moreTxt.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+            moreTxt.setPadding(20, 20, 20, 20);
+            moreTxt.setTextColor(Color.parseColor("#999999"));
+            moreTxt.setText("Driver Not Allocated Yet");
+            user_1.addView(moreTxt);
+        }
+        else{
+            user_1.removeAllViews();
+            DriverShortProfileView driverView = new DriverShortProfileView(this);
+            driverView.setUser(journey.group.driver);
+            user_1.addView(driverView);
+        }
     }
 
     protected void updateMatesCard(){

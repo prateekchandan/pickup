@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_weight="1.5"
+        android:gravity="center"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:id="@+id/user_profile_img"
+        android:src="@drawable/ic_user_gray"
+        />
+
+
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="4"
+        android:layout_height="50dp"
+        android:id="@+id/driver_name"
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@color/text_color_dark"
+        android:textSize="16sp"
+        />
+
+   <LinearLayout
+       android:layout_width="0dp"
+       android:layout_height="50dp"
+       android:layout_weight="3"
+       android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:padding="2dp"
+            android:textColor="@color/text_color_dark"
+            android:gravity="center"
+            android:id="@+id/car_model_name"/>
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="25dp"
+           android:gravity="center"
+           android:padding="2dp"
+           android:textColor="@color/text_color_dark"
+           android:id="@+id/car_number"/>
+   </LinearLayout>
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginBottom="13dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="0.5"
+        android:src="@drawable/phone"
+        android:id="@+id/call_driver"/>
+</LinearLayout>

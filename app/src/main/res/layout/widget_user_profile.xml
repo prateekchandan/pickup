@@ -7,13 +7,13 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_weight="1"
+        android:gravity="center"
         android:id="@+id/propicImg"
         >
-        <com.facebook.widget.ProfilePictureView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <cab.pickup.ui.widget.ProfilePictureView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:scaleType="fitCenter"
-            android:background="@drawable/circle_shape"
             android:adjustViewBounds="true"
             android:id="@+id/user_profile_img"
             />
