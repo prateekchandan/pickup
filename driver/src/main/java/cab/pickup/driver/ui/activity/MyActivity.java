@@ -3,15 +3,17 @@ package cab.pickup.driver.ui.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 
+import cab.pickup.common.Constants;
 import cab.pickup.driver.R;
 import cab.pickup.common.util.IOUtil;
 
 /**
  * Created by prateek on 4/8/15.
  */
-public class MyActivity extends AppCompatActivity {
+public class MyActivity extends ActionBarActivity {
 
     SharedPreferences prefs;
 
@@ -34,12 +36,8 @@ public class MyActivity extends AppCompatActivity {
         return IOUtil.getAppVersion(getApplicationContext());
     }
 
-    public String getUrl(String... path){
-        return getString(R.string.base_url)+(path!=null?path[0]:"");
-    }
-
     public String getKey(){
-        return getString(R.string.key);
+        return Constants.KEY;
     }
 
     public SharedPreferences getSharedPreferences(){
