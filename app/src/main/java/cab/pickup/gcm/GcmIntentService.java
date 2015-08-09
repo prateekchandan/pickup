@@ -36,7 +36,7 @@ import cab.pickup.ui.activity.RideActivity;
 public class GcmIntentService extends IntentService {
     SharedPreferences prefs;
     Journey journey;
-    JSONArray eventList;
+    JSONArray eventList = new JSONArray();
 
     public static final int TYPE_USER_ADDED=10,
                             TYPE_DRIVER_ADDED=11,
@@ -113,6 +113,9 @@ public class GcmIntentService extends IntentService {
                     int msg_type = msg.getInt("type");
                     final JSONObject data = msg.getJSONObject("data");
                     final long time = data.getLong("time");
+
+                    if(!data.getString("journey_id").equals(journey.id))
+                        return;
 
                     if(msg_type==TYPE_USER_ADDED){
                         journey.group.mates.add(0, new User(intent.getStringExtra("id"), new OnTaskCompletedListener() {
