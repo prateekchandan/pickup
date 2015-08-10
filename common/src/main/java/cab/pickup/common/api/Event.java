@@ -53,6 +53,8 @@ public class Event {
                 return ((User)data).name + " picked from his location";
             case TYPE_USER_DROPPED:
                 return ((User)data).name + " dropped to his destination";
+            case TYPE_USER_CANCELLED:
+                return ((User)data).name + " cancelled his journey";
         }
 
         return "Not Init";

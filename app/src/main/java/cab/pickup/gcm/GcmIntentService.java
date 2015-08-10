@@ -118,7 +118,7 @@ public class GcmIntentService extends IntentService {
                         return;
 
                     if(msg_type==TYPE_USER_ADDED){
-                        journey.group.mates.add(0, new User(intent.getStringExtra("id"), new OnTaskCompletedListener() {
+                        journey.group.mates.add(0, new User(String.valueOf(data.getInt("user_id")), new OnTaskCompletedListener() {
                             @Override
                             public void onTaskCompleted(Result res) {
                                 try {
@@ -151,7 +151,7 @@ public class GcmIntentService extends IntentService {
                                 "Please reach the pickup location");
                     } else if(msg_type==TYPE_USER_CANCELLED){
                         for(User u: journey.group.mates) {
-                            if(u.id.equals(intent.getStringExtra("id"))) {
+                            if(u.id.equals(String.valueOf(data.getInt("user_id")))) {
                                 eventList.put(new JSONObject(new Event(Event.TYPE_USER_CANCELLED, new User(new JSONObject(u.toString())), time).toString()));
                                 journey.group.mates.remove(u);
 
@@ -162,7 +162,7 @@ public class GcmIntentService extends IntentService {
                                 data.getString("user_name")+" cancelled his journey");
                     }else if(msg_type==TYPE_USER_PICKED){
                         for(User u: journey.group.mates) {
-                            if(u.id.equals(intent.getStringExtra("id"))) {
+                            if(u.id.equals(String.valueOf(data.getInt("user_id")))) {
                                 eventList.put(new JSONObject(new Event(Event.TYPE_USER_PICKED, u, time).toString()));
                                 break;
                             }
@@ -171,7 +171,7 @@ public class GcmIntentService extends IntentService {
                         sendJourneyUpdate(JOURNEY_USER_PICKED_INTENT_TAG,"One mate was picked up",data.getString("user_name")+" was picked up from his location");
                     }else if(msg_type==TYPE_USER_DROPPED){
                         for(User u: journey.group.mates) {
-                            if(u.id.equals(intent.getStringExtra("id"))) {
+                            if(u.id.equals(String.valueOf(data.getInt("user_id")))) {
                                 eventList.put(new JSONObject(new Event(Event.TYPE_USER_DROPPED, u, time).toString()));
                                 break;
                             }
@@ -212,6 +212,7 @@ public class GcmIntentService extends IntentService {
         mNotificationManager.notify(1, mBuilder.build());
 
         Intent broadcast = new Intent(intent_tag);
+        broadcast.putExtra("notif_id", 1);
         sendBroadcast(broadcast);
     }
 }

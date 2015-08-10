@@ -73,10 +73,6 @@ public class RideActivity extends MapsActivity {
 
             mNotificationManager.cancel(intent.getIntExtra("notif_id",0));
 
-            if(!journey.id.equals(intent.getStringExtra("journey_id"))){
-                return;
-            }
-
             loadEventData(intent);
         }
     };
