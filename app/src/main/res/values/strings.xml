@@ -77,4 +77,7 @@
 
     <string name="mates_dialog_head">Mates (%1d)</string>
 
+    <string name="title_cancelled">Cancelled</string>
+    <string name="title_completed">Completed</string>
+
 </resources>

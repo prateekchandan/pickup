@@ -137,8 +137,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+       //Removed the menu
         return super.onCreateOptionsMenu(menu);
 
     }
@@ -149,17 +148,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-            return true;
-        }
-
-        if(id== R.id.action_profile){
-            startActivity(new Intent(this,ProfileActivity.class));
-            return true;
-        }
-
+        
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
@@ -431,6 +420,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                     Log.d("group",res.data.toString());
                     try {
                         journey.group = new Group(res.data.getJSONObject("group"),MyApplication.getDB());
+                        journey.group.group_id = String.valueOf(res.data.getInt("group_id"));
                     }catch (Exception E){
                         E.printStackTrace();
                     }

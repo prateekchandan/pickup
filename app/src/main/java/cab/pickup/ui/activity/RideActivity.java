@@ -34,6 +34,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -92,6 +94,8 @@ public class RideActivity extends MapsActivity {
 
         //make map invisible
         findViewById(R.id.map).setVisibility(View.INVISIBLE);
+
+
     }
 
     @Override
@@ -116,6 +120,7 @@ public class RideActivity extends MapsActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        updateCommonPath();
         refreshList();
         if(getIntent().hasExtra("action")){
             loadEventData(getIntent());
@@ -132,6 +137,7 @@ public class RideActivity extends MapsActivity {
             setupTextBoxes();
             updateDriverCard();
             updateMatesCard();
+            updateCommonPath();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -326,41 +332,7 @@ public class RideActivity extends MapsActivity {
     protected void onStart() {
         super.onStart();
 
-        Log.d("JourneyCheck", "Contains journey: " + prefs.contains("journey"));
-        try {
-            journey=new Journey(new JSONObject(prefs.getString("journey","")),MyApplication.getDB());
-            setupTextBoxes();
 
-            JSONArray start_pts = journey.group.json.getJSONObject("path_waypoints").getJSONArray("startwaypoints");
-            JSONArray end_pts = journey.group.json.getJSONObject("path_waypoints").getJSONArray("endwaypoints");
-
-            double start_lat = start_pts.getJSONArray(0).getDouble(0);
-            double start_lng = start_pts.getJSONArray(0).getDouble(1);
-
-            double end_lat = end_pts.getJSONArray(end_pts.length()-1).getDouble(0);
-            double end_lng = end_pts.getJSONArray(end_pts.length()-1).getDouble(1);
-
-
-            String waypoints="";
-            for(int i=1; i<start_pts.length(); i++){
-                waypoints+=start_pts.getJSONArray(i).getDouble(0)+","+start_pts.getJSONArray(i).getDouble(1)+"|";
-            }
-
-            for(int i=0; i<end_pts.length()-1; i++){
-                waypoints+=end_pts.getJSONArray(i).getDouble(0)+","+end_pts.getJSONArray(i).getDouble(1)+"|";
-            }
-            if(waypoints.length()==0)
-                waypoints="|";
-
-            Log.d("WAYPTT",waypoints);
-            String url="http://maps.googleapis.com/maps/api/directions/json?origin="
-                    + start_lat + "," + start_lng + "&destination="
-                    + end_lat + "," + end_lng+"&waypoints="+waypoints.substring(0,waypoints.length()-1);
-            Log.d("WAYPTT",url);
-            new MapDirectionsTask().execute(url);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -485,6 +457,54 @@ public class RideActivity extends MapsActivity {
         else{
             findViewById(R.id.driver_short_view).setVisibility(View.GONE);
             findViewById(R.id.summary_user_one).setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void updateCommonPath(){
+        Log.d("JourneyCheck", "Contains journey: " + prefs.contains("journey"));
+        try {
+            journey=new Journey(new JSONObject(prefs.getString("journey","")),MyApplication.getDB());
+            setupTextBoxes();
+            Log.d("PATHJSON", journey.group.json.toString());
+            JSONObject path_waypts = new JSONObject(journey.group.json.getString("path_waypoints"));
+            JSONArray start_pts = path_waypts.getJSONArray("startwaypoints");
+            JSONArray end_pts = path_waypts.getJSONArray("endwaypoints");
+
+            double start_lat = start_pts.getJSONArray(0).getDouble(0);
+            double start_lng = start_pts.getJSONArray(0).getDouble(1);
+
+            double end_lat = end_pts.getJSONArray(end_pts.length()-1).getDouble(0);
+            double end_lng = end_pts.getJSONArray(end_pts.length()-1).getDouble(1);
+
+
+            String waypoints="";
+            for(int i=1; i<start_pts.length(); i++){
+                waypoints+=start_pts.getJSONArray(i).getDouble(0)+","+start_pts.getJSONArray(i).getDouble(1)+"|";
+            }
+
+            for(int i=0; i<end_pts.length()-1; i++){
+                waypoints+=end_pts.getJSONArray(i).getDouble(0)+","+end_pts.getJSONArray(i).getDouble(1)+"|";
+            }
+            if(waypoints.length()==0)
+                waypoints="|";
+
+            Log.d("WAYPTT",waypoints);
+            String url="http://maps.googleapis.com/maps/api/directions/json?origin="
+                    + URLEncoder.encode(String.valueOf(start_lat),"UTF-8")
+                    + ","
+                    + URLEncoder.encode(String.valueOf(start_lng),"UTF-8")
+                    + "&destination="
+                    + URLEncoder.encode(String.valueOf(end_lat),"UTF-8")
+                    + ","
+                    + URLEncoder.encode(String.valueOf(end_lng),"UTF-8")
+                    +"&waypoints="+
+                    URLEncoder.encode(String.valueOf(waypoints.substring(0,waypoints.length()-1)), "UTF-8");
+            Log.d("WAYPTT",url);
+            new MapDirectionsTask().execute(url);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }catch (UnsupportedEncodingException E){
+            E.printStackTrace();
         }
     }
 }

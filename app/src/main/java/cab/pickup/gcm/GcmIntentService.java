@@ -24,10 +24,12 @@ import org.json.JSONObject;
 
 import cab.pickup.MyApplication;
 import cab.pickup.R;
+import cab.pickup.common.Constants;
 import cab.pickup.common.api.Driver;
 import cab.pickup.common.api.Event;
 import cab.pickup.common.api.Journey;
 import cab.pickup.common.api.User;
+import cab.pickup.common.server.GetTask;
 import cab.pickup.common.server.OnTaskCompletedListener;
 import cab.pickup.common.server.Result;
 import cab.pickup.ui.activity.MainActivity;
@@ -107,6 +109,35 @@ public class GcmIntentService extends IntentService {
                 Log.d(TAG, extras.toString());
 
                 JSONObject msg = null;
+
+                try {
+                    msg = new JSONObject(extras.getString("message"));
+                    int msg_type = msg.getInt("type");
+                    if(msg_type==TYPE_USER_CANCELLED || msg_type==TYPE_USER_ADDED){
+                        String group_id = journey.group.group_id;
+                        new GetTask(this){
+                            @Override
+                            public void onPostExecute(Result res){
+                                super.onPostExecute(res);
+                                if(res.statusCode==200){
+                                    try {
+                                        journey.group.json=res.data.getJSONObject("group");
+                                        prefs.edit()
+                                                .putString("journey",journey.toString())
+                                                .apply();
+                                        Log.d("GROUP_UPDATE",res.data.toString());
+                                    }catch (Exception E){
+                                        E.printStackTrace();
+                                    }
+
+                                }
+                            }
+                        }.execute(Constants.getUrl("/get_group/"+group_id+"?key="+Constants.KEY));
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
                 try {
                     msg = new JSONObject(extras.getString("message"));
 
@@ -129,7 +160,7 @@ public class GcmIntentService extends IntentService {
                                     e.printStackTrace();
                                 }
                             }
-                        },MyApplication.getDB()));
+                        }, MyApplication.getDB()));
                     } else if(msg_type==TYPE_DRIVER_ADDED){
                         journey.group.driver = new Driver(data.getString("driver_id"), new OnTaskCompletedListener() {
                             @Override
@@ -181,6 +212,7 @@ public class GcmIntentService extends IntentService {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
 
                 Log.i(TAG, "Received: " + extras.getString("message"));
             }

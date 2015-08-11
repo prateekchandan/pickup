@@ -61,8 +61,8 @@
         </activity>
         <activity
             android:name=".ui.activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_ride">
+            android:label="@string/title_activity_ride"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.activity.SettingsActivity"
@@ -74,8 +74,8 @@
             android:label="@string/title_fb_login" />
         <activity
             android:name=".ui.activity.LoginActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -84,9 +84,9 @@
         </activity>
         <activity
             android:name=".ui.activity.RideActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_ride"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
         </activity>
 
         <!--
@@ -121,12 +121,13 @@
 
         <activity
             android:name=".ui.activity.ProfileActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_profile" >
+            android:label="@string/title_activity_profile"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.activity.HistoryActivity"
-            android:label="@string/title_activity_history" >
+            android:label="@string/title_activity_history"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 
