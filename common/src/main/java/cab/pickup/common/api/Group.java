@@ -14,12 +14,16 @@ public class Group {
     public ArrayList<User> mates = new ArrayList<>();
     public JSONObject json;
     public Driver driver;
+    public String group_id;
 
     public Group(){
     }
 
     public Group(JSONObject rep, UserDatabaseHandler db) throws JSONException{
         Log.d("GROUP", rep.toString());
+        if(rep.has("group_id"))
+            group_id = rep.getString("group_id");
+
         if(rep.has("mates")) {
             JSONArray users = rep.getJSONArray("mates");
             for (int i = 0; i < users.length(); i++) {
@@ -54,6 +58,7 @@ public class Group {
 
             rep.put("mates",mate_array);
             rep.put("json",json);
+            rep.put("group_id",group_id);
             if(driver!=null)
                 rep.put("driver", new JSONObject(driver.toString()));
         } catch (JSONException e) {
