@@ -47,6 +47,7 @@ public class LoginActivity extends MyActivity {
         startActivity(new Intent(this,MainActivity.class));
         finish();
     }
+
     public void login(View v){
         final String username , password;
         username=usernameField.getText().toString();
@@ -70,7 +71,7 @@ public class LoginActivity extends MyActivity {
                 nameValuePairs.add(new BasicNameValuePair("username", username));
                 nameValuePairs.add(new BasicNameValuePair("password", password));
                 nameValuePairs.add(new BasicNameValuePair("key", getKey()));
-
+                Log.d("PostingData",nameValuePairs.toString());
                 return nameValuePairs;
             }
 
@@ -87,9 +88,10 @@ public class LoginActivity extends MyActivity {
                     }catch (Exception E){
                         E.printStackTrace();
                     }
+                    startNextActivity();
                 }else{
                     passwordField.setText("");
-                    passwordField.setError(ret.statusMessage);
+                    Toast.makeText(LoginActivity.this,ret.statusMessage,Toast.LENGTH_LONG).show();
                 }
             }
         }.execute(Constants.getUrl("/driver_login"));
