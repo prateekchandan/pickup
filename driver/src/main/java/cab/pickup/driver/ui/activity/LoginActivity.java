@@ -9,9 +9,12 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +91,7 @@ public class LoginActivity extends MyActivity {
                     }catch (Exception E){
                         E.printStackTrace();
                     }
-                    startNextActivity();
+                    registerGCM();
                 }else{
                     passwordField.setText("");
                     Toast.makeText(LoginActivity.this,ret.statusMessage,Toast.LENGTH_LONG).show();
@@ -96,6 +99,40 @@ public class LoginActivity extends MyActivity {
             }
         }.execute(Constants.getUrl("/driver_login"));
 
+    }
+
+    public void registerGCM(){
+        final GoogleCloudMessaging gcm;
+
+        final String SENDER_ID = "1032273645702";
+        gcm = GoogleCloudMessaging.getInstance(this);
+
+        new PostTask(this){
+            @Override
+            protected Result doInBackground(String... params) {
+                String gcm_id=null;
+                try {
+                    gcm_id = gcm.register(SENDER_ID);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                return super.doInBackground(params[0], gcm_id);
+            }
+
+            @Override
+            public List<NameValuePair> getPostData(String[] params, int i) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+                nameValuePairs.add(new BasicNameValuePair("driver_id", me.driver_id));
+                nameValuePairs.add(new BasicNameValuePair("key", getKey()));
+
+                nameValuePairs.add(new BasicNameValuePair("reg_id", params[i]));
+
+                return nameValuePairs;
+            }
+        }.execute(Constants.getUrl("/driver_register_gcm"));
+        startNextActivity();
     }
 
 }

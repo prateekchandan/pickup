@@ -71,6 +71,7 @@ public class DriverTracker extends LocationTracker {
                                     List<NameValuePair> nameValuePairs = new ArrayList<>();
                                     nameValuePairs.add(new BasicNameValuePair("position",pos));
                                     nameValuePairs.add(new BasicNameValuePair("key", Constants.KEY));
+                                    nameValuePairs.add(new BasicNameValuePair("event_ids", "[]"));
 
                                     return nameValuePairs;
                                 }
@@ -79,7 +80,7 @@ public class DriverTracker extends LocationTracker {
                                     super.onPostExecute(ret);
                                     Log.d("TIMEDTASK", "YO " + " D " + d.driver_id + "  :  " + pos + " : " + (new Timestamp(new Date().getTime()))+ " : "+ret.statusMessage+ " : " + String.valueOf(ret.statusCode));
                                 }
-                            }.execute(Constants.getUrl("/driver_modify_location/"+d.driver_id));
+                            }.execute(Constants.getUrl("/periodic_route/"+d.driver_id));
                         }
                     }
                 }, 0, 3, TimeUnit.MINUTES);

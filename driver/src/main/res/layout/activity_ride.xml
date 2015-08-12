@@ -1,0 +1,50 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="cab.pickup.driver.ui.activity.RideActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <include layout="@layout/user_shortview"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:layout_height="match_parent"/>
+            <include layout="@layout/user_shortview"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:layout_height="match_parent"/>
+            <include layout="@layout/user_shortview"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7">
+            
+        </LinearLayout>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Picked Up Person 1"
+            android:textColor="@color/text_color_light"
+            android:background="@color/theme_color_dark"/>
+    </LinearLayout>
+
+</LinearLayout>

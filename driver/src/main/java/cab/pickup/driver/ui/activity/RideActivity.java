@@ -1,29 +1,25 @@
 package cab.pickup.driver.ui.activity;
 
-import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import cab.pickup.driver.R;
 
-public class MainActivity extends MyActivity {
+public class RideActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_ride);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -39,18 +35,6 @@ public class MainActivity extends MyActivity {
             return true;
         }
 
-        if(id == R.id.action_logout){
-            prefs.edit().clear().apply();
-            startActivity(new Intent(this,LoginActivity.class));
-            finish();
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
-    }
-
-    public void acceptRide(View V){
-        startActivity(new Intent(this,RideActivity.class));
-        finish();
     }
 }

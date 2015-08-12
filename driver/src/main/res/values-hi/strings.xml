@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pickup ड्राइवर के लिए</string>
+    <string name="Login">प्रवेश करें </string>
+    <string name="action_settings">सेटिंग</string>
+    <string name="empty_password">पासवर्ड खली नहीं रह सकता </string>
+    <string name="empty_username">नाम खली नहीं  रह सकता </string>
+    <string name="for_driver">ड्राइवर के लिए </string>
+    <string name="login_attempt">लॉगिन  हो रहा है </string>
+    <string name="login_success">लॉगिन कामयाब हो गया </string>
+    <string name="logout">लॉगआउट करें </string>
+    <string name="password">पासवर्ड </string>
+    <string name="title_activity_main">Pickup ड्राइवर के लिए </string>
+    <string name="title_activity_ride">Pickup ड्राइवर के लिए </string>
+    <string name="username">नाम</string>
+    <string name="title_activity_login">लॉगिन  कार्य </string>
+</resources>
