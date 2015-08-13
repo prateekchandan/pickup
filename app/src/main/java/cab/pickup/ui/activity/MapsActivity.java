@@ -27,6 +27,9 @@ import java.util.HashMap;
 import cab.pickup.R;
 import cab.pickup.common.api.Journey;
 import cab.pickup.common.api.Location;
+import cab.pickup.common.server.OnStringTaskCompletedListener;
+import cab.pickup.common.server.OnTaskCompletedListener;
+import cab.pickup.common.server.Result;
 import cab.pickup.common.util.IOUtil;
 
 public class MapsActivity extends MyActivity implements GoogleMap.OnMapLoadedCallback{
@@ -83,10 +86,15 @@ public class MapsActivity extends MyActivity implements GoogleMap.OnMapLoadedCal
     class MapDirectionsTask extends AsyncTask<String, Integer, String> {
         public final static String MODE_DRIVING = "driving";
         public final static String MODE_WALKING = "walking";
-
+        public Double distance;
         static final String TAG = "Directions";
+        OnStringTaskCompletedListener listener;
 
         public MapDirectionsTask() {
+        }
+
+        public MapDirectionsTask( OnStringTaskCompletedListener l) {
+            listener = l;
         }
 
         @Override
@@ -125,6 +133,10 @@ public class MapsActivity extends MyActivity implements GoogleMap.OnMapLoadedCal
                 JSONObject path = new JSONObject(json);
 
                 addPath(Journey.getPath(path), Journey.getLatLngBounds(path), "0");
+                distance=Journey.getPathDistance(path);
+                if(listener!=null)
+                    listener.onTaskCompleted(String.valueOf(distance));
+                Log.d("DISTANCE_INMAP",String.valueOf(distance));
             } catch (JSONException e) {
                 Log.e(TAG, "JSON error: "+e.getMessage());
 

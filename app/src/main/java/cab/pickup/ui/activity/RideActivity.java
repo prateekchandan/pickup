@@ -176,6 +176,7 @@ public class RideActivity extends MapsActivity {
             E.printStackTrace();
         }
 
+        ((TextView)findViewById(R.id.jouney_distance)).setText(String.valueOf(journey.distance)+" km");
         updateMatesCard();
         updateDriverCard();
     }

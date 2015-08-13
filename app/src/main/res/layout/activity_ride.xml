@@ -108,6 +108,7 @@
                     android:layout_weight="4"
                     android:text="26 Km"
                     android:textSize="14sp"
+                    android:id="@+id/jouney_distance"
                     android:singleLine="true"
                     android:gravity="start|center_vertical"
                     android:textColor="@color/text_color_light"

@@ -59,7 +59,7 @@
 
     <string name="pickup_location">Pickup Location</string>
     <string name="drop_location">Drop Location</string>
-    <string name="ride_now">Ride Now</string>
+    <string name="ride_now">Book Ride</string>
 
 
     <string name="login_successful">Successfully logged in!!</string>

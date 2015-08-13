@@ -42,6 +42,7 @@ import cab.pickup.common.api.Group;
 import cab.pickup.common.api.Journey;
 import cab.pickup.common.api.Location;
 import cab.pickup.common.server.GetTask;
+import cab.pickup.common.server.OnStringTaskCompletedListener;
 import cab.pickup.common.server.OnTaskCompletedListener;
 import cab.pickup.common.server.Result;
 import cab.pickup.ui.widget.LocationSearchBar;
@@ -303,7 +304,15 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             String url="http://maps.googleapis.com/maps/api/directions/json?origin="
                     + start.latitude + "," + start.longitude + "&destination="
                     + end.latitude + "," + end.longitude;
-            new MapDirectionsTask().execute(url);
+            MapDirectionsTask task = new MapDirectionsTask(new OnStringTaskCompletedListener() {
+                @Override
+                public void onTaskCompleted(String s) {
+                    journey.distance = Double.parseDouble(s);
+                }
+
+
+            });
+            task.execute(url);
 
             return true;
         } catch (NullPointerException E){
@@ -318,6 +327,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             ((CompoundButton)v).setChecked(true);
         }
 
+        Log.d("DISTANCE_INMAIN",String.valueOf(journey.distance));
         clearFareAndMates();
 
         v.setSelected(true);
