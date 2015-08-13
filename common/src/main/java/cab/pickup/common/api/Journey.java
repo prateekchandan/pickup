@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +26,10 @@ import cab.pickup.common.util.UserDatabaseHandler;
 
 // Wrapper class for Journey details json
 public class Journey {
-    public String id, distance, duration, cost;
+    public String id, duration;
 
     public Location start, end;
-
+    public Double distance=0.0,cost=0.0;
     public String user_id;
     public Group group;
 
@@ -48,6 +49,11 @@ public class Journey {
         del_time=journey.getString("margin_before");
         cab_preference=journey.getString("preference");
 
+        if(journey.has("distance"))
+            distance = journey.getDouble("distance");
+
+        if(journey.has("cost"))
+            cost  = journey.getDouble("cost");
 
         group = new Group(new JSONObject(journey.getString("group")),db);
     }
@@ -81,9 +87,10 @@ public class Journey {
         JSONArray legs = ((JSONObject)(path.has("routes")?
                 path.getJSONArray("routes").get(0):
                 path)).getJSONArray("legs");
-
+        Log.d("DISTANCECALC",legs.toString());
         for (int i = 0; i < legs.length(); i++) {
             JSONArray steps = legs.getJSONObject(i).getJSONArray("steps");
+
             for(int j=0; j<steps.length(); j++) {
                 String polyline = steps.getJSONObject(j).getJSONObject("polyline").getString("points");
 
@@ -94,6 +101,27 @@ public class Journey {
         }
 
         return lines;
+    }
+
+    public static Double getPathDistance(JSONObject path) throws JSONException {
+
+        Double dist = 0.0;
+        Long distC = 0l;
+
+        JSONArray legs = ((JSONObject)(path.has("routes")?
+                path.getJSONArray("routes").get(0):
+                path)).getJSONArray("legs");
+
+        for (int i = 0; i < legs.length(); i++) {
+            JSONArray steps = legs.getJSONObject(i).getJSONArray("steps");
+
+            for(int j=0; j<steps.length(); j++) {
+                distC += steps.getJSONObject(j).getJSONObject("distance").getLong("value");
+            }
+        }
+        dist = distC/1000.0;
+        DecimalFormat df = new DecimalFormat("0.0");
+        return Double.parseDouble(df.format(dist));
     }
 
 
@@ -121,6 +149,8 @@ public class Journey {
 
             journey.put("margin_before", del_time);
             journey.put("preference", cab_preference);
+            journey.put("distance", distance);
+            journey.put("cost", cost);
 
             journey.put("group", group);
         } catch (JSONException e) {
@@ -172,8 +202,6 @@ public class Journey {
             if(ret.statusCode==200){
                 id = ret.data.optString("journey_id");
                 Log.d(TAG, ret.statusMessage);
-
-                Toast.makeText(context, ret.statusMessage, Toast.LENGTH_LONG).show();
             }
             super.onPostExecute(ret);
         }
