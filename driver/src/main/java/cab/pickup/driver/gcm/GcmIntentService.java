@@ -16,8 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import cab.pickup.MyApplication;
-import cab.pickup.R;
+import cab.pickup.driver.MyApplication;
+import cab.pickup.driver.R;
 import cab.pickup.common.Constants;
 import cab.pickup.common.api.Driver;
 import cab.pickup.common.api.Event;
@@ -26,29 +26,25 @@ import cab.pickup.common.api.User;
 import cab.pickup.common.server.GetTask;
 import cab.pickup.common.server.OnTaskCompletedListener;
 import cab.pickup.common.server.Result;
-import cab.pickup.ui.activity.MainActivity;
-import cab.pickup.ui.activity.RideActivity;
+import cab.pickup.driver.api.Group;
+import cab.pickup.driver.ui.activity.MainActivity;
+import cab.pickup.driver.ui.activity.MyActivity;
 
 public class GcmIntentService extends IntentService {
     SharedPreferences prefs;
-    Journey journey;
+    Group group;
     JSONArray eventList = new JSONArray();
 
-    public static final int TYPE_USER_ADDED=10,
-                            TYPE_DRIVER_ADDED=11,
-                            TYPE_DRIVER_ARRIVED=12,
-                            TYPE_USER_CANCELLED=13,
-                            TYPE_USER_PICKED=14,
-                            TYPE_USER_DROPPED=15;
+    public static final int TYPE_USER_ADDED=18,
+                            TYPE_USER_CANCELLED=19,
+                            ALLOCATED_GROUP=16;
+
 
     static final String TAG = "Intent Service";
     public static final String MSG_REC_INTENT_TAG = "MESSAGE_RECIEVED";
     public static final String JOURNEY_ADD_USER_INTENT_TAG = "JOURNEY_ADD_USER";
-    public static final String JOURNEY_ADD_DRIVER_INTENT_TAG = "JOURNEY_ADD_DRIVER";
-    public static final String JOURNEY_DRIVER_ARRIVED_INTENT_TAG = "JOURNEY_DRIVER_ARRIVED";
     public static final String JOURNEY_USER_CANCELLED_INTENT_TAG = "JOURNEY_USER_CANCELLED";
-    public static final String JOURNEY_USER_PICKED_INTENT_TAG = "JOURNEY_USER_PICKED";
-    public static final String JOURNEY_USER_DROPPED_INTENT_TAG = "JOURNEY_USER_DROPPED";
+    public static final String JOURNEY_ALLOCATED_TAG = "JOURNEY_ALLOCATED_RIDE";
 
     NotificationManager mNotificationManager;
 
@@ -61,12 +57,15 @@ public class GcmIntentService extends IntentService {
         super.onCreate();
 
         prefs=getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
+        try {
+            group = new Group(new JSONObject(prefs.getString("group","")));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         try {
-            journey = new Journey(new JSONObject(prefs.getString("journey","")), MyApplication.getDB());
-
             eventList = new JSONArray(prefs.getString("events",""));
-        } catch (JSONException e) {
+        }catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -76,6 +75,12 @@ public class GcmIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Driver driver;
+        if(MyApplication.driver==null)
+            return;
+
+        driver = MyApplication.driver;
+
         Bundle extras = intent.getExtras();
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
         // The getMessageType() intent parameter must be the intent you received
@@ -104,33 +109,6 @@ public class GcmIntentService extends IntentService {
 
                 JSONObject msg = null;
 
-                try {
-                    msg = new JSONObject(extras.getString("message"));
-                    int msg_type = msg.getInt("type");
-                    if(msg_type==TYPE_USER_CANCELLED || msg_type==TYPE_USER_ADDED){
-                        String group_id = journey.group.group_id;
-                        new GetTask(this){
-                            @Override
-                            public void onPostExecute(Result res){
-                                super.onPostExecute(res);
-                                if(res.statusCode==200){
-                                    try {
-                                        journey.group.json=res.data.getJSONObject("group");
-                                        prefs.edit()
-                                                .putString("journey",journey.toString())
-                                                .apply();
-                                        Log.d("GROUP_UPDATE",res.data.toString());
-                                    }catch (Exception E){
-                                        E.printStackTrace();
-                                    }
-
-                                }
-                            }
-                        }.execute(Constants.getUrl("/get_group/"+group_id+"?key="+Constants.KEY));
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
 
                 try {
                     msg = new JSONObject(extras.getString("message"));
@@ -139,70 +117,31 @@ public class GcmIntentService extends IntentService {
                     final JSONObject data = msg.getJSONObject("data");
                     final long time = data.getLong("time");
 
-                    if(!data.getString("journey_id").equals(journey.id))
-                        return;
 
                     if(msg_type==TYPE_USER_ADDED){
-                        journey.group.mates.add(0, new User(String.valueOf(data.getInt("user_id")), new OnTaskCompletedListener() {
-                            @Override
-                            public void onTaskCompleted(Result res) {
-                                try {
-                                    eventList.put(new JSONObject(new Event(Event.TYPE_USER_ADDED, journey.group.mates.get(0), time).toString()));
 
-                                    sendJourneyUpdate(JOURNEY_ADD_USER_INTENT_TAG, "New mate added!", data.getString("user_name") + " will now ride with you");
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                    }else if(msg_type==TYPE_USER_CANCELLED){
+
+
+                    }else if(msg_type==ALLOCATED_GROUP){
+                        new GetTask(this){
+                            @Override
+                            public void onPostExecute(Result res){
+                                super.onPostExecute(res);
+                                if(res.statusCode==200){
+                                    try {
+                                        JSONObject groupObj = res.data.getJSONObject("final_data").getJSONObject("group_details");
+                                        groupObj.put("journey_details",res.data.getJSONObject("final_data").getJSONArray("journey_details"));
+                                        group  = new Group(groupObj);
+                                        sendJourneyUpdate(JOURNEY_ALLOCATED_TAG, "New Journey Allocated","A new journey has been allocated to you", MainActivity.class);
+                                    }catch (Exception E){
+                                        E.printStackTrace();
+                                    }
                                 }
                             }
-                        }, MyApplication.getDB()));
-                    } else if(msg_type==TYPE_DRIVER_ADDED){
-                        journey.group.driver = new Driver(data.getString("driver_id"), new OnTaskCompletedListener() {
-                            @Override
-                            public void onTaskCompleted(Result res) {
-                                try {
-                                    eventList.put(new JSONObject(new Event(Event.TYPE_DRIVER_ADDED, journey.group.driver,time).toString()));
-
-                                    sendJourneyUpdate(JOURNEY_ADD_DRIVER_INTENT_TAG, "Driver allocated!", "Check to see your driver's details");
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-
-                    } else if(msg_type==TYPE_DRIVER_ARRIVED){
-                        eventList.put(new JSONObject(new Event(Event.TYPE_DRIVER_ARRIVED, journey.group.driver, time).toString()));
-
-                        sendJourneyUpdate(JOURNEY_DRIVER_ARRIVED_INTENT_TAG,"Your driver is arriving...",
-                                "Please reach the pickup location");
-                    } else if(msg_type==TYPE_USER_CANCELLED){
-                        for(User u: journey.group.mates) {
-                            if(u.id.equals(String.valueOf(data.getInt("user_id")))) {
-                                eventList.put(new JSONObject(new Event(Event.TYPE_USER_CANCELLED, new User(new JSONObject(u.toString())), time).toString()));
-                                journey.group.mates.remove(u);
-
-                                break;
-                            }
-                        }
-                        sendJourneyUpdate(JOURNEY_USER_CANCELLED_INTENT_TAG,"One mate left journey",
-                                data.getString("user_name")+" cancelled his journey");
-                    }else if(msg_type==TYPE_USER_PICKED){
-                        for(User u: journey.group.mates) {
-                            if(u.id.equals(String.valueOf(data.getInt("user_id")))) {
-                                eventList.put(new JSONObject(new Event(Event.TYPE_USER_PICKED, u, time).toString()));
-                                break;
-                            }
-                        }
-
-                        sendJourneyUpdate(JOURNEY_USER_PICKED_INTENT_TAG,"One mate was picked up",data.getString("user_name")+" was picked up from his location");
-                    }else if(msg_type==TYPE_USER_DROPPED){
-                        for(User u: journey.group.mates) {
-                            if(u.id.equals(String.valueOf(data.getInt("user_id")))) {
-                                eventList.put(new JSONObject(new Event(Event.TYPE_USER_DROPPED, u, time).toString()));
-                                break;
-                            }
-                        }
-                        sendJourneyUpdate(JOURNEY_USER_DROPPED_INTENT_TAG,"One mate was dropped",data.getString("user_name")+" was dropped at his location");
+                        }.execute(Constants.getUrl("/get_detailed_group/"+driver.driver_id+"?key="+Constants.KEY));
                     }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -215,13 +154,13 @@ public class GcmIntentService extends IntentService {
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    private void sendJourneyUpdate(String intent_tag, String title, String message){
+    private void sendJourneyUpdate(String intent_tag, String title, String message,Class cls){
         prefs.edit()
-            .putString("events",eventList.toString())
-            .putString("journey",journey.toString())
-            .commit();
+                .putString("events",eventList.toString())
+                .putString("group",group.toString())
+                .apply();
 
-        Intent i=new Intent(this, RideActivity.class);
+        Intent i=new Intent(this,cls);
         i.putExtra("action", intent_tag);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 i, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -236,6 +175,7 @@ public class GcmIntentService extends IntentService {
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(1, mBuilder.build());
+
 
         Intent broadcast = new Intent(intent_tag);
         broadcast.putExtra("notif_id", 1);

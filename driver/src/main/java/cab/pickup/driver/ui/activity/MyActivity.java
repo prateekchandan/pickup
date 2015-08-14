@@ -14,8 +14,10 @@ import org.json.JSONObject;
 import cab.pickup.common.Constants;
 import cab.pickup.common.api.Driver;
 import cab.pickup.common.api.User;
+import cab.pickup.driver.MyApplication;
 import cab.pickup.driver.R;
 import cab.pickup.common.util.IOUtil;
+import cab.pickup.driver.api.Group;
 import cab.pickup.driver.util.DriverTracker;
 
 /**
@@ -25,6 +27,7 @@ public class MyActivity extends ActionBarActivity {
 
     SharedPreferences prefs;
     public Driver me;
+    public Group group;
 
     @Override
     protected void onCreate(Bundle icicle) {
@@ -32,11 +35,20 @@ public class MyActivity extends ActionBarActivity {
         prefs=getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
         try {
             me=new Driver(new JSONObject(prefs.getString("driver_json","")));
+            MyApplication.driver = me;
             Log.d("MyAct", me.getJson());
         } catch (JSONException e) {
             e.printStackTrace();
             me = new Driver();
         }
+
+        try {
+            group=new Group(new JSONObject(prefs.getString("group","")));
+            Log.d("MyAct Group", group.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
         if(DriverTracker.instance==null){
             Log.d("Service","here");

@@ -41,7 +41,7 @@ public class LoginActivity extends MyActivity {
         passwordField = ((EditText)findViewById(R.id.password));
 
         if(me.driver_id!=null){
-            startNextActivity();
+            registerGCM();
         }
 
     }

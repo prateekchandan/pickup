@@ -19,11 +19,19 @@ public class User{
 
 
     public User(JSONObject user) throws JSONException{
+        loadJSONdata(user, false);
+    }
+
+    public User(JSONObject user, final UserDatabaseHandler db) throws JSONException{
         loadJSONdata(user,false);
+        db.addUser(User.this);
     }
 
     public User(String id, final OnTaskCompletedListener listener, final UserDatabaseHandler db){
-        User temp = db.findUser(id);
+        User temp = null;
+        if(db!=null)
+            temp = db.findUser(id);
+
         if(temp!=null){
             JSONObject data=null;
             try {

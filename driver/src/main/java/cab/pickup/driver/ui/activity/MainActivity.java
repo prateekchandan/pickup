@@ -50,7 +50,7 @@ public class MainActivity extends MyActivity {
     }
 
     public void acceptRide(View V){
-        startActivity(new Intent(this,RideActivity.class));
+        startActivity(new Intent(this, RideActivity.class));
         finish();
     }
 }
