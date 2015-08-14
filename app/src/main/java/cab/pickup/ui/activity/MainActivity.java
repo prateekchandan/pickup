@@ -547,7 +547,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         ToggleButton time_60 = ((ToggleButton) findViewById(R.id.time_60));
 
         Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
         String time_now = sdf.format(cal.getTime());
         cal.add(Calendar.MINUTE,30);
         String time_to30 = sdf.format(cal.getTime());

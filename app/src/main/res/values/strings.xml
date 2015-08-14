@@ -4,7 +4,7 @@
     <string name="app_name">PickUp</string>
     <string name="app_id">262521600615048</string>
     <string name="title_activity_maps">Map</string>
-    <string name="title_activity_settings">Preferences</string>
+    <string name="title_activity_settings">Edit Your Personal Info</string>
     <string name="title_fb_login">Facebook Login</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="preferences">pickup_prefs</string>

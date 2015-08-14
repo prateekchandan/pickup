@@ -5,29 +5,13 @@
     android:orientation="vertical"
     android:padding="0dp"
     android:layout_margin="0dp">
-    <LinearLayout
 
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="0dp">
 
-        <TextView android:text="@string/edit_page_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="30dp"
-            android:paddingBottom="20dp"
-            android:gravity="center"
-            android:id="@+id/personal_info"
-            android:textSize="25sp"
-            android:background="@drawable/button_back"
-            android:textColor="@color/text_color_light"
-            />
-        <ScrollView
+    <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="20dp">
-            <LinearLayout
+            <cab.pickup.common.widget.AdjustableLinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -99,11 +83,8 @@
                     />
 
 
-            </LinearLayout>
+            </cab.pickup.common.widget.AdjustableLinearLayout>
         </ScrollView>
-    </LinearLayout>
-
-
 
     <Button
         android:layout_width="match_parent"
