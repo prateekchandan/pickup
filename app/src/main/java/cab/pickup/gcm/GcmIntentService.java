@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
@@ -239,6 +242,14 @@ public class GcmIntentService extends IntentService {
                         .setContentInfo(message)
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(message));
+
+        try {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(1, mBuilder.build());
