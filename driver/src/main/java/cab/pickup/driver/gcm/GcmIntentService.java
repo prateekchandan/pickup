@@ -6,6 +6,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -176,6 +179,17 @@ public class GcmIntentService extends IntentService {
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(1, mBuilder.build());
 
+        try {
+            Uri notification;
+            if(intent_tag.equals(JOURNEY_ALLOCATED_TAG))
+                notification= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+            else
+                notification= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Intent broadcast = new Intent(intent_tag);
         broadcast.putExtra("notif_id", 1);

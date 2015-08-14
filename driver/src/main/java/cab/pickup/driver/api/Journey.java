@@ -52,7 +52,7 @@ public class Journey {
             distance_travelled = journey.getInt("distance_travelled");
 
         if(journey.has("user"))
-            user = new User(journey.getJSONObject("user"), MyApplication.getDB());
+            user = new User(new JSONObject(journey.getString("user")), MyApplication.getDB());
         else if(journey.has("id"))
             user = new User(journey.getString("id"),null,MyApplication.getDB());
 
