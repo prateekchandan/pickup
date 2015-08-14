@@ -80,4 +80,12 @@
     <string name="title_cancelled">Cancelled</string>
     <string name="title_completed">Completed</string>
 
+    <string name="fare_details">Fare Details</string>
+    <string name="rupee_symbol">₹</string>
+    <string name="base_fare_text">₹ 35 Base fare</string>
+    <string name="sign_plus">+</string>
+    <string name="distance_fare_text">₹ %1$d (6 * %2$s km)</string>
+    <string name="final_fare_text">₹ <b>%1$d</b> (₹35 base fare + ₹%2$d ride fare)</string>
+
+
 </resources>

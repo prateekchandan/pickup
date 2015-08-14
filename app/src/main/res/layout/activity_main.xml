@@ -90,6 +90,7 @@
                 android:id="@+id/map"
                 android:name="com.google.android.gms.maps.SupportMapFragment" />
         </LinearLayout>
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -101,64 +102,63 @@
             android:id="@+id/button_confirm"
             android:visibility="invisible"
             android:onClick="confirmRide"/>
+
         <android.support.v7.widget.CardView
             android:layout_gravity="center"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/button_material_light"
             card_view:cardElevation="4dp"
             android:layout_marginBottom="15dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             android:id="@+id/time_picker_card"
             android:layout_above="@+id/fare_and_mates_card"
             android:layout_centerHorizontal="true"
             android:visibility="invisible">
 
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
                     style="@style/Label"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="I want a cab in"
+                    android:background="#fff"
+                    android:padding="5dp"
+                    android:gravity="center"
+                    android:layout_marginBottom="2dp"
                     android:layout_centerHorizontal="true"
                     android:id="@+id/time_label"/>
 
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="2dp"
-                    android:background="#999999"
-                    android:layout_alignRight="@+id/time_60"
-                    android:id="@+id/time_horizontal_div"
-                    android:layout_below="@+id/time_label"/>
 
-                <ToggleButton
-                    android:background="@drawable/radio_button"
-                    android:layout_width="120dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textOff="30 mins"
-                    android:textOn="30 mins"
-                    android:layout_below="@+id/time_horizontal_div"
-                    android:id="@+id/time_30"
-                    android:onClick="selectTime"/>
-                <View
-                    android:layout_width="2dp"
-                    android:layout_height="wrap_content"
-                    android:background="#999999"
-                    android:layout_alignTop="@+id/time_30"
-                    android:layout_alignBottom="@+id/time_30"
-                    android:layout_toRightOf="@+id/time_30"
-                    android:id="@+id/time_vertical_div"/>
-                <ToggleButton
-                    android:background="@drawable/radio_button"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:textOff="60 mins"
-                    android:textOn="60 mins"
-                    android:layout_toRightOf="@+id/time_vertical_div"
-                    android:id="@+id/time_60"
-                    android:layout_alignTop="@+id/time_30"
-                    android:onClick="selectTime" />
+                    android:layout_below="@+id/time_label"
+                    android:orientation="horizontal">
+                    <ToggleButton
+                        android:background="@drawable/radio_button"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textOff="30 mins"
+                        android:textOn="30 mins"
+                        android:id="@+id/time_30"
+                        android:layout_marginRight="2dp"
+                        android:onClick="selectTime"/>
+                    <ToggleButton
+                        android:background="@drawable/radio_button"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textOff="60 mins"
+                        android:textOn="60 mins"
+                        android:id="@+id/time_60"
+                        android:onClick="selectTime" />
+                </LinearLayout>
+
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 
@@ -171,52 +171,71 @@
             android:layout_above="@+id/button_confirm"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="15dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             android:visibility="invisible">
             <RelativeLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <ToggleButton
-                    android:background="@drawable/tab_button"
-                    android:layout_width="120dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textOn="Fare"
-                    android:textOff="Fare"
-                    android:id="@+id/tab_fares"
-                    android:onClick="switchTabs"
-                    />
-                <ToggleButton
-                    android:background="@drawable/tab_button"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:textOn="Mates"
-                    android:textOff="Mates"
-                    android:layout_toRightOf="@+id/tab_fares"
-                    android:id="@+id/tab_mates"
-                    android:onClick="switchTabs"
-                    android:checked="true"/>
+                    android:id="@+id/card_head">
+                    <ToggleButton
+                        android:background="@drawable/tab_button"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textOn="Fare"
+                        android:textOff="Fare"
+                        android:id="@+id/tab_fares"
+                        android:onClick="switchTabs"
+                        />
+                    <ToggleButton
+                        android:background="@drawable/tab_button"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textOn="Mates"
+                        android:textOff="Mates"
+                        android:id="@+id/tab_mates"
+                        android:onClick="switchTabs"
+                        android:checked="true"/>
+                </LinearLayout>
 
-                <ListView
-                    android:layout_width="240dp"
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/summary_user_list"
-                    android:layout_below="@+id/tab_fares"/>
-                <TextView
-                    android:layout_width="240dp"
-                    android:layout_height="50dp"
+                    android:id="@+id/summary_user_one"
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/card_head"
+                    android:onClick="showUserDialog"
+                    android:visibility="visible">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:id="@+id/mates_empty_notif"
+                        android:text="No Users with you"
+                        android:textColor="#999999"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:id="@+id/summary_fare"
-                    android:text="Rs 35 (booking charge) + Rs 6/km"
-                    android:padding="10dp"
-                    android:gravity="center"
-                    android:layout_below="@+id/tab_fares"
-                    android:visibility="gone"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Searching for mates..."
-                    android:textSize="20sp"
-                    android:textColor="#999999"
-                    android:id="@+id/mates_empty_notif"
-                    android:layout_alignTop="@+id/summary_user_list" />
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/card_head"
+                    android:onClick="showFareDialog"
+                    android:visibility="gone">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:id="@+id/main_fare_text"
+                        android:text="Rs 35(booking charge) + Rs 6 / km"
+                        android:textColor="@color/text_color_dark"/>
+                </LinearLayout>
             </RelativeLayout>
         </android.support.v7.widget.CardView>
     </RelativeLayout>

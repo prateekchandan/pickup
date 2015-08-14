@@ -198,15 +198,6 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
                     setAddress(new Location(tracker.getLatitude(),tracker.getLongitude(),"My Location"));
                     dismiss();
                     break;
-                /*case R.id.location_search_dialog_home:
-                    setAddress(new Location(context.me.home.latitude,context.me.home.longitude,"Home"));
-                    dismiss();
-                    break;
-
-                case R.id.location_search_dialog_office:
-                    setAddress(new Location(context.me.office.latitude,context.me.office.longitude,"Office"));
-                    dismiss();
-                    break;*/
             }
         }
 

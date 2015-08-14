@@ -1,24 +1,31 @@
 package cab.pickup.ui.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -41,6 +48,7 @@ import cab.pickup.common.Constants;
 import cab.pickup.common.api.Group;
 import cab.pickup.common.api.Journey;
 import cab.pickup.common.api.Location;
+import cab.pickup.common.api.User;
 import cab.pickup.common.server.GetTask;
 import cab.pickup.common.server.OnStringTaskCompletedListener;
 import cab.pickup.common.server.OnTaskCompletedListener;
@@ -48,6 +56,7 @@ import cab.pickup.common.server.Result;
 import cab.pickup.ui.widget.LocationSearchBar;
 import cab.pickup.ui.widget.UserListAdapter;
 import cab.pickup.common.util.IOUtil;
+import cab.pickup.ui.widget.UserProfileView;
 
 public class MainActivity extends MapsActivity implements   LocationSearchBar.OnAddressSelectedListener,
                                                             OnTaskCompletedListener {
@@ -73,6 +82,10 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     UserListAdapter user_adapter;
     LocationSearchBar field_start, field_end;
 
+    Dialog userDialog,fareDialog;
+
+
+    boolean show_fare_card=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,11 +105,34 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         field_start.setOnAddressSelectedListener(this);
         field_end.setOnAddressSelectedListener(this);
 
-        user_list_view=(ListView)findViewById(R.id.summary_user_list);
+        userDialog = new Dialog(this);
+        userDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        userDialog.setContentView(R.layout.user_list_dialog);
+
+        fareDialog = new Dialog(this);
+        fareDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        fareDialog.setContentView(R.layout.fare_dialog);
+
+        user_list_view=(ListView)userDialog.findViewById(R.id.summary_user_list);
         //user_list_view.setEmptyView(findViewById(R.id.mates_empty_notif));
 
         user_adapter=new UserListAdapter(this);
         user_list_view.setAdapter(user_adapter);
+
+        (userDialog.findViewById(R.id.icon_close)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userDialog.hide();
+            }
+        });
+
+        (fareDialog.findViewById(R.id.icon_close)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fareDialog.hide();
+            }
+        });
+
     }
 
     @Override
@@ -181,6 +217,30 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         //loadPage(page);
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        if(map!=null)
+            map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+                @Override
+                public boolean onMyLocationButtonClick() {
+
+                    if(tracker==null)
+                        return true;
+
+
+                    if(tracker.getLastKnownLocation()==null){
+                        Toast.makeText(MainActivity.this, "Unable to get current location. Please check your GPS", Toast.LENGTH_LONG).show();
+                        return true;
+                    }
+
+                    field_start.setAddress(new Location(tracker.getLatitude(),tracker.getLongitude(),"My Location"));
+
+                    return true;
+                }
+            });
+    }
 
     @Override
     public void onStop() {
@@ -205,11 +265,12 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     @Override
     public void onAddressSelected(final LocationSearchBar bar, Location address){
         if(address == null || bar == null || bar.getAddress()==null) return;
-
+        show_fare_card = false;
         if(map==null){
             Toast.makeText(this,getResources().getString(R.string.map_error),Toast.LENGTH_SHORT).show();
             return;
         }
+
 
         onAddressChangeClear();
         if(!address.locUpdated){
@@ -308,6 +369,13 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                 @Override
                 public void onTaskCompleted(String s) {
                     journey.distance = Double.parseDouble(s);
+                    show_fare_card = true;
+                    int distance_fare = (int)(journey.distance*6);
+                    String text =String.format(getString(R.string.distance_fare_text), distance_fare,s);
+                    ((TextView)fareDialog.findViewById(R.id.distance_fare)).setText(text);
+                    text = String.format(getString(R.string.final_fare_text), distance_fare+35,distance_fare);
+                    ((TextView)findViewById(R.id.main_fare_text)).setText(text);
+
                 }
 
 
@@ -327,7 +395,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             ((CompoundButton)v).setChecked(true);
         }
 
-        Log.d("DISTANCE_INMAIN",String.valueOf(journey.distance));
         clearFareAndMates();
 
         v.setSelected(true);
@@ -364,7 +431,16 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
         journey.addToServer(this, this);
 
-        ((TextView)findViewById(R.id.mates_empty_notif)).setText("Searching for mates...");
+        // Setting searching for mates in card
+        LinearLayout user_1 = (LinearLayout)findViewById(R.id.summary_user_one);
+        user_1.removeAllViews();
+        TextView moreTxt = new TextView(this);
+        moreTxt.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+        moreTxt.setPadding(20, 20, 20, 20);
+        moreTxt.setTextColor(Color.parseColor("#999999"));
+        moreTxt.setText("Searching for mates..");
+        user_1.addView(moreTxt);
     }
 
     public void switchTabs(View v){
@@ -374,11 +450,11 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         ((ToggleButton)v).setChecked(true);
         if(v.getId()==R.id.tab_fares){
             findViewById(R.id.summary_fare).setVisibility(View.VISIBLE);
-            findViewById(R.id.summary_user_list).setVisibility(View.GONE);
+            findViewById(R.id.summary_user_one).setVisibility(View.GONE);
         }
         else{
             findViewById(R.id.summary_fare).setVisibility(View.GONE);
-            findViewById(R.id.summary_user_list).setVisibility(View.VISIBLE);
+            findViewById(R.id.summary_user_one).setVisibility(View.VISIBLE);
         }
     }
 
@@ -394,7 +470,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                     super.onPostExecute(res);
                     if(res.statusCode==200){
                         try {
-                            ((TextView)findViewById(R.id.mates_empty_notif)).setVisibility(View.INVISIBLE);
                             Log.d("bestmatch","here");
                             JSONObject usersJson = res.data.getJSONObject("best_match");
                             if(!usersJson.toString().equals("{}")){
@@ -405,10 +480,9 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                                     user_adapter.add(users.getString(i));
                                     Log.d("bestmatch", users.getString(i));
                                 }
-                            } else {
-                                ((TextView)findViewById(R.id.mates_empty_notif)).setVisibility(View.VISIBLE);
-                                ((TextView)findViewById(R.id.mates_empty_notif)).setText("No mates found!");
                             }
+
+                            updateMatesCard();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -461,7 +535,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     public void clearFareAndMates(){
         user_adapter.clear();
         findViewById(R.id.summary_fare).setVisibility(View.GONE);
-        findViewById(R.id.summary_user_list).setVisibility(View.VISIBLE);
+        findViewById(R.id.summary_user_one).setVisibility(View.VISIBLE);
         ((ToggleButton)findViewById(R.id.tab_fares)).setChecked(false);
         ((ToggleButton)findViewById(R.id.tab_mates)).setChecked(true);
     }
@@ -476,5 +550,57 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         findViewById(R.id.button_confirm).setVisibility(View.INVISIBLE);
         clearFareAndMates();
         clearTimers();
+    }
+
+    public void showUserDialog(View V){
+        if(user_adapter.getCount()<=0)
+            return;
+        userDialog.show();
+    }
+
+    protected void updateMatesCard(){
+
+        ((TextView)userDialog.findViewById(R.id.head_text)).setText(String.format(getString(R.string.mates_dialog_head), user_adapter.getCount()));
+
+        LinearLayout user_1 = (LinearLayout)findViewById(R.id.summary_user_one);
+        if(user_adapter.getCount()>0){
+            user_1.removeAllViews();
+            UserProfileView userView = new UserProfileView(this);
+            userView.setUserId(user_adapter.getItem(0));
+            TextView moreTxt = new TextView(this);
+            moreTxt.setText("+"+String.valueOf(user_adapter.getCount()-1)+" more");
+            LinearLayout.LayoutParams param1 = new LinearLayout.LayoutParams(
+                    0,LinearLayout.LayoutParams.MATCH_PARENT, 0.3f);
+            LinearLayout.LayoutParams param2 = new LinearLayout.LayoutParams(
+                    0,
+                    LinearLayout.LayoutParams.WRAP_CONTENT, 0.7f);
+
+            userView.setLayoutParams(param2);
+            moreTxt.setLayoutParams(param1);
+            moreTxt.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+            moreTxt.setPadding(0, 15, 15, 15);
+            moreTxt.setTextColor(getResources().getColor(R.color.theme_color_dark));
+            user_1.setWeightSum(1.0f);
+            user_1.addView(userView);
+            user_1.addView(moreTxt);
+        }
+        else{
+            user_1.removeAllViews();
+            TextView moreTxt = new TextView(this);
+            moreTxt.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+            moreTxt.setPadding(20, 20, 20, 20);
+            moreTxt.setTextColor(Color.parseColor("#999999"));
+            moreTxt.setText("No Users with you");
+            user_1.addView(moreTxt);
+        }
+    }
+
+    public void showFareDialog(View V){
+        if(!show_fare_card)
+            return;
+        int fare = 35 + (int)(journey.distance*6);
+        ((TextView)fareDialog.findViewById(R.id.fare_final)).setText(String.valueOf(fare));
+        fareDialog.show();
     }
 }
