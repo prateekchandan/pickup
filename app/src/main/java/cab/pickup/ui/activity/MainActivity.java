@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -39,6 +40,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -373,8 +375,8 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                     int distance_fare = (int)(journey.distance*6);
                     String text =String.format(getString(R.string.distance_fare_text), distance_fare,s);
                     ((TextView)fareDialog.findViewById(R.id.distance_fare)).setText(text);
-                    text = String.format(getString(R.string.final_fare_text), distance_fare+35,distance_fare);
-                    ((TextView)findViewById(R.id.main_fare_text)).setText(text);
+                    text = String.format(getString(R.string.final_fare_text), distance_fare+35,s);
+                    ((TextView)findViewById(R.id.main_fare_text)).setText(Html.fromHtml(text));
 
                 }
 
@@ -439,7 +441,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                 LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
         moreTxt.setPadding(20, 20, 20, 20);
         moreTxt.setTextColor(Color.parseColor("#999999"));
-        moreTxt.setText("Searching for mates..");
+        moreTxt.setText(getString(R.string.searching_for_mates));
         user_1.addView(moreTxt);
     }
 
@@ -496,7 +498,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     }
 
     public void confirmRide(View v){
-        GetTask confirmTask = new GetTask(this,"Confirming your Journey..."){
+        GetTask confirmTask = new GetTask(this,getString(R.string.confirming_your_journey)){
             @Override
             public void onPostExecute(Result res) {
                 super.onPostExecute(res);
@@ -541,11 +543,28 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     }
 
     public void clearTimers(){
+        ToggleButton time_30 = ((ToggleButton) findViewById(R.id.time_30));
+        ToggleButton time_60 = ((ToggleButton) findViewById(R.id.time_60));
+
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        String time_now = sdf.format(cal.getTime());
+        cal.add(Calendar.MINUTE,30);
+        String time_to30 = sdf.format(cal.getTime());
+        cal.add(Calendar.MINUTE,30);
+        String time_to60 = sdf.format(cal.getTime());
+
+        time_30.setTextOff(time_now+" - "+time_to30);
+        time_30.setTextOn(time_now+" - "+time_to30);
+        time_60.setTextOff(time_to30+" - "+time_to60);
+        time_60.setTextOn(time_to30+" - "+time_to60);
+
         ((CompoundButton)findViewById(R.id.time_30)).setChecked(false);
         ((CompoundButton)findViewById(R.id.time_60)).setChecked(false);
     }
 
     public void onAddressChangeClear(){
+
         findViewById(R.id.fare_and_mates_card).setVisibility(View.INVISIBLE);
         findViewById(R.id.button_confirm).setVisibility(View.INVISIBLE);
         clearFareAndMates();
@@ -591,7 +610,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                     LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
             moreTxt.setPadding(20, 20, 20, 20);
             moreTxt.setTextColor(Color.parseColor("#999999"));
-            moreTxt.setText("No Users with you");
+            moreTxt.setText(getString(R.string.no_users_with_you));
             user_1.addView(moreTxt);
         }
     }

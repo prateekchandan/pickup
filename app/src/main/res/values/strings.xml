@@ -85,7 +85,10 @@
     <string name="base_fare_text">₹ 35 Base fare</string>
     <string name="sign_plus">+</string>
     <string name="distance_fare_text">₹ %1$d (6 * %2$s km)</string>
-    <string name="final_fare_text">₹ <b>%1$d</b> (₹35 base fare + ₹%2$d ride fare)</string>
+    <string name="final_fare_text">₹ Total Fare : <b>%1$d</b> for distance of %2$s km</string>
 
+    <string name="searching_for_mates">Searching for mates..</string>
+    <string name="no_users_with_you">No users with you</string>
+    <string name="confirming_your_journey">Confirming your journey..</string>
 
 </resources>
