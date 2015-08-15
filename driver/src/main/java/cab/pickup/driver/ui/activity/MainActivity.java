@@ -1,16 +1,36 @@
 package cab.pickup.driver.ui.activity;
 
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import cab.pickup.driver.R;
+import cab.pickup.driver.gcm.GcmIntentService;
 
 public class MainActivity extends MyActivity {
+
+    BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("GCM", "update Reciever called");
+
+            NotificationManager mNotificationManager = (NotificationManager)
+                   MainActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            mNotificationManager.cancel(intent.getIntExtra("notif_id",0));
+
+            journeyAllocated();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +38,35 @@ public class MainActivity extends MyActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ALLOCATED_TAG));
+
+    }
+
+    @Override
+    public void onDestroy() {
+        unregisterReceiver(mUpdateReceiver);
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(getIntent().hasExtra("action")){
+            journeyAllocated();
+        } else {
+            Log.d("GCM", "No action");
+        }
     }
 
     @Override
@@ -52,5 +101,11 @@ public class MainActivity extends MyActivity {
     public void acceptRide(View V){
         startActivity(new Intent(this, RideActivity.class));
         finish();
+    }
+
+    public void journeyAllocated(){
+        findViewById(R.id.waiting_for_ride).setVisibility(View.GONE);
+        findViewById(R.id.ride_accept).setVisibility(View.VISIBLE);
+        Toast.makeText(this,"JourneyAllocated",Toast.LENGTH_LONG).show();
     }
 }
