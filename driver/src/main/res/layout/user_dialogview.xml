@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/icon_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_cancel_black" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_below="@+id/icon_close">
+
+        <cab.pickup.driver.ui.widget.ProfilePictureView
+            android:layout_width="100dp"
+            android:id="@+id/user_pic"
+            android:layout_height="100dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/text_color_dark"
+            android:textSize="16sp"
+            android:id="@+id/user_name"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/text_color_dark"
+            android:textSize="16sp"
+            android:id="@+id/user_age"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_location"
+            android:drawableLeft="@drawable/ic_location"
+            android:drawablePadding="2dp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/text_color_dark"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:id="@+id/start_location" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_location"
+            android:drawableLeft="@drawable/ic_location"
+            android:drawablePadding="2dp"
+            android:textColor="@color/text_color_dark"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:id="@+id/end_location" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Picked him up"
+            android:id="@+id/pickup_button"
+            android:textColor="@color/text_color_dark"
+            android:backgroundTint="@color/theme_color_light"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PDropped him"
+            android:id="@+id/drop_button"
+            android:textColor="@color/text_color_dark"
+            android:backgroundTint="@color/theme_color_light"/>
+    </LinearLayout>
+</RelativeLayout>

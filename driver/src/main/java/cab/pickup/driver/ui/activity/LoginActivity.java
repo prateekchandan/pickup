@@ -47,7 +47,10 @@ public class LoginActivity extends MyActivity {
     }
 
     public void startNextActivity(){
-        startActivity(new Intent(this,MainActivity.class));
+        if(group==null)
+            startActivity(new Intent(this,MainActivity.class));
+        else
+            startActivity(new Intent(this, RideActivity.class));
         finish();
     }
 

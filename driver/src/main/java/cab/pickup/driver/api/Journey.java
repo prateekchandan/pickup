@@ -26,7 +26,25 @@ public class Journey {
     public Journey(){
     }
 
+    public Journey(JSONObject journey,OnTaskCompletedListener listener) throws JSONException {
+        loadFromJSON(journey);
+        if(journey.has("user"))
+            user = new User(new JSONObject(journey.getString("user")), MyApplication.getDB());
+        else if(journey.has("id"))
+            user = new User(journey.getString("id"),listener,MyApplication.getDB());
+
+    }
+
     public Journey(JSONObject journey) throws JSONException {
+        loadFromJSON(journey);
+        if(journey.has("user"))
+            user = new User(new JSONObject(journey.getString("user")), MyApplication.getDB());
+        else if(journey.has("id"))
+            user = new User(journey.getString("id"),null,MyApplication.getDB());
+
+    }
+
+    private void loadFromJSON(JSONObject journey) throws JSONException{
         id=journey.getString("journey_id");
         datetime=journey.getString("journey_time");
 
@@ -51,13 +69,7 @@ public class Journey {
         if(journey.has("distance_travelled"))
             distance_travelled = journey.getInt("distance_travelled");
 
-        if(journey.has("user"))
-            user = new User(new JSONObject(journey.getString("user")), MyApplication.getDB());
-        else if(journey.has("id"))
-            user = new User(journey.getString("id"),null,MyApplication.getDB());
-
     }
-
 
 
     @Override

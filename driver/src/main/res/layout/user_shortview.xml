@@ -11,6 +11,7 @@
     android:gravity="center">
 
     <cab.pickup.driver.ui.widget.ProfilePictureView
+        android:id="@+id/user_pic"
         android:layout_width="60dp"
         android:layout_height="60dp"/>
     <TextView
@@ -19,7 +20,7 @@
         android:gravity="center"
         android:textSize="16sp"
         android:textColor="@color/text_color_dark"
-        android:text="Prateek Chandan"
+        android:id="@+id/user_name"
         android:layout_marginTop="5dp"/>
 
 

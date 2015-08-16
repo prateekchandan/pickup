@@ -3,12 +3,17 @@ package cab.pickup.driver.ui.activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import cab.pickup.driver.R;
+import cab.pickup.driver.api.Journey;
+import cab.pickup.driver.ui.widget.UserShortCard;
 
-public class RideActivity extends ActionBarActivity {
+public class RideActivity extends MyActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +21,17 @@ public class RideActivity extends ActionBarActivity {
         setContentView(R.layout.activity_ride);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        LinearLayout user_view = ((LinearLayout)findViewById(R.id.people_cards));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,1f);
+        params.setMargins(4,4,4,4);
+        for(Journey j : group.journeys){
+            Log.d("UserAdded",j.user.id);
+            UserShortCard u = new UserShortCard(this);
+            u.setLayoutParams(params);
+            u.setJourney(j);
+            user_view.addView(u);
+        }
     }
 
     @Override

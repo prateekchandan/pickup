@@ -1,6 +1,7 @@
 package cab.pickup.common.api;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -25,6 +26,7 @@ public class User{
     public User(JSONObject user, final UserDatabaseHandler db) throws JSONException{
         loadJSONdata(user,false);
         db.addUser(User.this);
+        Log.d("UserLoaded","user loaded in database "+name);
     }
 
     public User(String id, final OnTaskCompletedListener listener, final UserDatabaseHandler db){

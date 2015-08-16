@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import cab.pickup.common.api.Driver;
 import cab.pickup.common.api.User;
+import cab.pickup.common.server.OnTaskCompletedListener;
 import cab.pickup.common.util.UserDatabaseHandler;
 
 /**
@@ -21,6 +22,27 @@ public class Group {
     public String group_id;
 
     public Group(){
+    }
+
+    public Group(JSONObject rep,OnTaskCompletedListener listener) throws JSONException {
+        Log.d("GROUP", rep.toString());
+        if(rep.has("group_id"))
+            group_id = rep.getString("group_id");
+
+
+        if(rep.has("journeys")) {
+            JSONArray journey_array = rep.getJSONArray("journeys");
+            for (int i = 0; i < journey_array.length(); i++) {
+                journeys.add(new Journey(new JSONObject(journey_array.getString(i))));
+            }
+            this.json = rep.getJSONObject("json");
+        }else if(rep.has("journey_details")){
+            JSONArray journey_array = rep.getJSONArray("journey_details");
+            for (int i = 0; i < journey_array.length(); i++) {
+                journeys.add(new Journey(new JSONObject(journey_array.getString(i)),listener));
+            }
+            this.json = rep;
+        }
     }
 
     public Group(JSONObject rep) throws JSONException {
@@ -42,10 +64,8 @@ public class Group {
             }
             this.json = rep;
         }
-
-
-
     }
+
 
     @Override
     public String toString(){

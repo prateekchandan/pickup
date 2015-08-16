@@ -135,8 +135,13 @@ public class GcmIntentService extends IntentService {
                                     try {
                                         JSONObject groupObj = res.data.getJSONObject("final_data").getJSONObject("group_details");
                                         groupObj.put("journey_details",res.data.getJSONObject("final_data").getJSONArray("journey_details"));
-                                        group  = new Group(groupObj);
-                                        sendJourneyUpdate(JOURNEY_ALLOCATED_TAG, "New Journey Allocated","A new journey has been allocated to you", MainActivity.class);
+                                        group  = new Group(groupObj,new OnTaskCompletedListener(){
+                                            @Override
+                                            public void onTaskCompleted(Result res){
+                                                sendJourneyUpdate(JOURNEY_ALLOCATED_TAG, "New Journey Allocated","A new journey has been allocated to you", MainActivity.class);
+                                            }
+                                        });
+
                                     }catch (Exception E){
                                         E.printStackTrace();
                                     }
