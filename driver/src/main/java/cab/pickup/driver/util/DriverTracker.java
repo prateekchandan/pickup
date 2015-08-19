@@ -80,7 +80,7 @@ public class DriverTracker extends LocationTracker {
                                     super.onPostExecute(ret);
                                     Log.d("TIMEDTASK", "YO " + " D " + d.driver_id + "  :  " + pos + " : " + (new Timestamp(new Date().getTime()))+ " : "+ret.statusMessage+ " : " + String.valueOf(ret.statusCode));
                                 }
-                            }.execute(Constants.getUrl("/periodic_route/"+d.driver_id));
+                            }.execute(Constants.getUrl("/driver_periodic_route/"+d.driver_id));
                         }
                     }
                 }, 0, 3, TimeUnit.MINUTES);

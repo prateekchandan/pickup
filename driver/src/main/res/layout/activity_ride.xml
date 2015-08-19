@@ -19,12 +19,22 @@
             android:id="@+id/people_cards"
             android:orientation="horizontal">
         </LinearLayout>
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="7">
-            
-        </LinearLayout>
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/map_background"
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/map"
+                android:text="This banda ka address"/>
+        </RelativeLayout>
         <Button
             android:layout_width="match_parent"
             android:layout_height="50dp"

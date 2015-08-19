@@ -61,14 +61,14 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Picked him up"
+            android:text="@string/picked_him"
             android:id="@+id/pickup_button"
             android:textColor="@color/text_color_dark"
             android:backgroundTint="@color/theme_color_light"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="PDropped him"
+            android:text="@string/dropped_him"
             android:id="@+id/drop_button"
             android:textColor="@color/text_color_dark"
             android:backgroundTint="@color/theme_color_light"/>

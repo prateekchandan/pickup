@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,19 +17,20 @@ import cab.pickup.common.api.User;
 import cab.pickup.driver.R;
 import cab.pickup.driver.api.Journey;
 import cab.pickup.driver.ui.activity.MyActivity;
+import cab.pickup.driver.ui.activity.RideActivity;
 
 /**
  * Created by prateek on 16/8/15.
  */
 public class UserShortCard extends CardView {
-    User user;
-    Journey journey;
-    MyActivity mContext;
+    public User user;
+    public Journey journey;
+    RideActivity mContext;
     Dialog dialog;
 
     public UserShortCard(Context context){
         super(context);
-        mContext = (MyActivity)context;
+        mContext = (RideActivity)context;
 
         dialog = new Dialog(mContext);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -51,7 +53,7 @@ public class UserShortCard extends CardView {
 
     public UserShortCard(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = (MyActivity)context;
+        mContext = (RideActivity)context;
     }
 
     public void setJourney(Journey j){
@@ -69,11 +71,35 @@ public class UserShortCard extends CardView {
         ((TextView)dialog.findViewById(R.id.start_location)).setText(j.start.longDescription);
         ((TextView)dialog.findViewById(R.id.end_location)).setText(j.end.longDescription);
 
+        ((Button)dialog.findViewById(R.id.pickup_button)).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mContext.picked_user(journey);
+            }
+        });
+
+        ((Button)dialog.findViewById(R.id.drop_button)).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mContext.dropped_user(journey);
+            }
+        });
+
 
     }
 
     public void showDetailedCard(){
         dialog.show();
+    }
+
+    public void disableDropping(){
+        ((Button)dialog.findViewById(R.id.drop_button)).setEnabled(false);
+        journey.journey_ended=1;
+    }
+
+    public void disablePicking(){
+        ((Button)dialog.findViewById(R.id.pickup_button)).setEnabled(false);
+        journey.journey_started=1;
     }
 
 }

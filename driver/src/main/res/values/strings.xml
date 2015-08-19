@@ -27,5 +27,7 @@
 
 
     <string name="title_activity_ride">Pickup Driver</string>
+    <string name="picked_him">Picked him up</string>
+    <string name="dropped_him">Dropped him</string>
 
 </resources>

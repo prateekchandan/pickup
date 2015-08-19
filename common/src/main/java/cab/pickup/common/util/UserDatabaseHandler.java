@@ -97,6 +97,9 @@ public class UserDatabaseHandler extends SQLiteOpenHelper {
     }
 
     public User findUser(String id){
+        if(id==null)
+            return null;
+
         String selectQuery = "SELECT  * FROM " + TABLE_USER + " where " + this.id + " = ?";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, new String[]{id});

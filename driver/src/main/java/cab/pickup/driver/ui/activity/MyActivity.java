@@ -1,9 +1,12 @@
 package cab.pickup.driver.ui.activity;
 
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,6 +17,7 @@ import org.json.JSONObject;
 import cab.pickup.common.Constants;
 import cab.pickup.common.api.Driver;
 import cab.pickup.common.api.User;
+import cab.pickup.common.util.LocationTracker;
 import cab.pickup.driver.MyApplication;
 import cab.pickup.driver.R;
 import cab.pickup.common.util.IOUtil;
@@ -23,11 +27,12 @@ import cab.pickup.driver.util.DriverTracker;
 /**
  * Created by prateek on 4/8/15.
  */
-public class MyActivity extends ActionBarActivity {
+public class MyActivity extends AppCompatActivity implements ServiceConnection {
 
     SharedPreferences prefs;
     public Driver me;
     public Group group;
+    LocationTracker tracker;
 
     @Override
     protected void onCreate(Bundle icicle) {
@@ -81,5 +86,20 @@ public class MyActivity extends ActionBarActivity {
             return getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
         else
             return prefs;
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        tracker = ((LocationTracker.LocalBinder) service).getService();
+        tracker.connect();
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+        tracker = null;
+    }
+
+    public LocationTracker getLocationTracker() {
+        return tracker;
     }
 }

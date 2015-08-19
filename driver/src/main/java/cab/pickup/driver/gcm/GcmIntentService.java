@@ -116,46 +116,60 @@ public class GcmIntentService extends IntentService {
                 try {
                     msg = new JSONObject(extras.getString("message"));
 
-                    int msg_type = msg.getInt("type");
+                    final int msg_type = msg.getInt("type");
                     final JSONObject data = msg.getJSONObject("data");
                     final long time = data.getLong("time");
 
+                    if(group!=null && !group.group_id.equals(data.getString("group_id"))){
+                        return;
+                    }
 
-                    if(msg_type==TYPE_USER_ADDED){
+                    Log.i(TAG, "Received: " + extras.getString("message"));
 
-                    }else if(msg_type==TYPE_USER_CANCELLED){
+                    if(msg_type==TYPE_USER_ADDED || msg_type == TYPE_USER_CANCELLED || msg_type == ALLOCATED_GROUP){
+                            new GetTask(this){
+                                @Override
+                                public void onPostExecute(Result res){
+                                    super.onPostExecute(res);
+                                    if(res.statusCode==200){
+                                        try {
+                                            JSONObject groupObj = res.data.getJSONObject("final_data").getJSONObject("group_details");
+                                            groupObj.put("journey_details",res.data.getJSONObject("final_data").getJSONArray("journey_details"));
+                                            groupObj.put("group_id",data.getString("group_id"));
+                                            group  = new Group(groupObj,new OnTaskCompletedListener(){
+                                                @Override
+                                                public void onTaskCompleted(Result res){
+                                                    if(msg_type==ALLOCATED_GROUP)
+                                                        sendJourneyUpdate(JOURNEY_ALLOCATED_TAG, "New Journey Allocated","A new journey has been allocated to you", MainActivity.class);
+                                                    else if(msg_type==TYPE_USER_ADDED){
+                                                        try {
+                                                            sendJourneyUpdate(JOURNEY_ADD_USER_INTENT_TAG, "New User Added",data.getString("user_name")+" has been added to ride", MainActivity.class);
+                                                        }catch (Exception E){
+                                                            E.printStackTrace();
+                                                        }
+                                                    }
+                                                    else if(msg_type==TYPE_USER_CANCELLED){
+                                                        try {
+                                                            sendJourneyUpdate(JOURNEY_USER_CANCELLED_INTENT_TAG, "One User Cancelled Ride",data.getString("user_name")+" has left the ride", MainActivity.class);
+                                                        }catch (Exception E){
+                                                            E.printStackTrace();
+                                                        }
+                                                    }
+                                                }
+                                            });
 
-
-                    }else if(msg_type==ALLOCATED_GROUP){
-                        new GetTask(this){
-                            @Override
-                            public void onPostExecute(Result res){
-                                super.onPostExecute(res);
-                                if(res.statusCode==200){
-                                    try {
-                                        JSONObject groupObj = res.data.getJSONObject("final_data").getJSONObject("group_details");
-                                        groupObj.put("journey_details",res.data.getJSONObject("final_data").getJSONArray("journey_details"));
-                                        group  = new Group(groupObj,new OnTaskCompletedListener(){
-                                            @Override
-                                            public void onTaskCompleted(Result res){
-                                                sendJourneyUpdate(JOURNEY_ALLOCATED_TAG, "New Journey Allocated","A new journey has been allocated to you", MainActivity.class);
-                                            }
-                                        });
-
-                                    }catch (Exception E){
-                                        E.printStackTrace();
+                                        }catch (Exception E){
+                                            E.printStackTrace();
+                                        }
                                     }
                                 }
-                            }
-                        }.execute(Constants.getUrl("/get_detailed_group/"+driver.driver_id+"?key="+Constants.KEY));
+                            }.execute(Constants.getUrl("/get_detailed_group/"+driver.driver_id+"?key="+Constants.KEY));
+
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
-                Log.i(TAG, "Received: " + extras.getString("message"));
             }
         }
         // Release the wake lock provided by the WakefulBroadcastReceiver.

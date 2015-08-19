@@ -13,7 +13,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cab.pickup.common.Constants;
+import cab.pickup.common.server.GetTask;
+import cab.pickup.common.server.OnTaskCompletedListener;
+import cab.pickup.common.server.Result;
 import cab.pickup.driver.R;
+import cab.pickup.driver.api.Group;
 import cab.pickup.driver.gcm.GcmIntentService;
 
 public class MainActivity extends MyActivity {
@@ -104,6 +112,14 @@ public class MainActivity extends MyActivity {
     }
 
     public void journeyAllocated(){
+        try {
+            group=new Group(new JSONObject(prefs.getString("group","")));
+        } catch (JSONException e) {
+            group = null;
+        }
+        if(group==null){
+            return;
+        }
         findViewById(R.id.waiting_for_ride).setVisibility(View.GONE);
         findViewById(R.id.ride_accept).setVisibility(View.VISIBLE);
         Toast.makeText(this,"JourneyAllocated",Toast.LENGTH_LONG).show();
