@@ -32,13 +32,12 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/map"
-                android:text="This banda ka address"/>
+                android:layout_below="@+id/map" />
         </RelativeLayout>
         <Button
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="Picked Up Person 1"
+            android:id="@+id/nextEventButton"
             android:textColor="@color/text_color_light"
             android:background="@color/theme_color_dark"/>
     </LinearLayout>

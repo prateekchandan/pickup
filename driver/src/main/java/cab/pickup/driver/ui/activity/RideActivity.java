@@ -15,7 +15,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -30,6 +32,7 @@ import cab.pickup.common.server.GetTask;
 import cab.pickup.common.server.PostTask;
 import cab.pickup.common.server.Result;
 import cab.pickup.driver.R;
+import cab.pickup.driver.api.Group;
 import cab.pickup.driver.api.Journey;
 import cab.pickup.driver.gcm.GcmIntentService;
 import cab.pickup.driver.ui.widget.UserShortCard;
@@ -37,7 +40,9 @@ import cab.pickup.driver.ui.widget.UserShortCard;
 public class RideActivity extends MapsActivity {
 
     private boolean rideEnded=false;
+    Button nextEventBtn;
     ArrayList<UserShortCard> userCards = new ArrayList<>();
+
     BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -56,6 +61,8 @@ public class RideActivity extends MapsActivity {
         setContentView(R.layout.activity_ride);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        nextEventBtn = (Button)findViewById(R.id.nextEventButton);
 
         LinearLayout user_view = ((LinearLayout)findViewById(R.id.people_cards));
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,1f);
@@ -125,8 +132,14 @@ public class RideActivity extends MapsActivity {
                             for (Journey journey : group.journeys)
                                 if(j.id.equals(journey.id))
                                     journey.journey_started=1;
+                            for(int i = 0;i<group.event_order.size();i++){
+                                Group.Order order = group.event_order.get(i);
+                                if(order.type==0 && j.id.equals(order.journey_id))
+                                    group.event_order.remove(i);
+                            }
                         }
                     }
+                    showNextEventBtn();
                 }
             }
         }.execute(Constants.getUrl("/picked_up_person/" + group.group_id));
@@ -152,10 +165,16 @@ public class RideActivity extends MapsActivity {
                             for (Journey journey : group.journeys)
                                 if(j.id.equals(journey.id))
                                     journey.journey_ended=1;
+                            for(int i = 0;i<group.event_order.size();i++){
+                                Group.Order order = group.event_order.get(i);
+                                if(order.type==1 && j.id.equals(order.journey_id))
+                                    group.event_order.remove(i);
+                            }
                         }
 
                     }
                     checkIfRideEnded();
+                    showNextEventBtn();
                 }
             }
         }.execute(Constants.getUrl("/end_journey/" + group.group_id));
@@ -171,6 +190,7 @@ public class RideActivity extends MapsActivity {
     public void onResume(){
         super.onResume();
         checkIfRideEnded();
+        showNextEventBtn();
     }
 
     @Override
@@ -212,5 +232,42 @@ public class RideActivity extends MapsActivity {
                     }
                 })
                 .show();
+    }
+
+    public void showNextEventBtn(){
+        nextEventBtn.setOnClickListener(null);
+
+        if(group.event_order.size()<=0){
+            nextEventBtn.setText(getString(R.string.this_ride_is_finish));
+            nextEventBtn.setEnabled(false);
+            return;
+        }
+
+        final Group.Order order = group.event_order.get(0);
+        Journey j_temp=null;
+        for (Journey j : group.journeys){
+            if(order.journey_id.equals(j.id)){
+                j_temp = j;
+                break;
+            }
+        }
+        final Journey journey = j_temp;
+        if(journey==null)
+            Log.e("ERROR","journey in event is not in group");
+
+        if(order.type==0)
+            nextEventBtn.setText(String.format(getString(R.string.picked_user),journey.user.name));
+        else
+            nextEventBtn.setText(String.format(getString(R.string.dropped_user),journey.user.name));
+
+        nextEventBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(order.type==0)
+                    picked_user(journey);
+                else
+                    dropped_user(journey);
+            }
+        });
     }
 }

@@ -30,4 +30,8 @@
     <string name="picked_him">Picked him up</string>
     <string name="dropped_him">Dropped him</string>
 
+    <string name="picked_user">Picked up %1$s</string>
+    <string name="dropped_user">Dropped %1$s</string>
+    <string name="this_ride_is_finish">This ride is finished</string>
+
 </resources>

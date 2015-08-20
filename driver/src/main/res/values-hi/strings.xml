@@ -16,4 +16,7 @@
     <string name="title_activity_login">लॉगिन  कार्य </string>
     <string name="dropped_him">स्थान से उठाया </string>
     <string name="picked_him">गब्तव्य स्थान पर छोड़ा </string>
+    <string name="picked_user">%1$s को उठाया </string>
+    <string name="dropped_user">%1$s को स्थान पर छोड़ा</string>
+    <string name="this_ride_is_finish">यह यात्रा खत्म हो चुकी है </string>
 </resources>
