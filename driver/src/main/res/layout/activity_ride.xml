@@ -28,12 +28,20 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/map_background"
                 android:id="@+id/map"
+                android:layout_alignParentTop="true"
                 android:name="com.google.android.gms.maps.SupportMapFragment" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/map" />
+
         </RelativeLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:drawableStart="@drawable/ic_location"
+            android:drawableLeft="@drawable/ic_location"
+            android:gravity="center"
+            android:textColor="@color/text_color_dark"
+            android:textSize="16sp"
+            android:id="@+id/address_Text" />
         <Button
             android:layout_width="match_parent"
             android:layout_height="50dp"

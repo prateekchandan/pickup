@@ -90,6 +90,7 @@ public class Journey {
             journey.put("margin_before", del_time);
             journey.put("preference", cab_preference);
             journey.put("distance", distance);
+            journey.put("cost", cost);
             journey.put("journey_ended", journey_ended);
             journey.put("journey_started", journey_started);
             journey.put("distance_travelled ", distance_travelled );

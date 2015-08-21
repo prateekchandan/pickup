@@ -19,7 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -41,6 +45,7 @@ public class RideActivity extends MapsActivity {
 
     private boolean rideEnded=false;
     Button nextEventBtn;
+    TextView addressText;
     ArrayList<UserShortCard> userCards = new ArrayList<>();
 
     BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
@@ -63,6 +68,7 @@ public class RideActivity extends MapsActivity {
         setSupportActionBar(toolbar);
 
         nextEventBtn = (Button)findViewById(R.id.nextEventButton);
+        addressText = (TextView)findViewById(R.id.address_Text);
 
         LinearLayout user_view = ((LinearLayout)findViewById(R.id.people_cards));
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,1f);
@@ -222,7 +228,7 @@ public class RideActivity extends MapsActivity {
     public void endRide(){
         new AlertDialog.Builder(this)
                 .setTitle("Journey Ended")
-                .setMessage("Here you will see option to and Ride!!")
+                .setMessage("Here you will see option to Rate!!")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         prefs.edit().remove("group").apply();
@@ -252,22 +258,40 @@ public class RideActivity extends MapsActivity {
             }
         }
         final Journey journey = j_temp;
+
         if(journey==null)
             Log.e("ERROR","journey in event is not in group");
 
-        if(order.type==0)
-            nextEventBtn.setText(String.format(getString(R.string.picked_user),journey.user.name));
-        else
+        if(order.type==0){
+            addressText.setText(journey.start.longDescription);
+            moveToLocation(new LatLng(journey.start.latitude,journey.start.longitude));
+            nextEventBtn.setText(String.format(getString(R.string.picked_user), journey.user.name));
+        }
+        else{
+            addressText.setText(journey.end.longDescription);
+            moveToLocation(new LatLng(journey.end.latitude, journey.end.longitude));
             nextEventBtn.setText(String.format(getString(R.string.dropped_user),journey.user.name));
+        }
 
         nextEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(order.type==0)
+                if (order.type == 0)
                     picked_user(journey);
                 else
                     dropped_user(journey);
             }
         });
+    }
+
+    private void moveToLocation(LatLng currentLocation)
+    {
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
+        // Zoom in, animating the camera.
+        map.animateCamera(CameraUpdateFactory.zoomIn());
+        // Zoom out to zoom level 10, animating with a duration of 2 seconds.
+        map.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+
+
     }
 }
