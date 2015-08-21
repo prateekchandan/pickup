@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -43,6 +45,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 import cab.pickup.MyApplication;
 import cab.pickup.R;
@@ -236,8 +240,21 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                         Toast.makeText(MainActivity.this, "Unable to get current location. Please check your GPS", Toast.LENGTH_LONG).show();
                         return true;
                     }
-
-                    field_start.setAddress(new Location(tracker.getLatitude(),tracker.getLongitude(),"My Location"));
+                    String addressText="MyLocation";
+                    try {
+                        Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
+                        List<Address> addresses  = geocoder.getFromLocation(tracker.getLatitude(),tracker.getLongitude(), 1);
+                        int numLines = addresses.get(0).getMaxAddressLineIndex();
+                        addressText="";
+                        for (int i = 0;i<numLines-1;i++) {
+                            if(i!=0)
+                                addressText+=", ";
+                            addressText += addresses.get(0).getAddressLine(i);
+                        }
+                    }catch (Exception E){
+                        E.printStackTrace();
+                    }
+                    field_start.setAddress(new Location(tracker.getLatitude(),tracker.getLongitude(),addressText));
 
                     return true;
                 }

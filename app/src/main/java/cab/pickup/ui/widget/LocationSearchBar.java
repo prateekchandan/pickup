@@ -3,6 +3,8 @@ package cab.pickup.ui.widget;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -30,6 +32,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import cab.pickup.R;
 import cab.pickup.common.api.Location;
@@ -194,8 +197,21 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
                         Toast.makeText(context, "Unable to get current location. Please check your GPS", Toast.LENGTH_LONG).show();
                         break;
                     }
-
-                    setAddress(new Location(tracker.getLatitude(),tracker.getLongitude(),"My Location"));
+                    String addressText="MyLocation";
+                    try {
+                        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+                        List<Address> addresses  = geocoder.getFromLocation(tracker.getLatitude(),tracker.getLongitude(), 1);
+                        int numLines = addresses.get(0).getMaxAddressLineIndex();
+                        addressText="";
+                        for (int i = 0;i<numLines-1;i++) {
+                            if(i!=0)
+                                addressText+=", ";
+                            addressText += addresses.get(0).getAddressLine(i);
+                        }
+                    }catch (Exception E){
+                        E.printStackTrace();
+                    }
+                    setAddress(new Location(tracker.getLatitude(),tracker.getLongitude(),addressText));
                     dismiss();
                     break;
             }

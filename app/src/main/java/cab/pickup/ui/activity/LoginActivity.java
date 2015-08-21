@@ -63,7 +63,7 @@ public class    LoginActivity extends MyActivity {
             findViewById(R.id.fb_login).setVisibility(View.GONE);
 
             ((TextView)findViewById(R.id.login_message_text)).setText("Loading...");
-            if (me.id == null) {
+            if (me.id == null || me.id == "null") {
                 ((TextView)findViewById(R.id.login_message_text)).setText("Loading...");
                 addUser();
             } else {
