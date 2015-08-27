@@ -1,5 +1,8 @@
 package cab.pickup.driver.api;
 
+import android.content.Intent;
+import android.os.Binder;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,6 +11,7 @@ import cab.pickup.common.api.User;
 import cab.pickup.common.server.OnTaskCompletedListener;
 import cab.pickup.common.server.Result;
 import cab.pickup.driver.MyApplication;
+import cab.pickup.driver.util.DistanceCalculator;
 
 /**
  * Created by prateek on 15/8/15.
@@ -20,8 +24,9 @@ public class Journey {
     public User user;
 
     public String datetime, del_time, cab_preference;
-    public int distance_travelled;
+    public Double distance_travelled=0.0;
     public int journey_started=0,journey_ended=0;
+    public boolean onRide = false;
 
     public Journey(){
     }
@@ -67,7 +72,10 @@ public class Journey {
             journey_started = journey.getInt("journey_started");
 
         if(journey.has("distance_travelled"))
-            distance_travelled = journey.getInt("distance_travelled");
+            distance_travelled = journey.getDouble("distance_travelled");
+
+        if(journey.has("onRide"))
+            onRide=journey.getBoolean("onRide");
 
     }
 
@@ -94,6 +102,7 @@ public class Journey {
             journey.put("journey_ended", journey_ended);
             journey.put("journey_started", journey_started);
             journey.put("distance_travelled ", distance_travelled );
+            journey.put("onRide", onRide );
             journey.put("user", user.toString() );
 
         } catch (JSONException e) {
@@ -102,6 +111,7 @@ public class Journey {
 
         return journey.toString();
     }
+
 
 }
 

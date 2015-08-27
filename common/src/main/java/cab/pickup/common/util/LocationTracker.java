@@ -49,7 +49,7 @@ public class LocationTracker extends Service implements LocationListener,
         locRequest = new LocationRequest();
         locRequest.setInterval(INTERVAL);
         locRequest.setFastestInterval(FASTEST_INTERVAL);
-        locRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        locRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
     public LocationTracker(){

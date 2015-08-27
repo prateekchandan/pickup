@@ -64,7 +64,7 @@ public class MapsActivity extends MyActivity implements GoogleMap.OnMapLoadedCal
         map.setPadding(0, 0, 0, 100);
         map.getUiSettings().setMapToolbarEnabled(false);
 
-        if(tracker!=null){
+        if(tracker!=null && tracker.getLocation()!=null){
             defaultLoc = new LatLng(tracker.getLatitude(),tracker.getLongitude());
         }
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(defaultLoc, 13));

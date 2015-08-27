@@ -32,6 +32,7 @@ import cab.pickup.common.server.Result;
 import cab.pickup.driver.api.Group;
 import cab.pickup.driver.ui.activity.MainActivity;
 import cab.pickup.driver.ui.activity.MyActivity;
+import cab.pickup.driver.ui.activity.RideActivity;
 
 public class GcmIntentService extends IntentService {
     SharedPreferences prefs;
@@ -39,7 +40,7 @@ public class GcmIntentService extends IntentService {
     JSONArray eventList = new JSONArray();
 
     public static final int TYPE_USER_ADDED=18,
-                            TYPE_USER_CANCELLED=19,
+                            TYPE_USER_CANCELLED=17,
                             ALLOCATED_GROUP=16;
 
 
@@ -143,14 +144,14 @@ public class GcmIntentService extends IntentService {
                                                         sendJourneyUpdate(JOURNEY_ALLOCATED_TAG, "New Journey Allocated","A new journey has been allocated to you", MainActivity.class);
                                                     else if(msg_type==TYPE_USER_ADDED){
                                                         try {
-                                                            sendJourneyUpdate(JOURNEY_ADD_USER_INTENT_TAG, "New User Added",data.getString("user_name")+" has been added to ride", MainActivity.class);
+                                                            sendJourneyUpdate(JOURNEY_ADD_USER_INTENT_TAG, "New User Added",data.getString("user_name")+" has been added to ride", RideActivity.class);
                                                         }catch (Exception E){
                                                             E.printStackTrace();
                                                         }
                                                     }
-                                                    else if(msg_type==TYPE_USER_CANCELLED){
+                                                    else{
                                                         try {
-                                                            sendJourneyUpdate(JOURNEY_USER_CANCELLED_INTENT_TAG, "One User Cancelled Ride",data.getString("user_name")+" has left the ride", MainActivity.class);
+                                                            sendJourneyUpdate(JOURNEY_USER_CANCELLED_INTENT_TAG, "One User Cancelled Ride",data.getString("user_name")+" has left the ride", RideActivity.class);
                                                         }catch (Exception E){
                                                             E.printStackTrace();
                                                         }

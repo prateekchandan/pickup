@@ -32,7 +32,7 @@ public class MyActivity extends AppCompatActivity implements ServiceConnection {
     SharedPreferences prefs;
     public Driver me;
     public Group group;
-    LocationTracker tracker;
+    DriverTracker tracker;
 
     @Override
     protected void onCreate(Bundle icicle) {
@@ -59,6 +59,7 @@ public class MyActivity extends AppCompatActivity implements ServiceConnection {
             Log.d("Service","here");
             startService(new Intent(this,DriverTracker.class));
         }else{
+            tracker = DriverTracker.instance;
             Log.d("Service","already initiated");
         }
     }
@@ -66,10 +67,18 @@ public class MyActivity extends AppCompatActivity implements ServiceConnection {
     @Override
     protected void onResume() {
         super.onResume();
+
+        Intent i = new Intent(this, LocationTracker.class);
+        bindService(i, this, BIND_AUTO_CREATE);
     }
 
     @Override
     public void onDestroy(){
+        try {
+            unbindService(this);
+        }catch (IllegalArgumentException E){
+            E.printStackTrace();
+        }
         super.onDestroy();
     }
 
@@ -90,8 +99,9 @@ public class MyActivity extends AppCompatActivity implements ServiceConnection {
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-        tracker = ((LocationTracker.LocalBinder) service).getService();
+        tracker = (DriverTracker)((DriverTracker.LocalBinder) service).getService();
         tracker.connect();
+        Log.d("COnnected","Yo location tracker connected");
     }
 
     @Override
