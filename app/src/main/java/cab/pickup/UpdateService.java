@@ -10,10 +10,12 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import cab.pickup.common.Constants;
+import cab.pickup.common.api.Event;
 import cab.pickup.common.api.User;
 import cab.pickup.common.server.GetTask;
 import cab.pickup.common.server.Result;
@@ -40,7 +42,18 @@ public class UpdateService extends Service {
                 public void onPostExecute(Result res) {
                     super.onPostExecute(res);
                     if(res.statusCode==200){
-                        // TODO add event data to prefs
+                        try {
+                            JSONArray events = new JSONArray(prefs.getString("events","[]"));
+                            JSONArray pending_events = res.data.getJSONArray("pending_events");
+
+                            for(int i=0; i<pending_events.length(); i++){
+                                events.put(pending_events.get(i));
+                            }
+
+                            prefs.edit().putString("events",events.toString()).apply();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
                         Log.d("UpdateTask","Add event data to prefs");
                         mUpdateHandler.postDelayed(mUpdateTask, UPDATE_TIME);
