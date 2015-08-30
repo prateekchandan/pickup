@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,7 +14,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cab.pickup.common.Constants;
-import cab.pickup.common.api.Event;
 import cab.pickup.common.api.User;
 import cab.pickup.common.server.GetTask;
 import cab.pickup.common.server.Result;
