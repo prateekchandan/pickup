@@ -3,15 +3,18 @@ package cab.pickup.ui.activity;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -41,6 +44,7 @@ import java.util.Date;
 
 import cab.pickup.MyApplication;
 import cab.pickup.R;
+import cab.pickup.UpdateService;
 import cab.pickup.common.Constants;
 import cab.pickup.common.api.Driver;
 import cab.pickup.common.api.Event;
@@ -56,7 +60,7 @@ import cab.pickup.ui.widget.UserListAdapter;
 import cab.pickup.ui.widget.UserProfileView;
 
 
-public class RideActivity extends MapsActivity {
+public class RideActivity extends MapsActivity implements ServiceConnection{
     Journey journey;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
@@ -65,15 +69,17 @@ public class RideActivity extends MapsActivity {
     EventAdapter mEventAdapter;
     private boolean isCancelled = false;
 
+    private UpdateService mUpdateService;
+
     BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("GCM","update Reciever called");
+            Log.d("GCM", "update Reciever called");
 
             NotificationManager mNotificationManager = (NotificationManager)
                     RideActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-            mNotificationManager.cancel(intent.getIntExtra("notif_id",0));
+            mNotificationManager.cancel(intent.getIntExtra("notif_id", 0));
 
             loadEventData(intent);
         }
@@ -95,7 +101,9 @@ public class RideActivity extends MapsActivity {
         //make map invisible
         findViewById(R.id.map).setVisibility(View.INVISIBLE);
 
-
+        Intent serviceBinder = new Intent();
+        serviceBinder.setClass(this, UpdateService.class);
+        bindService(serviceBinder, this, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -109,6 +117,15 @@ public class RideActivity extends MapsActivity {
         registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_ADD_USER_INTENT_TAG));
         registerReceiver(mUpdateReceiver, new IntentFilter(GcmIntentService.JOURNEY_DRIVER_ARRIVED_INTENT_TAG));
 
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        super.onServiceConnected(name, service);
+
+        mUpdateService=((UpdateService.LocalBinder)service).getService();
+
+        mUpdateService.startEventUpdates();
     }
 
     @Override
