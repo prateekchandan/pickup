@@ -142,6 +142,22 @@
         android:paddingRight="20dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
+        android:text="@string/side_menu_speak"
+        android:id="@+id/menu_speak"
+        android:drawableStart="@drawable/ic_speak"
+        android:drawableLeft="@drawable/ic_speak"
+        android:drawablePadding="15dp"
+        />
+    <TextView  android:layout_width="match_parent"  android:layout_height="2dp" android:background="#ddd" android:layout_marginLeft="20dp" android:layout_marginRight="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:text="@string/side_menu_rate"
         android:id="@+id/menu_rate"
         android:drawableStart="@drawable/ic_rate_gray"

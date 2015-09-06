@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Message;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.Toast;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,6 +43,7 @@ public class DriverTracker extends LocationTracker {
     public static DriverTracker instance = null;
     Driver d=null;
     SharedPreferences prefs;
+    ArrayList<Pair<Location,Date>> locationUpdates = new ArrayList<>();
     public void onCreate()
     {
         super.onCreate();
@@ -90,8 +93,33 @@ public class DriverTracker extends LocationTracker {
     }
 
     @Override
+    public void onLocationChanged(Location location) {
+        this.location = location;
+        lastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+        Date current = new Date();
+        locationUpdates.add(new Pair<Location, Date>(location,current));
+        Log.v("DriverTracker", "Location: " + getLatitude() + "," + getLongitude() + ", Time: " + lastUpdateTime);
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return Service.START_STICKY;
+    }
+
+    public double calcDistance(Date first , Date last){
+        Location prev = null;
+        double dist = 0.0;
+        for(Pair<Location,Date> temp:locationUpdates){
+            if(temp.second.after(first) && temp.second.before(last)) {
+                if (prev == null)
+                    prev = temp.first;
+                else {
+                    dist += prev.distanceTo(temp.first);
+                    prev = temp.first;
+                }
+            }
+        }
+        return dist;
     }
 
 }

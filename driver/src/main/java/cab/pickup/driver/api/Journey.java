@@ -6,6 +6,8 @@ import android.os.Binder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+
 import cab.pickup.common.api.Location;
 import cab.pickup.common.api.User;
 import cab.pickup.common.server.OnTaskCompletedListener;
@@ -27,6 +29,7 @@ public class Journey {
     public Double distance_travelled=0.0;
     public int journey_started=0,journey_ended=0;
     public boolean onRide = false;
+    public Date startTime=new Date(),endTime=new Date();
 
     public Journey(){
     }
@@ -77,6 +80,13 @@ public class Journey {
         if(journey.has("onRide"))
             onRide=journey.getBoolean("onRide");
 
+        if(journey.has("startTime"))
+            startTime=new Date(journey.getLong("startTime"));
+
+        if(journey.has("endTime"))
+            endTime=new Date(journey.getLong("endTime"));
+
+
     }
 
 
@@ -104,6 +114,9 @@ public class Journey {
             journey.put("distance_travelled ", distance_travelled );
             journey.put("onRide", onRide );
             journey.put("user", user.toString() );
+
+            journey.put("startTime",startTime.getTime());
+            journey.put("endTime",endTime.getTime());
 
         } catch (JSONException e) {
             e.printStackTrace();

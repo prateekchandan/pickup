@@ -37,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cab.pickup.common.Constants;
@@ -211,6 +212,7 @@ public class RideActivity extends MapsActivity implements LocationListener {
                                 if(j.id.equals(journey.id)) {
                                     journey.journey_started = 1;
                                     journey.onRide=true;
+                                    journey.startTime = new Date();
                                 }
                             for(int i = 0;i<group.event_order.size();i++){
                                 Group.Order order = group.event_order.get(i);
@@ -230,21 +232,26 @@ public class RideActivity extends MapsActivity implements LocationListener {
             Toast.makeText(this,"Please check your GPS",Toast.LENGTH_LONG).show();
             return;
         }
-
+        Double tempDist=0.0;
+        for (Journey journey : group.journeys)
+            if(j.id.equals(journey.id)) {
+                tempDist = tracker.calcDistance(journey.startTime,new Date());
+            }
+        final Double distance = tempDist;
         new PostTask(this) {
             @Override
             public List<NameValuePair> getPostData(String[] params, int i) {
                 List<NameValuePair> nameValuePairs = new ArrayList<>();
                 nameValuePairs.add(new BasicNameValuePair("journey_id", j.id));
                 nameValuePairs.add(new BasicNameValuePair("drop_location", String.valueOf(tracker.getLatitude())+","+String.valueOf(tracker.getLongitude())));
-                nameValuePairs.add(new BasicNameValuePair("app_distance", String.valueOf(j.distance_travelled)));
+                nameValuePairs.add(new BasicNameValuePair("app_distance", String.valueOf(distance)));
                 nameValuePairs.add(new BasicNameValuePair("key", getKey()));
                 return nameValuePairs;
             }
 
             @Override
             public void onPostExecute(Result res){
-                Toast.makeText(RideActivity.this,"Distance : "+String.valueOf(j.distance_travelled),Toast.LENGTH_LONG).show();
+                Toast.makeText(RideActivity.this,"Distance : "+String.valueOf(j.distance_travelled)+ " : " + "Distance1 : "+String.valueOf(distance),Toast.LENGTH_LONG).show();
                 Toast.makeText(RideActivity.this,res.statusMessage,Toast.LENGTH_LONG).show();
                 if(res.statusCode==200){
                     String fare = "null";
@@ -261,6 +268,7 @@ public class RideActivity extends MapsActivity implements LocationListener {
                                 if(j.id.equals(journey.id)) {
                                     journey.journey_ended = 1;
                                     journey.onRide=false;
+
                                 }
                             for(int i = 0;i<group.event_order.size();i++){
                                 Group.Order order = group.event_order.get(i);

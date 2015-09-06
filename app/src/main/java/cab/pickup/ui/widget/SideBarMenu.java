@@ -79,7 +79,8 @@ public class SideBarMenu extends RelativeLayout {
             public void onClick(View v) {
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
-                String shareBody = "Download pickup from this URL";
+                String shareBody = "Download pickup from this URL \n" +
+                        "https://play.google.com/store/apps/details?id=cab.pickup";
                 sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Pickup App");
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
                 mContext.startActivity(Intent.createChooser(sharingIntent, "Share via"));
@@ -117,6 +118,17 @@ public class SideBarMenu extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 Toast.makeText(mContext,"Payment to be updated soon!",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        menu.findViewById(R.id.menu_speak).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String recepientEmail = "support@getpickup.in"; // either set to destination email or leave empty
+                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                intent.setData(Uri.parse("mailto:" + recepientEmail));
+                intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Feedback");
+                mContext.startActivity(intent);
             }
         });
     }

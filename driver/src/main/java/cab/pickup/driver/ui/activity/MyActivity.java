@@ -74,11 +74,6 @@ public class MyActivity extends AppCompatActivity implements ServiceConnection {
 
     @Override
     public void onDestroy(){
-        try {
-            unbindService(this);
-        }catch (IllegalArgumentException E){
-            E.printStackTrace();
-        }
         super.onDestroy();
     }
 
