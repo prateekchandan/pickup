@@ -142,7 +142,7 @@ public class GcmIntentService extends IntentService {
 
                                 }
                             }
-                        }.execute(Constants.getUrl("/get_group/"+group_id+"?key="+Constants.KEY));
+                        }.execute(Constants.getUrl("/get_group/"+group_id+"?key="+Constants.getKey()));
                     }
                 }catch (Exception e){
                     e.printStackTrace();

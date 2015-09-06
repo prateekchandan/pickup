@@ -73,7 +73,7 @@ public class DriverTracker extends LocationTracker {
                                 public List<NameValuePair> getPostData(String[] params, int i) {
                                     List<NameValuePair> nameValuePairs = new ArrayList<>();
                                     nameValuePairs.add(new BasicNameValuePair("position",pos));
-                                    nameValuePairs.add(new BasicNameValuePair("key", Constants.KEY));
+                                    nameValuePairs.add(new BasicNameValuePair("key", Constants.getKey()));
                                     nameValuePairs.add(new BasicNameValuePair("event_ids", "[]"));
 
                                     return nameValuePairs;

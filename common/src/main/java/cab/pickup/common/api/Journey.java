@@ -178,7 +178,7 @@ public class Journey {
             List<NameValuePair> nameValuePairs = new ArrayList<>(2);
 
             nameValuePairs.add(new BasicNameValuePair("user_id", user_id));
-            nameValuePairs.add(new BasicNameValuePair("key", Constants.KEY));
+            nameValuePairs.add(new BasicNameValuePair("key", Constants.getKey()));
 
             //nameValuePairs.add(new BasicNameValuePair("journey_id", id));
             nameValuePairs.add(new BasicNameValuePair("start_lat", start.latitude+""));

@@ -82,7 +82,7 @@ public class MyActivity extends AppCompatActivity implements ServiceConnection {
     }
 
     public String getKey(){
-        return Constants.KEY;
+        return Constants.getKey();
     }
 
     public SharedPreferences getSharedPreferences(){

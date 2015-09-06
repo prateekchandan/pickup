@@ -164,7 +164,7 @@ public class GcmIntentService extends IntentService {
                                         }
                                     }
                                 }
-                            }.execute(Constants.getUrl("/get_detailed_group/"+driver.driver_id+"?key="+Constants.KEY));
+                            }.execute(Constants.getUrl("/get_detailed_group/"+driver.driver_id+"?key="+Constants.getKey()));
 
                     }
 
