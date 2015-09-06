@@ -28,11 +28,11 @@ public class LocationTracker extends Service implements LocationListener,
     private static final long INTERVAL = 1000 * 10;
     private static final long FASTEST_INTERVAL = 1000 * 5;
 
-    FusedLocationProviderApi locApi = LocationServices.FusedLocationApi;
-    GoogleApiClient apiClient;
-    LocationRequest locRequest;
-    Location location;
-    String lastUpdateTime;
+    public FusedLocationProviderApi locApi = LocationServices.FusedLocationApi;
+    public GoogleApiClient apiClient;
+    public LocationRequest locRequest;
+    public Location location;
+    public String lastUpdateTime;
 
     private final IBinder mBinder = new LocalBinder();
 

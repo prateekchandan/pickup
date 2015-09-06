@@ -188,7 +188,7 @@ public class    LoginActivity extends MyActivity {
     }
     
     public void addDataToPrefs(String user_id){
-        Log.d("LoginDebug","addDatatoPrefs");
+        Log.d("LoginDebug", "addDatatoPrefs");
         SharedPreferences.Editor spe = prefs.edit();
 
         me.id=user_id;
@@ -268,7 +268,10 @@ public class    LoginActivity extends MyActivity {
     private void startNextActivity() {
         Log.d("LoginDebug","startNextActivity");
         registerGCM();
-        if(prefs.contains("journey")) {
+        if(prefs.contains("ride_end_fare")){
+            startActivity(new Intent(this,RateActivity.class));
+        }
+        else if(prefs.contains("journey")) {
             try {
                 JSONObject journey_data = new JSONObject(prefs.getString("journey", ""));
                 Journey journey = new Journey(journey_data, MyApplication.getDB());

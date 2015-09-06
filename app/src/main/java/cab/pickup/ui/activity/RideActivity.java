@@ -135,8 +135,6 @@ public class RideActivity extends MapsActivity {
 
             refreshList();
             setupTextBoxes();
-            updateDriverCard();
-            updateMatesCard();
             updateCommonPath();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -144,6 +142,7 @@ public class RideActivity extends MapsActivity {
     }
 
     protected void refreshList(){
+
         Log.d("RidePage", "refreshList");
 
         mEventAdapter.clear();
@@ -159,8 +158,14 @@ public class RideActivity extends MapsActivity {
             e.printStackTrace();
         }
 
+
         updateDriverCard();
         updateMatesCard();
+
+        if(prefs.contains("ride_end_fare")){
+            startActivity(new Intent(this, RateActivity.class));
+        }
+
     }
 
     private void setupTextBoxes(){

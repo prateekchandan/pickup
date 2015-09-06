@@ -62,11 +62,22 @@ public class Event {
 
     public String getTimeString(){
         long curr = System.currentTimeMillis();
-        if(curr-time.getTime() < 60000){
+        long event_time = time.getTime();
+        Log.d("Time Event",String.valueOf(curr)+" ... "+String.valueOf(time.getTime()));
+        if(curr-event_time < 60000){
             return "moments ago";
-        }else if(curr-time.getTime() < 60*60000){
-            return ((curr-time.getTime())/60000) + " minutes ago";
-        }else {
+        }else if(curr-event_time < 60*60000){
+            return ((curr-event_time)/60000) + " minutes ago";
+        }else if(curr-event_time < 24*60*60000){
+            long minutes = ((curr-event_time)/60000);
+            long hours = minutes/60;
+            minutes %= 60;
+            String hourStr = "hours";
+            if(hours==1)
+                hourStr=" hour";
+            return  hours+hourStr+minutes+" minutes ago";
+        }
+        else {
             Calendar cal = Calendar.getInstance();
             cal.setTime(time);
             int hour = cal.get(Calendar.HOUR_OF_DAY);

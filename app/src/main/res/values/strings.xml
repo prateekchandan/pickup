@@ -90,5 +90,6 @@
     <string name="searching_for_mates">Searching for mates..</string>
     <string name="no_users_with_you">No users with you</string>
     <string name="confirming_your_journey">Confirming your journey..</string>
+    <string name="title_activity_rate">Ride Finished!!</string>
 
 </resources>

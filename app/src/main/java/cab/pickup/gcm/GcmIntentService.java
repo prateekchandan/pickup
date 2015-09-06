@@ -41,6 +41,7 @@ import cab.pickup.ui.activity.RideActivity;
 public class GcmIntentService extends IntentService {
     SharedPreferences prefs;
     Journey journey;
+    User me;
     JSONArray eventList = new JSONArray();
 
     public static final int TYPE_USER_ADDED=10,
@@ -73,10 +74,16 @@ public class GcmIntentService extends IntentService {
 
         try {
             journey = new Journey(new JSONObject(prefs.getString("journey","")), MyApplication.getDB());
-
             eventList = new JSONArray(prefs.getString("events",""));
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+
+        try {
+            me=new User(new JSONObject(prefs.getString("user_json","")));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            me=new User();
         }
 
         mNotificationManager = (NotificationManager)
@@ -146,7 +153,7 @@ public class GcmIntentService extends IntentService {
 
                     int msg_type = msg.getInt("type");
                     final JSONObject data = msg.getJSONObject("data");
-                    final long time = data.getLong("time");
+                    final long time = data.getLong("time")*1000;
 
                     if(!data.getString("journey_id").equals(journey.id))
                         return;
@@ -204,11 +211,17 @@ public class GcmIntentService extends IntentService {
 
                         sendJourneyUpdate(JOURNEY_USER_PICKED_INTENT_TAG,"One mate was picked up",data.getString("user_name")+" was picked up from his location");
                     }else if(msg_type==TYPE_USER_DROPPED){
+                        Log.d("YOYO TEST",me.id + " here " + data.getInt("user_id"));
                         for(User u: journey.group.mates) {
                             if(u.id.equals(String.valueOf(data.getInt("user_id")))) {
                                 eventList.put(new JSONObject(new Event(Event.TYPE_USER_DROPPED, u, time).toString()));
                                 break;
                             }
+                        }
+                        if(me.id.equals(String.valueOf(data.getInt("user_id")))){
+                            int fare = data.getInt("fare");
+                            Log.d("YOYO TEST","me :d "+fare);
+                            prefs.edit().putString("ride_end_fare", String.valueOf(fare)).apply();
                         }
                         sendJourneyUpdate(JOURNEY_USER_DROPPED_INTENT_TAG,"One mate was dropped",data.getString("user_name")+" was dropped at his location");
                     }
@@ -228,7 +241,7 @@ public class GcmIntentService extends IntentService {
         prefs.edit()
             .putString("events",eventList.toString())
             .putString("journey",journey.toString())
-            .commit();
+            .apply();
 
         Intent i=new Intent(this, RideActivity.class);
         i.putExtra("action", intent_tag);

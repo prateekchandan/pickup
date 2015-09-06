@@ -1,6 +1,7 @@
 package cab.pickup.ui.widget;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,17 +40,12 @@ public class EventView extends LinearLayout{
 
     public void updateView(){
         mTitle.setText(mEvent.getTitle());
+        Log.d("Time Event", mEvent.getTimeString());
         mTime.setText(mEvent.getTimeString());
-      //  if(!(mEvent.data instanceof User) || mEvent.data == null) {
-            mIcon.setVisibility(VISIBLE);
-        //    fbImage.setVisibility(GONE);
-            mIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.user));
-       // }
-       // else{
-       //     mIcon.setVisibility(GONE);
-        //    fbImage.setVisibility(VISIBLE);
-        //    fbImage.setProfileId(((User) mEvent.data).fbid);
-        //}
+        mIcon.setVisibility(VISIBLE);
+        mIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.user));
+
+
     }
 
     public void setEvent(Event e){
