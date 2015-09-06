@@ -86,7 +86,7 @@ public class DriverTracker extends LocationTracker {
                             }.execute(Constants.getUrl("/driver_periodic_route/"+d.driver_id));
                         }
                     }
-                }, 0, 3, TimeUnit.MINUTES);
+                }, 0, 1, TimeUnit.MINUTES);
 
         instance = this;
 
