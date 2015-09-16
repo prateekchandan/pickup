@@ -70,7 +70,7 @@ public class MapsActivity extends MyActivity implements GoogleMap.OnMapLoadedCal
         if(map.getMyLocation() != null)
         {
             Location location = new Location(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude(),"");
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.latitude, location.longitude), 17));
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.latitude, location.longitude), 15));
         } else {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(defaultLoc, 11));
         }

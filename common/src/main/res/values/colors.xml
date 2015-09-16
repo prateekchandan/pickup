@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Colors for the new version -->
+    <color name="primary_color">#100049</color>
+    <color name="primary_color_80">#CC100049</color>
+    <color name="primary_color_60">#99100049</color>
+    <color name="primary_color_40">#66100049</color>
+    <color name="primary_color_20">#33100049</color>
+    <color name="compound_color">#620c7c</color>
+    <color name="complement_color">#ffbf47</color>
+
+    <!--   Old Version of App -->
     <color name="theme_color">#ff3F51BF</color>
     <color name="theme_color_light">#ff1194f6</color>
     <color name="theme_color_dark">#ff303f9f</color>
-
     <color name="text_color_light">#FBFBFB</color>
     <color name="text_color_dark">#ff000000</color>
-
     <color name="button_bg_enabled">#ff001bb2</color>
     <color name="button_bg_disabled">#BBB4B4</color>
-
     <color name="light_gray">#EEEEEE</color>
     <color name="href_blue_color">#2196F3</color>
 </resources>
