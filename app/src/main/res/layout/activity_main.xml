@@ -16,232 +16,111 @@
             android:id="@+id/toolbar"
             layout="@layout/toolbar"/>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_below="@+id/toolbar"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/theme_color">
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <ImageView
-                        android:layout_width="15dp"
-                        android:layout_height="22dp"
-                        android:src="@drawable/circle"/>
-                    <ImageView
-                        android:layout_width="15dp"
-                        android:layout_height="22dp"
-                        android:src="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"/>
-                    <ImageView
-                        android:layout_width="15dp"
-                        android:layout_height="22dp"
-                        android:src="@drawable/balloon"/>
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="15"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <cab.pickup.ui.widget.LocationSearchBar
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/field_start"
-                        android:background="@color/theme_color"
-                        android:hint="@string/pickup_location"
-                        android:padding="12dp"
-                        android:textSize="14sp"
-                        android:singleLine="true"
-                        android:gravity="start|center_vertical"
-                        android:textColor="@color/text_color_light"
-                        android:textColorHint="@color/text_color_light"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:background="@color/text_color_light"/>
-                    <cab.pickup.ui.widget.LocationSearchBar
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/field_end"
-                        android:background="@color/theme_color"
-                        android:hint="@string/drop_location"
-                        android:padding="12dp"
-                        android:textSize="14sp"
-                        android:singleLine="true"
-                        android:gravity="start|center_vertical"
-                        android:textColor="@color/text_color_light"
-                        android:textColorHint="@color/text_color_light"/>
-                </LinearLayout>
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="1"
-                    android:onClick="exchangeLocations"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/exchange"/>
-            </LinearLayout>
             <fragment
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/map"
                 android:name="com.google.android.gms.maps.SupportMapFragment" />
-        </LinearLayout>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/ride_now"
-            android:background="@color/theme_color"
-            android:textColor="@color/text_color_light"
-            android:textSize="16sp"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/button_confirm"
-            android:visibility="invisible"
-            android:onClick="confirmRide"/>
-
-        <android.support.v7.widget.CardView
-            android:layout_gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/button_material_light"
-            card_view:cardElevation="4dp"
-            android:layout_marginBottom="15dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:id="@+id/time_picker_card"
-            android:layout_above="@+id/fare_and_mates_card"
-            android:layout_centerHorizontal="true"
-            android:visibility="invisible">
-
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    style="@style/Label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="I want a cab in"
-                    android:background="#fff"
-                    android:padding="5dp"
-                    android:gravity="center"
-                    android:layout_marginBottom="2dp"
-                    android:layout_centerHorizontal="true"
-                    android:id="@+id/time_label"/>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/time_label"
-                    android:orientation="horizontal">
-                    <ToggleButton
-                        android:background="@drawable/radio_button"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:textOff="30 mins"
-                        android:textOn="30 mins"
-                        android:id="@+id/time_30"
-                        android:layout_marginRight="2dp"
-                        android:onClick="selectTime"/>
-                    <ToggleButton
-                        android:background="@drawable/radio_button"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:textOff="60 mins"
-                        android:textOn="60 mins"
-                        android:id="@+id/time_60"
-                        android:onClick="selectTime" />
-                </LinearLayout>
-
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            card_view:cardElevation="4dp"
-            android:id="@+id/fare_and_mates_card"
-            android:layout_above="@+id/button_confirm"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="15dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:visibility="invisible">
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:layout_alignParentTop="true">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/card_head">
-                    <ToggleButton
-                        android:background="@drawable/tab_button"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:textOn="Fare"
-                        android:textOff="Fare"
-                        android:id="@+id/tab_fares"
-                        android:onClick="switchTabs"
-                        />
-                    <ToggleButton
-                        android:background="@drawable/tab_button"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:textOn="Mates"
-                        android:textOff="Mates"
-                        android:id="@+id/tab_mates"
-                        android:onClick="switchTabs"
-                        android:checked="true"/>
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/summary_user_one"
-                    android:orientation="horizontal"
-                    android:layout_below="@+id/card_head"
-                    android:onClick="showUserDialog"
-                    android:visibility="visible">
-                    <TextView
+                    android:layout_alignParentTop="true"
+                    android:id="@+id/field_start_card"
+                    android:padding="10dp"
+                    android:background="@color/background_grey"
+                    android:elevation="4dp"
+                    android:orientation="vertical">
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:id="@+id/mates_empty_notif"
-                        android:text="No Users with you"
-                        android:textColor="#999999"/>
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pickup_location"
+                            android:layout_marginRight="10dp"
+                            android:textSize="12sp"
+                            android:textColor="@color/compound_color"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/current_location"
+                            android:textSize="12sp"
+                            android:id="@+id/pickup_help_text" />
+                    </LinearLayout>
+                    <cab.pickup.ui.widget.LocationSearchBar
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_color_dark"
+                        android:textSize="16sp"
+                        android:hint="@string/pickup_location_long"
+                        android:textColorHint="@color/complement_color"
+                        android:singleLine="true"
+                        android:id="@+id/field_start"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/summary_fare"
-                    android:orientation="horizontal"
-                    android:layout_below="@+id/card_head"
-                    android:onClick="showFareDialog"
-                    android:visibility="gone">
-                    <TextView
+                    android:layout_below="@+id/swap_locations"
+                    android:id="@+id/field_end_card"
+                    android:padding="10dp"
+                    android:background="@color/background_grey"
+                    android:elevation="4dp"
+                    android:orientation="vertical">
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:id="@+id/main_fare_text"
-                        android:text="Rs 35(booking charge) + Rs 6 / km"
-                        android:textColor="@color/text_color_dark"/>
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/drop_location"
+                            android:textSize="12sp"
+                            android:layout_marginRight="10dp"
+                            android:textColor="@color/compound_color"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:id="@+id/drop_help_text" />
+                    </LinearLayout>
+                    <cab.pickup.ui.widget.LocationSearchBar
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_color_dark"
+                        android:textSize="16sp"
+                        android:hint="@string/drop_location_long"
+                        android:textColorHint="@color/complement_color"
+                        android:singleLine="true"
+                        android:id="@+id/field_end"/>
                 </LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_below="@+id/field_start_card"
+                    android:src="@drawable/exchange"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="-6dp"
+                    android:layout_marginBottom="-6dp"
+                    android:id="@+id/swap_locations"/>
             </RelativeLayout>
-        </android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+
+
     </RelativeLayout>
 
 

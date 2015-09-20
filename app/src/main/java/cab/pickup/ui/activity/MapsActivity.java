@@ -63,9 +63,11 @@ public class MapsActivity extends MyActivity implements GoogleMap.OnMapLoadedCal
 
     private void setUpMap() {
         map.getUiSettings().setZoomControlsEnabled(true);
-        map.setPadding(0,0,0, 100);
+        map.setPadding(0, 0, 0, 100);
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMapToolbarEnabled(false);
+        map.getUiSettings().setMyLocationButtonEnabled(false);
+
 
         if(map.getMyLocation() != null)
         {

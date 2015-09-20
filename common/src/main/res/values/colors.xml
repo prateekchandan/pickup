@@ -7,7 +7,9 @@
     <color name="primary_color_40">#66100049</color>
     <color name="primary_color_20">#33100049</color>
     <color name="compound_color">#620c7c</color>
+    <color name="compound_color_dark">#2E053D</color>
     <color name="complement_color">#ffbf47</color>
+    <color name="background_grey">#F9F9F9</color>
 
     <!--   Old Version of App -->
     <color name="theme_color">#ff3F51BF</color>

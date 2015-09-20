@@ -57,8 +57,11 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 
-    <string name="pickup_location">Pickup Location</string>
-    <string name="drop_location">Drop Location</string>
+    <string name="pickup_location">PICKUP</string>
+    <string name="pickup_location_long">Pick a pickup location</string>
+    <string name="drop_location">DROP</string>
+    <string name="drop_location_long">Pick a drop location</string>
+    <string name="current_location">CURRENT LOCATION</string>
     <string name="ride_now">Book Ride</string>
 
 
