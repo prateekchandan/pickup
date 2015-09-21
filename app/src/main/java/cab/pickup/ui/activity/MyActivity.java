@@ -90,7 +90,6 @@ public class MyActivity extends AppCompatActivity implements ServiceConnection{
     public void onServiceConnected(ComponentName name, IBinder service) {
         tracker = ((LocationTracker.LocalBinder) service).getService();
         tracker.connect();
-        Log.d("tracker connected","yo");
     }
 
     @Override

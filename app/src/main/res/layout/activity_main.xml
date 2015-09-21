@@ -28,9 +28,14 @@
                 android:name="com.google.android.gms.maps.SupportMapFragment" />
             <RelativeLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
-                android:layout_alignParentTop="true">
+                android:layout_alignParentTop="true"
+                >
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -71,11 +76,12 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/swap_locations"
+                    android:layout_below="@+id/field_start_card"
                     android:id="@+id/field_end_card"
                     android:padding="10dp"
                     android:background="@color/background_grey"
                     android:elevation="4dp"
+                    android:layout_marginTop="20dp"
                     android:orientation="vertical">
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -94,6 +100,7 @@
                             android:textSize="12sp"
                             android:id="@+id/drop_help_text" />
                     </LinearLayout>
+
                     <cab.pickup.ui.widget.LocationSearchBar
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -104,18 +111,28 @@
                         android:singleLine="true"
                         android:id="@+id/field_end"/>
                 </LinearLayout>
-                <ImageView
+
+
+            </RelativeLayout>
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_below="@+id/field_start_card"
-                    android:src="@drawable/exchange"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginTop="-6dp"
-                    android:layout_marginBottom="-6dp"
-                    android:id="@+id/swap_locations"/>
+                    android:layout_centerVertical="true"
+                    android:padding="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:onClick="exchangeLocations"
+                >
+                    <cab.pickup.common.widget.IconFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/icon_swap"
+                        android:textSize="40dp"
+                        android:textColor="@color/text_color_dark"
+                        android:id="@+id/swap_locations"/>
+                </LinearLayout>
             </RelativeLayout>
 
         </RelativeLayout>
@@ -125,7 +142,7 @@
 
 
     <cab.pickup.ui.widget.SideBarMenu
-        android:layout_width="250dp "
+        android:layout_width="match_parent"
         android:id="@+id/navList"
         android:layout_height="match_parent"
         android:clickable="true"

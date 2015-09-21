@@ -30,6 +30,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -62,13 +64,14 @@ import cab.pickup.common.server.GetTask;
 import cab.pickup.common.server.OnStringTaskCompletedListener;
 import cab.pickup.common.server.OnTaskCompletedListener;
 import cab.pickup.common.server.Result;
+import cab.pickup.common.util.LocationTracker;
 import cab.pickup.ui.widget.LocationSearchBar;
 import cab.pickup.ui.widget.UserListAdapter;
 import cab.pickup.common.util.IOUtil;
 import cab.pickup.ui.widget.UserProfileView;
 
 public class MainActivity extends MapsActivity implements   LocationSearchBar.OnAddressSelectedListener,
-                                                            OnTaskCompletedListener {
+                                                            OnTaskCompletedListener{
     HashMap<Integer, Marker> markers = new HashMap<>();
 
     private ActionBarDrawerToggle mDrawerToggle;
@@ -248,14 +251,8 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         });
     }
 
-    private void setJourney(String journey_json) throws JSONException{
-        journey = new Journey(new JSONObject(journey_json),MyApplication.getDB());
 
-        ((LocationSearchBar)findViewById(R.id.field_start)).setAddress(journey.start);
-        ((LocationSearchBar)findViewById(R.id.field_end)).setAddress(journey.end);
 
-        displayPath();
-    }
 
     @Override
     public void onAddressSelected(final LocationSearchBar bar, Location address){
@@ -340,13 +337,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                 //findViewById(R.id.time_picker_card).setVisibility(View.VISIBLE);
             }
         }
-    }
-
-    @Override
-    public void onMapLoaded() {
-        field_start.setAddress(journey.start);
-        field_end.setAddress(journey.end);
-
     }
 
     private boolean displayPath() {
@@ -568,8 +558,13 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service){
-        super.onServiceConnected(name,service);
-        setStartToCurrentLocation();
-    }
+        tracker = ((LocationTracker.LocalBinder) service).getService();
+        tracker.connect(new OnStringTaskCompletedListener() {
+            @Override
+            public void onTaskCompleted(String res) {
+                setStartToCurrentLocation();
+            }
+        });
 
+    }
 }

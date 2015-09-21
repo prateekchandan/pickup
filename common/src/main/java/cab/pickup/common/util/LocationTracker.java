@@ -20,6 +20,8 @@ import com.google.android.gms.location.LocationServices;
 import java.text.DateFormat;
 import java.util.Date;
 
+import cab.pickup.common.server.OnStringTaskCompletedListener;
+
 public class LocationTracker extends Service implements LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener{
@@ -33,6 +35,7 @@ public class LocationTracker extends Service implements LocationListener,
     public LocationRequest locRequest;
     public Location location;
     public String lastUpdateTime;
+    private OnStringTaskCompletedListener listener;
 
     private final IBinder mBinder = new LocalBinder();
 
@@ -57,6 +60,11 @@ public class LocationTracker extends Service implements LocationListener,
 
     public void connect(){
         apiClient.connect();
+    }
+
+    public void connect(OnStringTaskCompletedListener _listener){
+        apiClient.connect();
+        listener=_listener;
     }
 
     public void disconnect(){
@@ -108,6 +116,9 @@ public class LocationTracker extends Service implements LocationListener,
     public void onConnected(Bundle bundle) {
         Log.d(TAG, "onConnected - isConnected ...............: " + apiClient.isConnected());
         startLocationUpdates();
+        if(listener!=null){
+            listener.onTaskCompleted("");
+        }
     }
 
     @Override
