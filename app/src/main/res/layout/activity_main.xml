@@ -135,6 +135,32 @@
                 </LinearLayout>
             </RelativeLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:padding="10dp"
+                android:id="@+id/ride_btn_group"
+                android:visibility="invisible"
+                android:background="@color/background_grey">
+                <!--android.support.v7.widget.AppCompatButton-->
+                <android.support.v7.widget.AppCompatButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/ride_after"
+                    android:id="@+id/ride_after"
+                    android:textColor="@color/text_color_light"
+                    />
+                <android.support.v7.widget.AppCompatButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textSize="20sp"
+                    android:id="@+id/ride_now"
+                    android:textColor="@color/text_color_light"
+                    android:text="@string/ride_now"/>
+            </LinearLayout>
         </RelativeLayout>
 
 

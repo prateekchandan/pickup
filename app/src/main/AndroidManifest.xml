@@ -56,10 +56,6 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".ui.activity.ChatActivity"
-            android:label="@string/title_activity_chat" >
-        </activity>
-        <activity
             android:name=".ui.activity.MainActivity"
             android:label="@string/title_activity_ride"
             android:screenOrientation="portrait" >
