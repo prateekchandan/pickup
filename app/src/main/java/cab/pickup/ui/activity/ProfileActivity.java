@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,17 +23,17 @@ import cab.pickup.common.util.Helper;
 public class ProfileActivity extends MyActivity{
 
     ImageView mProfilePic;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
-        try {
-            getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.profile_actionbar_gradient));
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        catch (Exception E){
-            E.printStackTrace();
-        }
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
         setContentView(R.layout.activity_profile);
         mProfilePic = (ImageView)findViewById(R.id.profile_picture);
         setProfilePicture();
@@ -109,16 +110,10 @@ public class ProfileActivity extends MyActivity{
 
     public void setProfileInfo(){
         ((TextView)findViewById(R.id.profile_name)).setText(me.name);
-        ((TextView)findViewById(R.id.profile_name_1)).setText(me.name);
         ((TextView)findViewById(R.id.profile_email)).setText(me.email);
         ((TextView)findViewById(R.id.profile_phone)).setText(me.phone);
         ((TextView)findViewById(R.id.profile_gender)).setText(me.gender);
-        String age_gender = String.valueOf(me.age);
-        if(me.gender.equals("male"))
-            age_gender+=" M";
-        else if(me.gender.equals("female"))
-            age_gender+=" F";
-        ((TextView)findViewById(R.id.profile_age_gender)).setText(age_gender);
+        ((TextView)findViewById(R.id.profile_age)).setText(me.age);
     }
 
     public void editProfile(View v){
