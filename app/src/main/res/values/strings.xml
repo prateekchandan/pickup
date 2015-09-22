@@ -62,7 +62,8 @@
     <string name="drop_location">DROP</string>
     <string name="drop_location_long">Pick a drop location</string>
     <string name="current_location">CURRENT LOCATION</string>
-    <string name="ride_now">Book Ride</string>
+    <string name="ride_now">RIDE NOW</string>
+    <string name="ride_after">RIDE \n AFTER 30 MINUTE</string>
 
 
     <string name="login_successful">Successfully logged in!!</string>

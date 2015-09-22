@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.location.Address;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
@@ -22,6 +24,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -76,7 +80,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-
+    AppCompatButton ride_now_btn,ride_later_btn;
 
     private static final String TAG = "Main";
 
@@ -111,6 +115,11 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         field_start.setOnAddressSelectedListener(this);
         field_end.setOnAddressSelectedListener(this);
         setupUIClicks();
+
+        ride_now_btn = (AppCompatButton) findViewById(R.id.ride_now);
+        ride_later_btn = (AppCompatButton) findViewById(R.id.ride_after);
+        ride_now_btn.setSupportBackgroundTintList(new ColorStateList(new int[][]{new int[0]}, new int[]{getResources().getColor(R.color.complement_color)}));
+        ride_later_btn.setSupportBackgroundTintList(new ColorStateList(new int[][]{new int[0]}, new int[]{getResources().getColor(R.color.primary_color_80)}));
     }
 
     @Override
@@ -300,11 +309,11 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                             markers.get(bar.getId()).setPosition(newPt);
                         }
 
-                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
+                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
                         bar.getAddress().setLatLong(loc.getDouble("lat"), loc.getDouble("lng"));
 
                         if(displayPath()) {
-                            //findViewById(R.id.time_picker_card).setVisibility(View.VISIBLE);
+                            displayRidesButton();
                         }
 
                     } catch (JSONException e) {
@@ -334,7 +343,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
 
             if(displayPath()) {
-                //findViewById(R.id.time_picker_card).setVisibility(View.VISIBLE);
+                displayRidesButton();
             }
         }
     }
@@ -371,6 +380,13 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             E.printStackTrace();
         }
         return false;
+    }
+
+    private void displayRidesButton(){
+        Animation slideUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
+        LinearLayout rideBtnGroup = (LinearLayout)findViewById(R.id.ride_btn_group);
+        rideBtnGroup.setVisibility(View.VISIBLE);
+        rideBtnGroup.startAnimation(slideUp);
     }
 
     public void selectTime(View v) {
