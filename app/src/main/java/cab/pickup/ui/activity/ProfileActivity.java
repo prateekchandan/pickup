@@ -6,10 +6,12 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,7 +24,10 @@ import cab.pickup.common.util.Helper;
 
 public class ProfileActivity extends MyActivity{
 
+    private static final int STATE_VIEW = 1;
+    private static final int STATE_EDIT = 2;
     ImageView mProfilePic;
+    private int state=STATE_VIEW;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +39,17 @@ public class ProfileActivity extends MyActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+
         setContentView(R.layout.activity_profile);
         mProfilePic = (ImageView)findViewById(R.id.profile_picture);
         setProfilePicture();
+        setProfileInfo();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        loadUI();
         setProfileInfo();
     }
 
@@ -48,9 +61,23 @@ public class ProfileActivity extends MyActivity{
     }
 
     @Override
-    public void onResume(){
-        super.onResume();
-        setProfileInfo();
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if(state==STATE_EDIT){
+            menu.getItem(R.id.profile_menu_save).setVisible(true);
+            menu.getItem(R.id.profile_menu_edit).setVisible(false);
+
+            menu.getItem(android.R.id.home).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+            return true;
+        } else if(state==STATE_VIEW){
+
+            menu.getItem(R.id.profile_menu_save).setVisible(false);
+            menu.getItem(R.id.profile_menu_edit).setVisible(true);
+
+            menu.getItem(android.R.id.home).setIcon(R.drawable.b_arrow);
+            return true;
+        }
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -63,9 +90,35 @@ public class ProfileActivity extends MyActivity{
         if(id == android.R.id.home){
             onBackPressed();
             return true;
+        } else if(id == R.id.profile_menu_edit){
+            state=STATE_VIEW;
+            loadUI();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void loadUI() {
+        if(state==STATE_VIEW) {
+            getSupportActionBar().setTitle(getText(R.string.profile_title_view));
+
+            ((EditText)findViewById(R.id.profile_phone)).setInputType(InputType.TYPE_NULL);
+            ((EditText)findViewById(R.id.profile_email)).setInputType(InputType.TYPE_NULL);
+            ((EditText)findViewById(R.id.profile_gender)).setInputType(InputType.TYPE_NULL);
+            ((EditText)findViewById(R.id.profile_age)).setInputType(InputType.TYPE_NULL);
+            ((EditText)findViewById(R.id.profile_name)).setInputType(InputType.TYPE_NULL);
+        } else if(state==STATE_EDIT){
+            getSupportActionBar().setTitle(getText(R.string.profile_title_edit));
+
+            ((EditText)findViewById(R.id.profile_phone)).setInputType(InputType.TYPE_CLASS_PHONE);
+            ((EditText)findViewById(R.id.profile_email)).setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+            ((EditText)findViewById(R.id.profile_gender)).setInputType(InputType.TYPE_CLASS_TEXT);
+            ((EditText)findViewById(R.id.profile_age)).setInputType(InputType.TYPE_CLASS_NUMBER);
+            ((EditText)findViewById(R.id.profile_name)).setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+        }
+
+        invalidateOptionsMenu();
     }
 
     public void setProfilePicture(){
@@ -114,9 +167,5 @@ public class ProfileActivity extends MyActivity{
         ((TextView)findViewById(R.id.profile_phone)).setText(me.phone);
         ((TextView)findViewById(R.id.profile_gender)).setText(me.gender);
         ((TextView)findViewById(R.id.profile_age)).setText(me.age);
-    }
-
-    public void editProfile(View v){
-        startActivity(new Intent(this,SettingsActivity.class));
     }
 }

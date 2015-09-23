@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="profile_picture_min_height">170dp</dimen>
+    <dimen name="profile_name_margin">20dp</dimen>
+
+    <string name="profile_mileage_format">%1$d KMS | %2$d Rides</string>
+    <string name="profile_menu_edit">Edit</string>
+    <string name="profile_menu_save">Save</string>
+
+    <string name="profile_title_view">Profile</string>
+    <string name="profile_title_edit">Edit Profile</string>
+
+    <style name="ProfileLabel" parent="Text.Small">
+        <item name="android:textColor">#999999</item>
+    </style>
+    <style name="ProfileData" parent="Text.Large">
+        <item name="android:layout_marginBottom">15dp</item>
+        <item name="android:inputType">none</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+</resources>
