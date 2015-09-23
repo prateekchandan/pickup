@@ -32,7 +32,7 @@
                 <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
+                android:padding="12dp"
                 android:layout_alignParentTop="true"
                 >
 
@@ -41,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:id="@+id/field_start_card"
-                    android:padding="10dp"
+                    android:padding="8dp"
                     android:background="@color/background_grey"
                     android:elevation="4dp"
                     android:orientation="vertical">
@@ -54,13 +54,12 @@
                             android:layout_height="wrap_content"
                             android:text="@string/pickup_location"
                             android:layout_marginRight="10dp"
-                            android:textSize="12sp"
+                            android:textSize="11sp"
                             android:textColor="@color/compound_color"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/current_location"
-                            android:textSize="12sp"
+                            android:textSize="11sp"
                             android:id="@+id/pickup_help_text" />
                     </LinearLayout>
                     <cab.pickup.ui.widget.LocationSearchBar
@@ -78,10 +77,10 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/field_start_card"
                     android:id="@+id/field_end_card"
-                    android:padding="10dp"
+                    android:padding="8dp"
                     android:background="@color/background_grey"
                     android:elevation="4dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="12dp"
                     android:orientation="vertical">
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -91,13 +90,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/drop_location"
-                            android:textSize="12sp"
+                            android:textSize="11sp"
                             android:layout_marginRight="10dp"
                             android:textColor="@color/compound_color"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="12sp"
+                            android:textSize="11sp"
                             android:id="@+id/drop_help_text" />
                     </LinearLayout>
 
@@ -120,7 +119,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:padding="10dp"
+                    android:padding="12dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginEnd="20dp"
                     android:onClick="exchangeLocations"
@@ -150,14 +149,17 @@
                     android:layout_weight="1"
                     android:text="@string/ride_after"
                     android:id="@+id/ride_after"
+                    android:textSize="12sp"
+                    android:onClick="selectTime"
                     android:textColor="@color/text_color_light"
                     />
                 <android.support.v7.widget.AppCompatButton
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:id="@+id/ride_now"
+                    android:onClick="selectTime"
                     android:textColor="@color/text_color_light"
                     android:text="@string/ride_now"/>
             </LinearLayout>

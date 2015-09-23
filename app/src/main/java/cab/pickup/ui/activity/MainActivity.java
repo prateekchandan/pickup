@@ -229,6 +229,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                     addressText+=", ";
                 addressText += addresses.get(0).getAddressLine(i);
             }
+            ((TextView)findViewById(R.id.pickup_help_text)).setText(getString(R.string.current_location));
         }catch (Exception E){
             E.printStackTrace();
         }
@@ -272,6 +273,8 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
             return;
         }
 
+
+        int id=bar.getId();
 
         onAddressChangeClear();
         if(!address.locUpdated){
@@ -363,7 +366,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                 @Override
                 public void onTaskCompleted(String s) {
                     journey.distance = Double.parseDouble(s);
-                    show_fare_card = true;
                     int distance_fare = (int)(journey.distance*6);
                     String text =String.format(getString(R.string.distance_fare_text), distance_fare,s);
                     text = String.format(getString(R.string.final_fare_text), distance_fare+35,s);
@@ -383,21 +385,14 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     }
 
     private void displayRidesButton(){
-        Animation slideUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
         LinearLayout rideBtnGroup = (LinearLayout)findViewById(R.id.ride_btn_group);
+        Animation slideUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
         rideBtnGroup.setVisibility(View.VISIBLE);
         rideBtnGroup.startAnimation(slideUp);
     }
 
     public void selectTime(View v) {
-/*
-        if(!((CompoundButton)v).isChecked()){
-            ((CompoundButton)v).setChecked(true);
-        }
 
-        clearFareAndMates();
-
-        v.setSelected(true);
         start = field_start.getAddress();
         end = field_end.getAddress();
 
@@ -408,12 +403,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
         Date now = new Date();
         now = new Date(now.getTime());
-
-        if(v.getId() == R.id.time_30) {
-            ((ToggleButton)findViewById(R.id.time_60)).setChecked(false);
-        } else if(v.getId() == R.id.time_60) {
-            ((ToggleButton)findViewById(R.id.time_30)).setChecked(false);
-        }
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -430,39 +419,11 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         Log.d(TAG, "Journey time : " +journey.datetime);
 
         journey.addToServer(this, this);
-
-        // Setting searching for mates in card
-        LinearLayout user_1 = (LinearLayout)findViewById(R.id.summary_user_one);
-        user_1.removeAllViews();
-        TextView moreTxt = new TextView(this);
-        moreTxt.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-        moreTxt.setPadding(20, 20, 20, 20);
-        moreTxt.setTextColor(Color.parseColor("#999999"));
-        moreTxt.setText(getString(R.string.searching_for_mates));
-        user_1.addView(moreTxt);*/
-    }
-
-    public void switchTabs(View v){/*
-        ((ToggleButton)findViewById(R.id.tab_fares)).setChecked(false);
-        ((ToggleButton)findViewById(R.id.tab_mates)).setChecked(false);
-
-        ((ToggleButton)v).setChecked(true);
-        if(v.getId()==R.id.tab_fares){
-            findViewById(R.id.summary_fare).setVisibility(View.VISIBLE);
-            findViewById(R.id.summary_user_one).setVisibility(View.GONE);
-        }
-        else{
-            findViewById(R.id.summary_fare).setVisibility(View.GONE);
-            findViewById(R.id.summary_user_one).setVisibility(View.VISIBLE);
-        }*/
     }
 
     @Override
     public void onTaskCompleted(Result res) {
         if(res.statusCode == 200) {
-            //findViewById(R.id.fare_and_mates_card).setVisibility(View.VISIBLE);
-            //findViewById(R.id.button_confirm).setVisibility(View.VISIBLE);
 
             new GetTask(this){
                 @Override
@@ -470,25 +431,13 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                     super.onPostExecute(res);
                     if(res.statusCode==200){
                         try {
-                            Log.d("bestmatch","here");
-                            JSONObject usersJson = res.data.getJSONObject("best_match");
-                            if(!usersJson.toString().equals("{}")){
 
-                                JSONArray users = usersJson.getJSONArray("user_ids");
-
-
-                            }
-
-
-
-                        } catch (JSONException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                 }
             }.execute(Constants.getUrl("/get_best_match/" + journey.id + "?key=" + getKey()));
-        }else{
-            clearTimers();
         }
     }
 
