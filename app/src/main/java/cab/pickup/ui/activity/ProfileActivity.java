@@ -1,5 +1,7 @@
 package cab.pickup.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,7 +40,6 @@ public class ProfileActivity extends MyActivity{
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-
 
         setContentView(R.layout.activity_profile);
         mProfilePic = (ImageView)findViewById(R.id.profile_picture);
@@ -91,6 +92,18 @@ public class ProfileActivity extends MyActivity{
             onBackPressed();
             return true;
         } else if(id == R.id.profile_menu_edit){
+            state=STATE_EDIT;
+            loadUI();
+            return true;
+        } else if(id == R.id.profile_menu_save){
+            me.name=((TextView)findViewById(R.id.profile_name)).getText().toString();
+            me.email=((TextView)findViewById(R.id.profile_email)).getText().toString();
+            me.age=((TextView)findViewById(R.id.profile_age)).getText().toString();
+            me.phone=((TextView)findViewById(R.id.profile_phone)).getText().toString();
+            me.gender=((TextView)findViewById(R.id.profile_gender)).getText().toString();
+
+            saveProfile();
+
             state=STATE_VIEW;
             loadUI();
             return true;
@@ -167,5 +180,25 @@ public class ProfileActivity extends MyActivity{
         ((TextView)findViewById(R.id.profile_phone)).setText(me.phone);
         ((TextView)findViewById(R.id.profile_gender)).setText(me.gender);
         ((TextView)findViewById(R.id.profile_age)).setText(me.age);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(state==STATE_EDIT){
+            new AlertDialog.Builder(this).setCancelable(true)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            state=STATE_VIEW;
+                            loadUI();
+                            setProfileInfo();
+                        }
+                    })
+                    .setTitle("Edit")
+                    .setMessage("Discard changes?")
+                    .create().show();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
