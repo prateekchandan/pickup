@@ -5,5 +5,5 @@
     android:background="@color/compound_color"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:elevation="4dp"
-    >
+    android:id="@+id/toolbar">
 </android.support.v7.widget.Toolbar>

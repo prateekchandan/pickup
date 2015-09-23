@@ -1,14 +1,19 @@
 package cab.pickup.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,21 +26,31 @@ import cab.pickup.common.util.Helper;
 
 public class ProfileActivity extends MyActivity{
 
+    private static final int STATE_VIEW = 1;
+    private static final int STATE_EDIT = 2;
     ImageView mProfilePic;
+    private int state=STATE_VIEW;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
-        try {
-            getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.profile_actionbar_gradient));
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        catch (Exception E){
-            E.printStackTrace();
-        }
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
         setContentView(R.layout.activity_profile);
         mProfilePic = (ImageView)findViewById(R.id.profile_picture);
         setProfilePicture();
+        setProfileInfo();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        loadUI();
         setProfileInfo();
     }
 
@@ -47,9 +62,23 @@ public class ProfileActivity extends MyActivity{
     }
 
     @Override
-    public void onResume(){
-        super.onResume();
-        setProfileInfo();
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if(state==STATE_EDIT){
+            menu.getItem(R.id.profile_menu_save).setVisible(true);
+            menu.getItem(R.id.profile_menu_edit).setVisible(false);
+
+            menu.getItem(android.R.id.home).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+            return true;
+        } else if(state==STATE_VIEW){
+
+            menu.getItem(R.id.profile_menu_save).setVisible(false);
+            menu.getItem(R.id.profile_menu_edit).setVisible(true);
+
+            menu.getItem(android.R.id.home).setIcon(R.drawable.b_arrow);
+            return true;
+        }
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -62,9 +91,47 @@ public class ProfileActivity extends MyActivity{
         if(id == android.R.id.home){
             onBackPressed();
             return true;
+        } else if(id == R.id.profile_menu_edit){
+            state=STATE_EDIT;
+            loadUI();
+            return true;
+        } else if(id == R.id.profile_menu_save){
+            me.name=((TextView)findViewById(R.id.profile_name)).getText().toString();
+            me.email=((TextView)findViewById(R.id.profile_email)).getText().toString();
+            me.age=((TextView)findViewById(R.id.profile_age)).getText().toString();
+            me.phone=((TextView)findViewById(R.id.profile_phone)).getText().toString();
+            me.gender=((TextView)findViewById(R.id.profile_gender)).getText().toString();
+
+            saveProfile();
+
+            state=STATE_VIEW;
+            loadUI();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void loadUI() {
+        if(state==STATE_VIEW) {
+            getSupportActionBar().setTitle(getText(R.string.profile_title_view));
+
+            ((EditText)findViewById(R.id.profile_phone)).setInputType(InputType.TYPE_NULL);
+            ((EditText)findViewById(R.id.profile_email)).setInputType(InputType.TYPE_NULL);
+            ((EditText)findViewById(R.id.profile_gender)).setInputType(InputType.TYPE_NULL);
+            ((EditText)findViewById(R.id.profile_age)).setInputType(InputType.TYPE_NULL);
+            ((EditText)findViewById(R.id.profile_name)).setInputType(InputType.TYPE_NULL);
+        } else if(state==STATE_EDIT){
+            getSupportActionBar().setTitle(getText(R.string.profile_title_edit));
+
+            ((EditText)findViewById(R.id.profile_phone)).setInputType(InputType.TYPE_CLASS_PHONE);
+            ((EditText)findViewById(R.id.profile_email)).setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+            ((EditText)findViewById(R.id.profile_gender)).setInputType(InputType.TYPE_CLASS_TEXT);
+            ((EditText)findViewById(R.id.profile_age)).setInputType(InputType.TYPE_CLASS_NUMBER);
+            ((EditText)findViewById(R.id.profile_name)).setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+        }
+
+        invalidateOptionsMenu();
     }
 
     public void setProfilePicture(){
@@ -109,19 +176,29 @@ public class ProfileActivity extends MyActivity{
 
     public void setProfileInfo(){
         ((TextView)findViewById(R.id.profile_name)).setText(me.name);
-        ((TextView)findViewById(R.id.profile_name_1)).setText(me.name);
         ((TextView)findViewById(R.id.profile_email)).setText(me.email);
         ((TextView)findViewById(R.id.profile_phone)).setText(me.phone);
         ((TextView)findViewById(R.id.profile_gender)).setText(me.gender);
-        String age_gender = String.valueOf(me.age);
-        if(me.gender.equals("male"))
-            age_gender+=" M";
-        else if(me.gender.equals("female"))
-            age_gender+=" F";
-        ((TextView)findViewById(R.id.profile_age_gender)).setText(age_gender);
+        ((TextView)findViewById(R.id.profile_age)).setText(me.age);
     }
 
-    public void editProfile(View v){
-        startActivity(new Intent(this,SettingsActivity.class));
+    @Override
+    public void onBackPressed() {
+        if(state==STATE_EDIT){
+            new AlertDialog.Builder(this).setCancelable(true)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            state=STATE_VIEW;
+                            loadUI();
+                            setProfileInfo();
+                        }
+                    })
+                    .setTitle("Edit")
+                    .setMessage("Discard changes?")
+                    .create().show();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

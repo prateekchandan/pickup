@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,11 +76,8 @@ public class MyActivity extends AppCompatActivity implements ServiceConnection{
         return getString(R.string.key);
     }
 
-    public SharedPreferences getSharedPreferences(){
-        if(prefs==null)
-            return getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
-        else
-            return prefs;
+    public void saveProfile() {
+        prefs.edit().putString("user_json",me.toString()).apply();
     }
 
     public LocationTracker getLocationTracker() {
@@ -96,9 +94,4 @@ public class MyActivity extends AppCompatActivity implements ServiceConnection{
     public void onServiceDisconnected(ComponentName name) {
         tracker = null;
     }
-
-    public void onLocationUpdate(Location location){
-        // do nothing
-    }
-
 }

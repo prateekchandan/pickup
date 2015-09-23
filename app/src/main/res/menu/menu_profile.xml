@@ -2,4 +2,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="cab.pickup.ui.activity.ProfileActivity">
+
+    <item app:showAsAction="always" android:icon="@android:drawable/ic_menu_edit"
+        android:title="@string/profile_menu_edit" android:id="@+id/profile_menu_edit"/>
+
+    <item android:visible="false" app:showAsAction="always"
+        android:id="@+id/profile_menu_save" android:icon="@android:drawable/checkbox_on_background"
+        android:title="@string/profile_menu_save"/>
 </menu>
