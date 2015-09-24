@@ -2,7 +2,6 @@ package cab.pickup.ui.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -11,8 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,7 +26,7 @@ public class ProfileActivity extends MyActivity{
     private static final int STATE_VIEW = 1;
     private static final int STATE_EDIT = 2;
     ImageView mProfilePic;
-    private int state=STATE_VIEW;
+    private int state=STATE_VIEW; // Save whether viewing or editing data
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +38,6 @@ public class ProfileActivity extends MyActivity{
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-
 
         mProfilePic = (ImageView)findViewById(R.id.profile_picture);
         setProfilePicture();
@@ -59,23 +55,25 @@ public class ProfileActivity extends MyActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_profile, menu);
+
         return true;
     }
 
+    // Called after every invalidateOptionsMenu
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if(state==STATE_EDIT){
-            menu.getItem(R.id.profile_menu_save).setVisible(true);
-            menu.getItem(R.id.profile_menu_edit).setVisible(false);
+            menu.findItem(R.id.profile_menu_save).setVisible(true);
+            menu.findItem(R.id.profile_menu_edit).setVisible(false);
 
-            menu.getItem(android.R.id.home).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+            //menu.findItem(android.R.id.home).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
             return true;
         } else if(state==STATE_VIEW){
 
-            menu.getItem(R.id.profile_menu_save).setVisible(false);
-            menu.getItem(R.id.profile_menu_edit).setVisible(true);
+            menu.findItem(R.id.profile_menu_save).setVisible(false);
+            menu.findItem(R.id.profile_menu_edit).setVisible(true);
 
-            menu.getItem(android.R.id.home).setIcon(R.drawable.b_arrow);
+            //menu.findItem(android.R.id.home).setIcon(R.drawable.b_arrow);
             return true;
         }
 
@@ -113,6 +111,7 @@ public class ProfileActivity extends MyActivity{
         return super.onOptionsItemSelected(item);
     }
 
+    // Load UI elements corresponding to state
     private void loadUI() {
         if(state==STATE_VIEW) {
             getSupportActionBar().setTitle(getText(R.string.profile_title_view));
@@ -132,7 +131,7 @@ public class ProfileActivity extends MyActivity{
             ((EditText)findViewById(R.id.profile_name)).setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
         }
 
-        invalidateOptionsMenu();
+        invalidateOptionsMenu(); // Reload menu
     }
 
     public void setProfilePicture(){
@@ -186,7 +185,7 @@ public class ProfileActivity extends MyActivity{
     @Override
     public void onBackPressed() {
         if(state==STATE_EDIT){
-            new AlertDialog.Builder(this).setCancelable(true)
+            new AlertDialog.Builder(this)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -195,6 +194,7 @@ public class ProfileActivity extends MyActivity{
                             setProfileInfo();
                         }
                     })
+                    .setNegativeButton("Cancel", null)
                     .setTitle("Edit")
                     .setMessage("Discard changes?")
                     .create().show();
