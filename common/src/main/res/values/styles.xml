@@ -14,19 +14,19 @@
     </style>
 
     <style name="Text.Large" parent="Text">
-        <item name="android:textSize">26sp</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="Text.Small" parent="Text">
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">11sp</item>
     </style>
 
     <style name="Text.Light.Large" parent="Text.Light">
-        <item name="android:textSize">23sp</item>
+        <item name="android:textSize">27sp</item>
     </style>
 
     <style name="Text.Light.Small" parent="Text.Light">
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">11sp</item>
     </style>
 
 </resources>
