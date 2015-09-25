@@ -43,8 +43,8 @@ public class Journey {
         id=journey.getString("journey_id");
         datetime=journey.getString("journey_time");
 
-        start= new Location(journey.getDouble("start_lat"), journey.getDouble("start_long"), journey.getString("start_text"));
-        end=new Location(journey.getDouble("end_lat"),journey.getDouble("end_long"),journey.getString("end_text"));
+        start= new Location(journey.getDouble("start_lat"), journey.getDouble("start_lng"), journey.getString("start_text"));
+        end=new Location(journey.getDouble("end_lat"),journey.getDouble("end_lng"),journey.getString("end_text"));
 
         del_time=journey.getString("margin_before");
         cab_preference=journey.getString("preference");
@@ -140,11 +140,11 @@ public class Journey {
             journey.put("journey_time",datetime);
 
             journey.put("start_lat",start.latitude);
-            journey.put("start_long",start.longitude);
+            journey.put("start_lng",start.longitude);
             journey.put("start_text",start.longDescription);
 
             journey.put("end_lat",end.latitude);
-            journey.put("end_long",end.longitude);
+            journey.put("end_lng",end.longitude);
             journey.put("end_text",end.longDescription);
 
             journey.put("margin_before", del_time);
@@ -182,9 +182,9 @@ public class Journey {
 
             //nameValuePairs.add(new BasicNameValuePair("journey_id", id));
             nameValuePairs.add(new BasicNameValuePair("start_lat", start.latitude+""));
-            nameValuePairs.add(new BasicNameValuePair("start_long", start.longitude+""));
+            nameValuePairs.add(new BasicNameValuePair("start_lng", start.longitude+""));
             nameValuePairs.add(new BasicNameValuePair("end_lat", end.latitude+""));
-            nameValuePairs.add(new BasicNameValuePair("end_long", end.longitude+""));
+            nameValuePairs.add(new BasicNameValuePair("end_lng", end.longitude+""));
 
             nameValuePairs.add(new BasicNameValuePair("journey_time", datetime));
             nameValuePairs.add(new BasicNameValuePair("margin_before", del_time));
