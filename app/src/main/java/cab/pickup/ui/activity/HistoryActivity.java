@@ -64,18 +64,13 @@ public class HistoryActivity extends MyActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
 
             if (convertView == null)
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.history_journey, parent, false);
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_journey_history, parent, false);
 
             PastJourney e = getItem(position);
-            ((TextView) convertView.findViewById(R.id.fromText)).setText(e.start_text);
-            ((TextView) convertView.findViewById(R.id.toText)).setText(e.end_text);
-            ((TextView) convertView.findViewById(R.id.fareText)).setText(String.valueOf(e.fare));
-            ((TextView) convertView.findViewById(R.id.distance_text)).setText(String.valueOf(e.distance) + " km");
-            ImageView imgC = ((ImageView) convertView.findViewById(R.id.iconCancel));
-            ImageView imgD = ((ImageView) convertView.findViewById(R.id.iconDone));
-            if (e.status.equals("cancelled")) {
-                imgC.setVisibility(View.VISIBLE);
-            } else imgD.setVisibility(View.VISIBLE);
+            ((TextView) convertView.findViewById(R.id.item_history_pickup_text)).setText(e.start_text);
+            ((TextView) convertView.findViewById(R.id.item_history_drop_text)).setText(e.end_text);
+            ((TextView) convertView.findViewById(R.id.item_history_fare)).setText(getString(R.string.item_history_fare,e.fare));
+            ((TextView) convertView.findViewById(R.id.item_history_distance)).setText(getString(R.string.item_history_distance, e.distance));
             return convertView;
         }
     }

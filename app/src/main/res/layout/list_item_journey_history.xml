@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:layout_marginBottom="15dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_history_date"
+        android:text="10 Jul, Wed"
+        style="@style/Text.Large"
+        android:paddingBottom="0dp"
+        android:layout_marginRight="10dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_history_time"
+        android:text="10:50 AM"
+        style="@style/Text.Small"
+        android:textColor="#333333"
+        android:paddingTop="0dp"
+        android:layout_below="@+id/item_history_date" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/item_history_fare"
+        android:id="@+id/item_history_fare"
+        style="@style/Text.Large"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        android:layout_below="@+id/item_history_time" />
+    <cab.pickup.common.widget.IconFont
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/item_history_pickup_icon"
+        android:layout_alignTop="@+id/item_history_pickup_text"
+        android:layout_toRightOf="@+id/item_history_date"
+        android:layout_marginRight="5dp" />
+    <TextView
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="#DDDDDD"
+        android:layout_marginLeft="2dp"
+        android:layout_below="@+id/item_history_pickup_icon"
+        android:layout_above="@+id/item_history_drop_icon"
+        android:layout_alignLeft="@+id/item_history_pickup_icon" />
+    <cab.pickup.common.widget.IconFont
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/item_history_drop_icon"
+        android:layout_toLeftOf="@+id/item_history_drop_text"
+        android:layout_alignTop="@+id/item_history_drop_text" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="2"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/item_history_pickup_text"
+        style="@style/Text.Small"
+        android:text="Huma Mall, Kanjurmarg East, Mumbai"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/item_history_pickup_icon" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="2"
+        android:minWidth="180dp"
+        android:id="@+id/item_history_drop_text"
+        style="@style/Text.Small"
+        android:text="R City Mall, Ghatkopar West, Mumbai"
+        android:layout_below="@+id/item_history_distance"
+        android:layout_alignLeft="@+id/item_history_pickup_text"
+        android:layout_marginBottom="10dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/item_history_distance"
+        android:id="@+id/item_history_distance"
+        android:textColor="#AAA"
+        android:layout_below="@+id/item_history_pickup_text"
+        android:layout_alignLeft="@+id/item_history_pickup_text" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#DDD"
+        android:padding="0dp"
+        android:layout_below="@+id/item_history_drop_text"/>
+</RelativeLayout>
