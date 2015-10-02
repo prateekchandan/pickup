@@ -10,7 +10,7 @@
             android:insetTop="-5dp"
             android:insetRight="-5dp">
             <shape>
-                <stroke android:width="5dp" android:color="@color/theme_color"/>
+                <stroke android:width="5dp" android:color="@color/compound_color"/>
                 <solid android:color="#FFFFFF" />
             </shape>
         </inset>

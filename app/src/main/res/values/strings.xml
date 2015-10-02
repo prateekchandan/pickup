@@ -64,6 +64,9 @@
     <string name="current_location">CURRENT LOCATION</string>
     <string name="ride_now">RIDE NOW</string>
     <string name="ride_after">RIDE \n AFTER 30 MINUTE</string>
+    <string name="confirm_ride">CONFIRM RIDE</string>
+    <string name="confirm_distance_text">%1$.2f KM @ ₹6.00/- per KM</string>
+    <string name="confirm_fare_text">Estimated Fare ₹%1$d.00</string>
 
 
     <string name="login_successful">Successfully logged in!!</string>
@@ -89,7 +92,7 @@
     <string name="rupee_symbol">₹</string>
     <string name="base_fare_text">₹ 35 Base fare</string>
     <string name="sign_plus">+</string>
-    <string name="distance_fare_text">₹ %1$d (6 * %2$s km)</string>
+
     <string name="final_fare_text">₹ Total Fare : <b>%1$d</b> for distance of %2$s km</string>
 
     <string name="searching_for_mates">Searching for mates..</string>

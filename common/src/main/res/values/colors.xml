@@ -10,13 +10,14 @@
     <color name="compound_color_dark">#2E053D</color>
     <color name="complement_color">#ffbf47</color>
     <color name="background_grey">#F9F9F9</color>
+    <color name="text_color_light">#FBFBFB</color>
+    <color name="text_color_dark">#ff000000</color>
+    <color name="text_color_dark_gray">#ff888888</color>
 
     <!--   Old Version of App -->
     <color name="theme_color">#ff3F51BF</color>
     <color name="theme_color_light">#ff1194f6</color>
     <color name="theme_color_dark">#ff303f9f</color>
-    <color name="text_color_light">#FBFBFB</color>
-    <color name="text_color_dark">#ff000000</color>
     <color name="button_bg_enabled">#ff001bb2</color>
     <color name="button_bg_disabled">#BBB4B4</color>
     <color name="light_gray">#EEEEEE</color>

@@ -83,13 +83,14 @@ public class RideActivity extends MapsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_ride);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        setContentView(R.layout.activity_ride);
+
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         setupDrawer();
 
