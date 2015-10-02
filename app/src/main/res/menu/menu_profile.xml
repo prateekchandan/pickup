@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="cab.pickup.ui.activity.ProfileActivity">
 
-    <item app:showAsAction="always" android:icon="@drawable/ic_mode_edit"
+    <item app:showAsAction="always" android:icon="@drawable/ic_edit_white_24dp"
         android:title="@string/profile_menu_edit" android:id="@+id/profile_menu_edit"/>
 
     <item android:visible="false" app:showAsAction="always"
-        android:icon="@drawable/ic_done"
+        android:icon="@drawable/ic_done_white_24dp"
         android:id="@+id/profile_menu_save"
         android:title="@string/profile_menu_save"/>
 </menu>

@@ -2,6 +2,7 @@ package cab.pickup.ui.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -115,20 +116,35 @@ public class ProfileActivity extends MyActivity{
     private void loadUI() {
         if(state==STATE_VIEW) {
             getSupportActionBar().setTitle(getText(R.string.profile_title_view));
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
 
             ((EditText)findViewById(R.id.profile_phone)).setInputType(InputType.TYPE_NULL);
             ((EditText)findViewById(R.id.profile_email)).setInputType(InputType.TYPE_NULL);
             ((EditText)findViewById(R.id.profile_gender)).setInputType(InputType.TYPE_NULL);
             ((EditText)findViewById(R.id.profile_age)).setInputType(InputType.TYPE_NULL);
             ((EditText)findViewById(R.id.profile_name)).setInputType(InputType.TYPE_NULL);
+
+
+            findViewById(R.id.profile_phone).setEnabled(false);
+            findViewById(R.id.profile_email).setEnabled(false);
+            findViewById(R.id.profile_gender).setEnabled(false);
+            findViewById(R.id.profile_age).setEnabled(false);
+            findViewById(R.id.profile_name).setEnabled(false);
         } else if(state==STATE_EDIT){
             getSupportActionBar().setTitle(getText(R.string.profile_title_edit));
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp);
 
             ((EditText)findViewById(R.id.profile_phone)).setInputType(InputType.TYPE_CLASS_PHONE);
             ((EditText)findViewById(R.id.profile_email)).setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
             ((EditText)findViewById(R.id.profile_gender)).setInputType(InputType.TYPE_CLASS_TEXT);
             ((EditText)findViewById(R.id.profile_age)).setInputType(InputType.TYPE_CLASS_NUMBER);
             ((EditText)findViewById(R.id.profile_name)).setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+
+            findViewById(R.id.profile_phone).setEnabled(true);
+            findViewById(R.id.profile_email).setEnabled(true);
+            findViewById(R.id.profile_gender).setEnabled(true);
+            findViewById(R.id.profile_age).setEnabled(true);
+            findViewById(R.id.profile_name).setEnabled(true);
         }
 
         invalidateOptionsMenu(); // Reload menu

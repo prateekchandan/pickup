@@ -444,7 +444,7 @@ public class RideActivity extends MapsActivity {
             mapView.animate()
                     .alpha(1.0f);
             eventView.setVisibility(View.INVISIBLE);
-            button.setImageResource(R.drawable.b_arrow);
+            button.setImageResource(R.drawable.ic_arrow_back_white_24dp);
         }
         else{
             eventView.setVisibility(View.VISIBLE);
