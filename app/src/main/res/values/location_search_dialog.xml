@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="location_search_nearby_label">Nearby Locations</string>
+    <string name="location_search_fav_label">Favourite Locations</string>
+    <string name="location_search_recent_label">Recent Locations</string>
+    <string name="location_search_my_location_text">Select current location</string>
+
+    <dimen name="location_search_icon_size">20dp</dimen>
+
+    <style name="LocationSearchLabel" parent="Text">
+        <item name="android:textColor">@color/primary_color</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
+    </style>
+</resources>

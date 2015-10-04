@@ -10,8 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="@string/search"
-        android:id="@+id/location_picker_search_field"
-        style="@style/LocationSearchBar"/>
+        android:id="@+id/location_picker_search_field"/>
     <RelativeLayout android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_below="@+id/location_picker_search_field"

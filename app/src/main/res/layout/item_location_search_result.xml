@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <cab.pickup.common.widget.IconFont
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="place"
+        android:textColor="@color/text_color_light"
+        android:textSize="@dimen/location_search_icon_size"
+        android:gravity="center"
+        android:id="@+id/item_location_search_icon"
+        android:layout_alignParentLeft="true"
+        android:layout_alignBottom="@+id/item_location_search_sub_text"
+        android:layout_alignParentTop="true" />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Office"
+        android:layout_marginLeft="20dp"
+        android:paddingBottom="0dp"
+        style="@style/Text"
+        android:id="@+id/item_location_search_main_text"
+        android:layout_toRightOf="@+id/item_location_search_icon" />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Office"
+        android:paddingTop="2dp"
+        style="@style/Text.Small"
+        android:id="@+id/item_location_search_sub_text"
+        android:layout_alignLeft="@+id/item_location_search_main_text"
+        android:layout_below="@+id/item_location_search_main_text" />
+</RelativeLayout>

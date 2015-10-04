@@ -65,11 +65,7 @@
                     <cab.pickup.ui.widget.LocationSearchBar
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/text_color_dark"
-                        android:textSize="16sp"
                         android:hint="@string/pickup_location_long"
-                        android:textColorHint="@color/complement_color"
-                        android:singleLine="true"
                         android:id="@+id/field_start"/>
                 </LinearLayout>
                 <LinearLayout
@@ -103,11 +99,7 @@
                     <cab.pickup.ui.widget.LocationSearchBar
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/text_color_dark"
-                        android:textSize="16sp"
                         android:hint="@string/drop_location_long"
-                        android:textColorHint="@color/complement_color"
-                        android:singleLine="true"
                         android:id="@+id/field_end"/>
                 </LinearLayout>
 
