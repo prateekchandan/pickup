@@ -62,11 +62,11 @@ public class MapsActivity extends MyActivity implements GoogleMap.OnMapLoadedCal
     }
 
     private void setUpMap() {
-        map.getUiSettings().setZoomControlsEnabled(true);
-        map.setPadding(0, 0, 0, 100);
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMapToolbarEnabled(false);
         map.getUiSettings().setMyLocationButtonEnabled(false);
+        // Remove zoom control from Map
+        map.getUiSettings().setZoomControlsEnabled(false);
 
 
         if(map.getMyLocation() != null)
@@ -86,8 +86,6 @@ public class MapsActivity extends MyActivity implements GoogleMap.OnMapLoadedCal
     }
 
     class MapDirectionsTask extends AsyncTask<String, Integer, String> {
-        public final static String MODE_DRIVING = "driving";
-        public final static String MODE_WALKING = "walking";
         public Double distance;
         static final String TAG = "Directions";
         OnStringTaskCompletedListener listener;

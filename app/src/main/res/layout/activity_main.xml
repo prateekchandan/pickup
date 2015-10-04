@@ -132,7 +132,7 @@
                 android:layout_alignParentBottom="true"
                 android:padding="10dp"
                 android:id="@+id/ride_btn_group"
-                android:visibility="invisible"
+                android:visibility="gone"
                 android:background="@color/background_grey">
                 <!--android.support.v7.widget.AppCompatButton-->
                 <android.support.v7.widget.AppCompatButton
@@ -154,6 +154,53 @@
                     android:onClick="selectTime"
                     android:textColor="@color/text_color_light"
                     android:text="@string/ride_now"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:padding="10dp"
+                android:paddingTop="15dp"
+                android:id="@+id/confirm_btn_group"
+                android:visibility="gone"
+                android:orientation="vertical"
+                android:background="@color/background_grey">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/text_color_dark_gray"
+                    android:textSize="25sp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:layout_marginBottom="5dp"
+                    android:id="@+id/confirm_text"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/text_color_dark_gray"
+                    android:textSize="12sp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:layout_marginBottom="0dp"
+                    android:id="@+id/confirm_distance_text"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/text_color_dark_gray"
+                    android:textSize="12sp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:id="@+id/confirm_fare_text"/>
+                <android.support.v7.widget.AppCompatButton
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="16sp"
+                    android:id="@+id/button_confirm"
+                    android:onClick="confirmRide"
+                    android:textColor="@color/text_color_light"
+                    android:text="@string/confirm_ride"/>
             </LinearLayout>
         </RelativeLayout>
 

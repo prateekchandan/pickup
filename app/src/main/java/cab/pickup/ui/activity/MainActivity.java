@@ -43,14 +43,17 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -67,6 +70,7 @@ import cab.pickup.common.api.User;
 import cab.pickup.common.server.GetTask;
 import cab.pickup.common.server.OnStringTaskCompletedListener;
 import cab.pickup.common.server.OnTaskCompletedListener;
+import cab.pickup.common.server.PostTask;
 import cab.pickup.common.server.Result;
 import cab.pickup.common.util.LocationTracker;
 import cab.pickup.ui.widget.LocationSearchBar;
@@ -74,14 +78,15 @@ import cab.pickup.ui.widget.UserListAdapter;
 import cab.pickup.common.util.IOUtil;
 import cab.pickup.ui.widget.UserProfileView;
 
-public class MainActivity extends MapsActivity implements   LocationSearchBar.OnAddressSelectedListener,
-                                                            OnTaskCompletedListener{
-    HashMap<Integer, Marker> markers = new HashMap<>();
+public class MainActivity extends MapsActivity implements   LocationSearchBar.OnAddressSelectedListener{
+
+    private HashMap<Integer, Marker> markers = new HashMap<>(); //! Use to keep the google map marker for a location
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-    AppCompatButton ride_now_btn,ride_later_btn;
+    private AppCompatButton ride_now_btn,ride_later_btn,confirm_btn;
 
+    // LOG TAG
     private static final String TAG = "Main";
 
 
@@ -94,6 +99,10 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
     boolean show_fare_card=false;
 
+    /**
+     * onCreate - Called on creation of MainActivity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,7 +127,9 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
 
         ride_now_btn = (AppCompatButton) findViewById(R.id.ride_now);
         ride_later_btn = (AppCompatButton) findViewById(R.id.ride_after);
+        confirm_btn = (AppCompatButton) findViewById(R.id.button_confirm);
         ride_now_btn.setSupportBackgroundTintList(new ColorStateList(new int[][]{new int[0]}, new int[]{getResources().getColor(R.color.complement_color)}));
+        confirm_btn.setSupportBackgroundTintList(new ColorStateList(new int[][]{new int[0]}, new int[]{getResources().getColor(R.color.complement_color)}));
         ride_later_btn.setSupportBackgroundTintList(new ColorStateList(new int[][]{new int[0]}, new int[]{getResources().getColor(R.color.primary_color_80)}));
     }
 
@@ -134,6 +145,9 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
+    /**
+     * Sets Up the side Drawer
+     */
     private void setupDrawer() {
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 R.string.drawer_open, R.string.drawer_close) {
@@ -173,11 +187,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -200,7 +210,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         try {
             Log.d("JourneyNow", journey.toString());
         }catch (Exception E){E.printStackTrace();}
-        //loadPage(page);
     }
 
     @Override
@@ -208,7 +217,9 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         super.onResume();
     }
 
-
+    /**
+     * Sets the Start location to correct Location
+     */
     public void setStartToCurrentLocation(){
         if(tracker==null)
             return;
@@ -246,6 +257,9 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         super.onStop();
     }
 
+    /**
+     * Setup UI Clicks for different items in Activity
+     */
     public void setupUIClicks(){
         findViewById(R.id.field_end_card).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -262,21 +276,42 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     }
 
 
-
-
+    /**
+     * onAddressSelected : This function is called whenever a location is changed for the locationsearchbar
+     *
+     * @param bar : The Location bar on which address is changed
+     * @param address : The new location of the bar
+     */
     @Override
     public void onAddressSelected(final LocationSearchBar bar, Location address){
-        if(address == null || bar == null || bar.getAddress()==null) return;
-        show_fare_card = false;
+        // If map is not set , Then throw the error and return
         if(map==null){
             Toast.makeText(this,getResources().getString(R.string.map_error),Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // If the location bar is null , means some logical error occured
+        if(bar==null){
+            Log.e(TAG, "The bar is null");
+            return;
+        }
+
+        // If address is null then clear the map markers
+        if(address == null || bar.getAddress()==null){
+            // Clear the marker from the map
+            if(markers.containsKey(bar.getId()))
+                markers.get(bar.getId()).remove();
+            // Remove the marker from hashmap
+            markers.remove(bar.getId());
+            return;
+        }
 
         int id=bar.getId();
 
+        //Bring back the rides option if not present
         onAddressChangeClear();
+
+        // If the address doesn't have latitude and longitude but only placeID
         if(!address.locUpdated){
             AsyncTask<String, Void, String> locFetch = new AsyncTask<String,Void,String>(){
                 @Override
@@ -287,15 +322,11 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                     HttpGet httpget = new HttpGet(url);
                     try {
                         HttpResponse response = httpclient.execute(httpget);
-
                         ret= IOUtil.buildStringFromIS(response.getEntity().getContent());
 
-                    } catch (ClientProtocolException e) {
-                        Log.e(TAG, e.getMessage());
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         Log.e(TAG, e.getMessage());
                     }
-
                     httpclient.close();
                     return ret;
                 }
@@ -306,21 +337,8 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                         JSONObject loc = new JSONObject(res).getJSONObject("result").getJSONObject("geometry").getJSONObject("location");
                         LatLng newPt = new LatLng(loc.getDouble("lat"), loc.getDouble("lng"));
 
-                        if(!markers.containsKey(bar.getId())) {
-                            markers.put(bar.getId(), map.addMarker(new MarkerOptions().position(newPt)));
-                        } else {
-                            markers.get(bar.getId()).setPosition(newPt);
-                        }
+                        setMarkerOnMap(bar,newPt);
 
-                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
-                        bar.getAddress().setLatLong(loc.getDouble("lat"), loc.getDouble("lng"));
-
-                        if(displayPath()) {
-                            displayRidesButton();
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
                     catch (Exception e) {
                         e.printStackTrace();
@@ -328,55 +346,66 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
                 }
             };
 
-            StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/details/json");
-            sb.append("?key=AIzaSyChiVpPeOyYNFGq7_aR6-zpHnv6HsnwXQo"); // TODO Seperate constants like these
-            sb.append("&placeid=" + address.placeId);
-            sb.append("&components=country:in");
+            String locURL = "https://maps.googleapis.com/maps/api/place/details/json";
+            locURL += "?key=AIzaSyChiVpPeOyYNFGq7_aR6-zpHnv6HsnwXQo"; // TODO Seperate constants like these
+            locURL += "&placeid=" + address.placeId;
+            locURL += "&components=country:in";
 
-            locFetch.execute(sb.toString());
+            locFetch.execute(locURL);
         } else {
             LatLng newPt = new LatLng(address.latitude, address.longitude);
-
-            if(!markers.containsKey(bar.getId())) {
-                markers.put(bar.getId(), map.addMarker(new MarkerOptions().position(newPt)));
-            } else {
-                markers.get(bar.getId()).setPosition(newPt);
-            }
-
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
-
-            if(displayPath()) {
-                displayRidesButton();
-            }
+            setMarkerOnMap(bar, newPt);
         }
     }
 
+    /**
+     * This function is called after onAddressChange to set Marker on Map
+     * @param bar
+     * @param newPt
+     */
+    private void setMarkerOnMap(final LocationSearchBar bar, LatLng newPt){
+        if(!markers.containsKey(bar.getId())) {
+            markers.put(bar.getId(), map.addMarker(new MarkerOptions().position(newPt)));
+        } else {
+            markers.get(bar.getId()).setPosition(newPt);
+        }
+
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(newPt, 17));
+        bar.getAddress().setLatLong(newPt.latitude, newPt.longitude);
+
+        if(displayPath()) {
+            displayRidesButton();
+        }
+
+        int id = bar.getId();
+        if(id==R.id.field_start)
+            ((TextView)findViewById(R.id.pickup_help_text)).setText("");
+        else if(id==R.id.field_end)
+            ((TextView)findViewById(R.id.drop_help_text)).setText("");
+
+        if(tracker==null || tracker.getLastKnownLocation()==null) {
+            return;
+        }
+    }
+
+    /**
+     * Display path on the map from the start and end location
+     */
     private boolean displayPath() {
-        if(!markers.containsKey(R.id.field_end) || !markers.containsKey((R.id.field_start)))
+        if(field_start.getAddress()==null ||field_end.getAddress()==null)
             return false;
 
         try {
-            LatLng start = markers.get(R.id.field_start).getPosition();
-            LatLng end = markers.get(R.id.field_end).getPosition();
+            LatLng start = new LatLng(field_start.getAddress().latitude,field_start.getAddress().longitude);
+            LatLng end =  new LatLng(field_end.getAddress().latitude,field_end.getAddress().longitude);
 
             String url="http://maps.googleapis.com/maps/api/directions/json?origin="
                     + start.latitude + "," + start.longitude + "&destination="
                     + end.latitude + "," + end.longitude;
-            MapDirectionsTask task = new MapDirectionsTask(new OnStringTaskCompletedListener() {
-                @Override
-                public void onTaskCompleted(String s) {
-                    journey.distance = Double.parseDouble(s);
-                    int distance_fare = (int)(journey.distance*6);
-                    String text =String.format(getString(R.string.distance_fare_text), distance_fare,s);
-                    text = String.format(getString(R.string.final_fare_text), distance_fare+35,s);
-                    //((TextView)findViewById(R.id.main_fare_text)).setText(Html.fromHtml(text));
 
-                }
-
-
-            });
-            task.execute(url);
-
+            // MapDirectionTask is in MapsActivity , used to display the path between start and end location
+            new MapDirectionsTask().execute(url);
+            // If display path is success return true
             return true;
         } catch (NullPointerException E){
             E.printStackTrace();
@@ -384,12 +413,29 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         return false;
     }
 
+    /**
+     * Display the Ride after and Ride now Button in the Main Activity
+     */
     private void displayRidesButton(){
         LinearLayout rideBtnGroup = (LinearLayout)findViewById(R.id.ride_btn_group);
         Animation slideUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
         rideBtnGroup.setVisibility(View.VISIBLE);
         rideBtnGroup.startAnimation(slideUp);
     }
+
+    /**
+     * Display the Ride after and Ride now Button in the Main Activity
+     */
+    private void displayConfirmButton(){
+        LinearLayout confirmBtnGroup = (LinearLayout)findViewById(R.id.confirm_btn_group);
+        Animation slideUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
+        confirmBtnGroup.setVisibility(View.VISIBLE);
+        confirmBtnGroup.startAnimation(slideUp);
+    }
+
+    /**
+     * Hide the Ride after and Ride now Button in the Main Activity
+     */
 
     public void selectTime(View v) {
 
@@ -413,33 +459,68 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         journey.start=start;
         journey.end=end;
         journey.datetime=formatter.format(now);
-        journey.del_time="30";
+        journey.del_time="30"; // TODO : Change this to 30 or 60
         journey.cab_preference="1";
 
-        Log.d(TAG, "Journey time : " +journey.datetime);
+        Log.d(TAG, "Journey time : " + journey.datetime);
+        requestJourney();
 
-        journey.addToServer(this, this);
     }
 
-    @Override
-    public void onTaskCompleted(Result res) {
-        if(res.statusCode == 200) {
+    /**
+     * Register journey on server
+     */
+    private void requestJourney(){
+        new PostTask(this,"Requesting for Journey"){
 
-            new GetTask(this){
-                @Override
-                public void onPostExecute(Result res) {
-                    super.onPostExecute(res);
-                    if(res.statusCode==200){
-                        try {
+            @Override
+            public List<NameValuePair> getPostData(String[] params, int i) {
+                List<NameValuePair> nameValuePairs = new ArrayList<>(2);
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
+                nameValuePairs.add(new BasicNameValuePair("user_id", me.id));
+                nameValuePairs.add(new BasicNameValuePair("key", Constants.getKey()));
+
+                nameValuePairs.add(new BasicNameValuePair("start_lat", journey.start.latitude+""));
+                nameValuePairs.add(new BasicNameValuePair("start_long", journey.start.longitude+""));
+                nameValuePairs.add(new BasicNameValuePair("end_lat", journey.end.latitude+""));
+                nameValuePairs.add(new BasicNameValuePair("end_long", journey.end.longitude+""));
+
+                nameValuePairs.add(new BasicNameValuePair("journey_time", journey.datetime));
+                nameValuePairs.add(new BasicNameValuePair("margin_before", journey.del_time));
+                nameValuePairs.add(new BasicNameValuePair("margin_after", journey.del_time));
+                nameValuePairs.add(new BasicNameValuePair("preference","1"));
+
+                nameValuePairs.add(new BasicNameValuePair("start_text",journey.start.longDescription));
+                nameValuePairs.add(new BasicNameValuePair("end_text", journey.end.longDescription));
+
+                return nameValuePairs;
+            }
+
+            @Override
+            public void onPostExecute(Result ret){
+                if(ret.statusCode==200){
+                    journey.id = ret.data.optString("journey_id");
                 }
-            }.execute(Constants.getUrl("/get_best_match/" + journey.id + "?key=" + getKey()));
-        }
+                showConfirmButton(ret);
+                super.onPostExecute(ret);
+            }
+        }.execute(Constants.getUrl("/journey_request"));
     }
+
+    /**
+     * Display of confirm button
+     * @param ret : The result set from
+     */
+    private void showConfirmButton(Result ret){
+        findViewById(R.id.ride_btn_group).setVisibility(View.GONE);
+        ((TextView)findViewById(R.id.confirm_text)).setText(ret.data.optString("message"));
+        double distance = ret.data.optInt("distance")/1000.0;
+        int fare = ret.data.optInt("estimated_fare");
+        ((TextView)findViewById(R.id.confirm_distance_text)).setText(String.format(getString(R.string.confirm_distance_text),distance));
+        ((TextView)findViewById(R.id.confirm_fare_text)).setText(String.format(getString(R.string.confirm_fare_text),fare));
+        displayConfirmButton();
+    }
+
 
     public void confirmRide(View v){
         GetTask confirmTask = new GetTask(this,getString(R.string.confirming_your_journey)){
@@ -471,20 +552,15 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     }
 
     public void exchangeLocations(View v){
-        Location temp = field_end.getAddress();
-        field_end.setAddress(field_start.getAddress());
-        field_start.setAddress(temp);
+        Location temp_e = field_end.getAddress();
+        Location temp_s = field_start.getAddress();
+        field_start.setAddress(null);
+        field_end.setAddress(temp_s);
+        field_start.setAddress(temp_e);
 
     }
 
-    //Clearing Function
-    public void clearFareAndMates(){
-        /*user_adapter.clear();
-        findViewById(R.id.summary_fare).setVisibility(View.GONE);
-        findViewById(R.id.summary_user_one).setVisibility(View.VISIBLE);
-        ((ToggleButton)findViewById(R.id.tab_fares)).setChecked(false);
-        ((ToggleButton)findViewById(R.id.tab_mates)).setChecked(true);*/
-    }
+
 
     public void clearTimers(){
       /*  ToggleButton time_30 = ((ToggleButton) findViewById(R.id.time_30));
@@ -515,11 +591,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         clearTimers();*/
     }
 
-    public void showUserDialog(View V){
-        /*if(user_adapter.getCount()<=0)
-            return;
-        userDialog.show();*/
-    }
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service){
