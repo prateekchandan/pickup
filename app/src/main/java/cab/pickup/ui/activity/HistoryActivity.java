@@ -2,6 +2,8 @@ package cab.pickup.ui.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -12,11 +14,19 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import cab.pickup.MyApplication;
 import cab.pickup.R;
 import cab.pickup.common.api.PastJourney;
+import cab.pickup.common.server.GetTask;
+import cab.pickup.common.server.Result;
 
-public class HistoryActivity extends MyActivity {
+public class HistoryActivity extends MyActivity implements OnRefreshListener{
+
+    SwipeRefreshLayout mRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +37,9 @@ public class HistoryActivity extends MyActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mRefreshLayout=((SwipeRefreshLayout)findViewById(R.id.history_swipe_refresh));
+        mRefreshLayout.setOnRefreshListener(this);
 
         getData();
     }
@@ -53,6 +66,51 @@ public class HistoryActivity extends MyActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRefresh() {
+        /**
+         * Fetch from server and add to database
+         */
+        new GetTask(this){
+            @Override
+            public void onPostExecute(Result res) {
+                super.onPostExecute(res);
+
+                if(res.statusCode==200){
+                    try {
+                        JSONArray history = res.data.getJSONArray("past_journeys");
+                        for(int i=0; i<history.length(); i++){
+                            JSONObject past = history.getJSONObject(i);
+                            PastJourney journey = new PastJourney();
+
+                            // Only display completed journeys for now
+                            if(past.getString("status").equals("completed")) {
+                                journey.start_lat = (float) past.getDouble("start_lat");
+                                journey.start_lng = (float) past.getDouble("start_long");
+                                journey.end_lat = (float) past.getDouble("end_lat");
+                                journey.end_lng = (float) past.getDouble("end_long");
+
+                                journey.start_text = past.getString("start_text");
+                                journey.end_text = past.getString("end_text");
+
+                                journey.fare = past.getDouble("fare");
+                                journey.time = past.getString("journey_time");
+                                journey.distance = past.getDouble("distance");
+
+                                MyApplication.getDB().addHistory(journey);
+                            }
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                mRefreshLayout.setRefreshing(false);
+            }
+        };
     }
 
     class HistoryAdapter extends ArrayAdapter<PastJourney> {
