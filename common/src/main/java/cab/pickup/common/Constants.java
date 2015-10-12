@@ -10,7 +10,7 @@ public class Constants {
     public static final String KEY = "9f83c32cf3c9d529e";
     public static final String DEBUG_KEY = "9f83c32cf3c9d529e";
     public static final String BASE_URL = "http://api.getpickup.in";
-    public static final String DEBUG_BASE_URL = "http://pickup.prateekchandan.me";
+    public static final String DEBUG_BASE_URL = "http://apitest.getpickup.in/";
     public static boolean DEBUG = false;
     public static String getUrl(String... path){
         if (DEBUG) {

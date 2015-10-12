@@ -97,7 +97,6 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
     LocationSearchBar field_start, field_end;
 
 
-    boolean show_fare_card=false;
 
     /**
      * onCreate - Called on creation of MainActivity
@@ -168,6 +167,9 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
+    /**
+     * Called when the activity is destroyed
+     */
     @Override
     public void onDestroy(){
         super.onDestroy();
@@ -417,6 +419,7 @@ public class MainActivity extends MapsActivity implements   LocationSearchBar.On
      * Display the Ride after and Ride now Button in the Main Activity
      */
     private void displayRidesButton(){
+        findViewById(R.id.confirm_btn_group).setVisibility(View.GONE);
         LinearLayout rideBtnGroup = (LinearLayout)findViewById(R.id.ride_btn_group);
         Animation slideUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
         rideBtnGroup.setVisibility(View.VISIBLE);
