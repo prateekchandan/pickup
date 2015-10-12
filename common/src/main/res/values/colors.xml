@@ -13,6 +13,7 @@
     <color name="text_color_light">#FBFBFB</color>
     <color name="text_color_dark">#ff000000</color>
     <color name="text_color_dark_gray">#ff888888</color>
+    <color name="text_color_light_gray">#B9B9B9</color>
 
     <!--   Old Version of App -->
     <color name="theme_color">#ff3F51BF</color>

@@ -21,9 +21,10 @@
         android:text="Example Name"
         android:layout_marginLeft="@dimen/profile_name_margin"
         style="@style/Text.Light.Large"
-        android:background="@android:color/transparent"
+        android:background="@drawable/edittext_background_light"
         android:layout_above="@+id/profile_mileage"
-        android:inputType="none"/>
+        android:inputType="none"
+        android:enabled="false"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,8 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingLeft="20dp"
-            android:paddingTop="20dp">
+            android:padding="20dp">
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

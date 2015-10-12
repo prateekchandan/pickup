@@ -42,11 +42,11 @@ import cab.pickup.common.util.LocationTracker;
 
 public class LocationSearchBar extends TextView implements View.OnClickListener{
 
-    private final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
-    private final String TYPE_AUTOCOMPLETE = "/autocomplete";
-    private final String OUT_JSON = "/json";
-    private final String API_KEY = "AIzaSyChiVpPeOyYNFGq7_aR6-zpHnv6HsnwXQo";
-    private final String LOG_TAG = "PICKUP_LOCATION";
+    private static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
+    private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
+    private static final String OUT_JSON = "/json";
+    private static final String API_KEY = "AIzaSyChiVpPeOyYNFGq7_aR6-zpHnv6HsnwXQo";
+    private static final String LOG_TAG = "PICKUP_LOCATION";
 
     private Location address;
     LocationTracker tracker;
@@ -56,13 +56,13 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
     boolean myLocationEnabled=true, homeOfficeEnabled=true;
 
     public LocationSearchBar(Context context) {
-        super(context);
+        super(context,null,R.style.LocationSearchBar);
 
         init(context);
     }
 
     public LocationSearchBar(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        super(context, attrs, R.style.LocationSearchBar);
 
         init(context);
     }
@@ -121,20 +121,19 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
         private SearchTask searchTask;
 
         public LocationSearchDialog() {
-            super(context);
+            super(context, R.style.LocationSearchDialog);
         }
 
         @Override
         public void onCreate(Bundle savedInstanceState){
-            requestWindowFeature(Window.FEATURE_NO_TITLE);
-
+            //requestWindowFeature(Window.FEATURE_NO_TITLE);
             setContentView(R.layout.widget_location_search_dialog);
 
-            searchField = (EditText)findViewById(R.id.location_search_dialog_edittext);
+            searchField = (EditText)findViewById(R.id.location_search_edittext);
             if(searchField.requestFocus()) {
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
             }
-            list = (ListView) findViewById(R.id.location_search_dialog_list);
+            list = (ListView) findViewById(R.id.location_search_list);
 
             adapter=new PlacesAdapter(context);
 
@@ -149,12 +148,32 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
                 }
             });
 
-            findViewById(R.id.location_search_dialog_myloc).setOnClickListener(this);
+            findViewById(R.id.location_search_my_location_label).setOnClickListener(this);
 
             if(myLocationEnabled) {
-                findViewById(R.id.location_search_dialog_myloc).setVisibility(View.VISIBLE);
+                findViewById(R.id.location_search_my_location_label).setVisibility(View.VISIBLE);
             } else {
-                findViewById(R.id.location_search_dialog_myloc).setVisibility(View.GONE);
+                findViewById(R.id.location_search_my_location_label).setVisibility(View.GONE);
+            }
+
+            if (homeOfficeEnabled){
+                findViewById(R.id.location_search_home_icon).setVisibility(View.VISIBLE);
+                findViewById(R.id.location_search_home_main_text).setVisibility(View.VISIBLE);
+                findViewById(R.id.location_search_home_sub_text).setVisibility(View.VISIBLE);
+                findViewById(R.id.location_search_office_icon).setVisibility(View.VISIBLE);
+                findViewById(R.id.location_search_office_main_text).setVisibility(View.VISIBLE);
+                findViewById(R.id.location_search_office_sub_text).setVisibility(View.VISIBLE);
+
+                findViewById(R.id.location_search_fav_label).setVisibility(VISIBLE);
+            } else {
+                findViewById(R.id.location_search_home_icon).setVisibility(View.INVISIBLE);
+                findViewById(R.id.location_search_home_main_text).setVisibility(View.INVISIBLE);
+                findViewById(R.id.location_search_home_sub_text).setVisibility(View.INVISIBLE);
+                findViewById(R.id.location_search_office_icon).setVisibility(View.INVISIBLE);
+                findViewById(R.id.location_search_office_main_text).setVisibility(View.INVISIBLE);
+                findViewById(R.id.location_search_office_sub_text).setVisibility(View.INVISIBLE);
+
+                findViewById(R.id.location_search_fav_label).setVisibility(INVISIBLE);
             }
 
 
@@ -192,7 +211,7 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
                 return;
 
             switch(v.getId()){
-                case R.id.location_search_dialog_myloc:
+                case R.id.location_search_my_location_label:
                     if(tracker.getLastKnownLocation()==null){
                         Toast.makeText(context, "Unable to get current location. Please check your GPS", Toast.LENGTH_LONG).show();
                         break;
@@ -286,7 +305,7 @@ public class LocationSearchBar extends TextView implements View.OnClickListener{
             sb.append("?key=" + API_KEY);
             sb.append("&components=country:in");
             sb.append("&input=" + URLEncoder.encode(input, "utf8"));
-            if(locString!="")
+            if(!locString.equals(""))
             {
                 sb.append("&location="+locString);
                 sb.append("&radius=50");

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="item_history_distance">%1$d KMS</string>
+    <string name="item_history_fare">₹ %1$d</string>
+
+</resources>
