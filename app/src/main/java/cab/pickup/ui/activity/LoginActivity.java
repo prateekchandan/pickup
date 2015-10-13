@@ -48,22 +48,17 @@ public class    LoginActivity extends MyActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-        try{
-            getSupportActionBar().hide();
-        }
-        catch (NullPointerException E){
-            E.printStackTrace();
-        }
 
         setContentView(R.layout.activity_login);
 
         Session session = Session.getActiveSession();
 
         if(session!=null && session.isOpened()) {
+            Log.d("FBACCESSTOKEN",session.getAccessToken());
             findViewById(R.id.fb_login).setVisibility(View.GONE);
 
             ((TextView)findViewById(R.id.login_message_text)).setText("Loading...");
-            if (me.id == null || me.id == "null") {
+            if (me.id == null || me.id.equals("null")) {
                 ((TextView)findViewById(R.id.login_message_text)).setText("Loading...");
                 addUser();
             } else {
@@ -156,7 +151,7 @@ public class    LoginActivity extends MyActivity {
                 //nameValuePairs.add(new BasicNameValuePair("gcm_id", gcm_id));
 
                 nameValuePairs.add(new BasicNameValuePair("device_id", me.device_id));
-                nameValuePairs.add(new BasicNameValuePair("fbid", me.fbid));
+                nameValuePairs.add(new BasicNameValuePair("access_token", Session.getActiveSession().getAccessToken()));
                 nameValuePairs.add(new BasicNameValuePair("name", me.name));
                 nameValuePairs.add(new BasicNameValuePair("email", me.email));
                 nameValuePairs.add(new BasicNameValuePair("gender", me.gender));
@@ -365,7 +360,7 @@ public class    LoginActivity extends MyActivity {
                         }
                     }
                 };
-                getTask.execute(Constants.getUrl("/user_exists?" + "key=" + getKey() + "&fbid=" + fbid));
+                getTask.execute(Constants.getUrl("/user_exists?" + "key=" + getKey() + "&access_token=" + Session.getActiveSession().getAccessToken()));
 
 
             }
