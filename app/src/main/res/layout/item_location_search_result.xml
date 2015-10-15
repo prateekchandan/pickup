@@ -6,7 +6,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="place"
-        android:textColor="@color/text_color_light"
+        android:textColor="@color/text_color_light_gray"
         android:textSize="@dimen/location_search_icon_size"
         android:gravity="center"
         android:id="@+id/item_location_search_icon"

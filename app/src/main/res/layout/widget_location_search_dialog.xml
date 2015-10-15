@@ -20,8 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/location_search_list"
-        android:layout_below="@+id/location_search_edittext"
-        android:visibility="gone" />
+        android:layout_below="@+id/location_search_edittext" />
 
     <cab.pickup.common.widget.IconFont
         android:layout_width="wrap_content"
