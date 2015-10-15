@@ -8,7 +8,8 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/profile_picture_min_height"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:src="@drawable/bg"
         android:background="@color/theme_color_light"
